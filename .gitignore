@@ -32,3 +32,6 @@ target/
 
 # npm
 node_modules/
+
+# other
+**/.DS_Store
