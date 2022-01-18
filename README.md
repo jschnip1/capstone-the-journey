@@ -13,9 +13,9 @@ An app that simplifies road trip planning. A user will be able to:
 
 ## Database (MySQL, Docker)
 
-*[x] Create ddl script
-*[x] Create a docker container
-*[ ] Create a Dockerfile
+* [x] Create ddl script
+* [x] Create a docker container
+* [ ] Create a Dockerfile
 
 ## Server (Spring)
 
