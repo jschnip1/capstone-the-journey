@@ -74,7 +74,7 @@ CREATE TABLE `trip_location` (
 
 CREATE TABLE `profile` (
   `profile_id` INT PRIMARY KEY NOT NULL auto_increment,
-  `profile_photo` VARCHAR(45) NULL,
+  `profile_photo` BLOB NULL,
   `about_me` VARCHAR(100) NULL,
   `app_user_id` INT NOT NULL,
   UNIQUE INDEX `profile_id_UNIQUE` (`profile_id` ASC) VISIBLE,
@@ -122,7 +122,87 @@ CREATE TABLE `photo` (
         REFERENCES `trip_location` (`trip_location_id`)
 );
 
+delimiter //
+create procedure set_known_good_state()
+begin
+	delete from `photo`;
+    alter table `photo` auto_increment = 1;
+    delete from `trip_location`;
+    alter table `trip_location` auto_increment = 1;
+    delete from `user_trip`;
+    alter table `user_trip`;
+    delete from `app_user_role`;
+    alter table `app_user_role`;
+    delete from `comment`;
+    alter table `comment` auto_increment = 1;
+    delete from `item`;
+    alter table `item` auto_increment = 1;
+    delete from `profile`;
+    alter table `profile` auto_increment = 1;
+    delete from `app_user`;
+    alter table `app_user` auto_increment = 1;
+    delete from `app_role`;
+    alter table `app_role` auto_increment = 1;
+    delete from `trip`;
+    alter table `trip` auto_increment = 1;
+    delete from `location`;
+    alter table `location` auto_increment = 1;
+    
+    insert into location (latitude, longitude, `name`, `type`, photo_url) values
+		("41.081444","-81.519005", "Akron,OH","City","https://uploads-ssl.webflow.com/58e984c0a0e2f91e7c795e7a/60cb3c0ce6b1c3d8df753e9a_akron-oh-real-estate.jpg"),
+        ("41.499321","-81.694359",null,null,null),
+        ("39.961178","-82.998795","Columbus,OH","City",null),
+        ("41.447019","-81.713324","Cleveland Metroparks Zoo","Zoo","https://www.clevelandmetroparks.com/getmedia/4755d368-c69b-436e-85a3-65fddb2e35c5/KCL_5322.jpg.ashx?width=1440&height=864&ext=.jpg&w=1440&h=863");
+        
+	insert into trip (start_time, end_time, review, total_distance, `name`) values
+		("2022-01-20","2022-01-22",3,165,"Major Ohio Cities"),
+        ("2021-11-11","2021-11-12",4,81,"Zoo to Akron");
+        
+	insert into trip_location (trip_id, location_id, sort_order) values
+		(1,2,1),
+		(1,1,2),
+		(1,3,3),
+        (2,2,1),
+        (2,4,2),
+        (2,1,3),
+        (2,2,4);
+        
+	insert into app_role (`name`) values
+		("USER"),
+        ("ADMIN");
+        
+	insert into app_user (username, password_hash, disabled) values
+		('john@smith.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 0),
+		('sally@jones.com', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa', 0);
 
+	insert into app_user_role
+		values
+		(1, 2),
+		(2, 1);
+        
+	insert into photo (photo, trip_location_id, caption) values
+		("photo of cleveland",1, "This is a photo of cleveland"),
+        ("photo of elephant",5,"This is a photo of an elephant");
+        
+	insert into `profile` (profile_photo, about_me, app_user_id) values
+		("photo of John", "I have a generic name", 1),
+        ("photo of Sally", "I like turtles", 2);
+        
+	insert into user_trip (user_trip_app_user_id, user_trip_id) values
+		(1,1),
+        (2,2);
+        
+	insert into `comment` (trip_id, comment_body, profile_id) values
+		(1,"I think John is ugly",2),
+        (2,"I like animals",1);
+    
+    insert into item (`name`, trip_id, `description`, profile_id, quantity, is_packed) values
+		("Sunscreen",2,null,null,1,0),
+        ("Snacks",1,"soda,slim jims, napkins",1,1,0);
+    
+
+end //
+delimiter ;
 
 
 

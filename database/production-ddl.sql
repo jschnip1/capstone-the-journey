@@ -74,7 +74,7 @@ CREATE TABLE `trip_location` (
 
 CREATE TABLE `profile` (
   `profile_id` INT PRIMARY KEY NOT NULL auto_increment,
-  `profile_photo` VARCHAR(45) NULL,
+  `profile_photo` BLOB NULL,
   `about_me` VARCHAR(100) NULL,
   `app_user_id` INT NOT NULL,
   UNIQUE INDEX `profile_id_UNIQUE` (`profile_id` ASC) VISIBLE,
