@@ -29,11 +29,12 @@ CREATE TABLE `app_user_role` (
 
 CREATE TABLE `trip` (
   `trip_id` INT PRIMARY KEY NOT NULL auto_increment,
-  `start_date` DATE NULL,
-  `end_date` DATE NULL,
+  `start_time` DATE NULL,
+  `end_time` DATE NULL,
   `review` INT NULL,
   `total_distance` INT NULL,
-  `name` VARCHAR(45) NOT NULL
+  `name` VARCHAR(45) NOT NULL,
+  `disabled` TINYINT NULL
 );
 
 CREATE TABLE `profile` (
@@ -66,7 +67,8 @@ CREATE TABLE `location` (
   `longitude` VARCHAR(45) NOT NULL,
   `name` VARCHAR(45) NULL,
   `type` VARCHAR(45) NULL,
-  `photo_url` VARCHAR(45) NULL
+  `photo_url` TEXT NULL,
+  `disabled` TINYINT NULL
 );
 
 
@@ -121,8 +123,3 @@ CREATE TABLE `photo` (
 		FOREIGN KEY (`trip_location_id`)
         REFERENCES `trip_location` (`trip_location_id`)
 );
-
-
-
-
-
