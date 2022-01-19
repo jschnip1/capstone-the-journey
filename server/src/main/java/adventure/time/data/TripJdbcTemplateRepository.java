@@ -27,7 +27,7 @@ public class TripJdbcTemplateRepository implements TripRepository {
         return jdbcTemplate.query(sql, new TripMapper());
     }
 
-    // Transactional with Locations
+    // Transactional with Locations, items, comments?
     @Override
     public Trip findById(int tripId) {
 
