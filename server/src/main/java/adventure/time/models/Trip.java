@@ -12,6 +12,7 @@ public class Trip {
     private int tripReview;
     private int totalDistance;
     private String name;
+    private boolean disabled;
     private List<Item> itemList = new ArrayList<>();
     private List<Comment> commentList = new ArrayList<>();
     private List<TripLocation> locations = new ArrayList<>();
@@ -98,5 +99,13 @@ public class Trip {
 
     public void setLocations(List<TripLocation> locations) {
         this.locations = locations;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 }

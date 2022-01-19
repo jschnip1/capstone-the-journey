@@ -23,7 +23,7 @@ public class TripJdbcTemplateRepository implements TripRepository {
 
     @Override
     public List<Trip> findAll() {
-        final String sql = "select trip_id, start_time, end_time, review, total_distance, name from trip;";
+        final String sql = "select trip_id, start_time, end_time, review, total_distance, name, disabled from trip;";
         return jdbcTemplate.query(sql, new TripMapper());
     }
 
@@ -31,11 +31,11 @@ public class TripJdbcTemplateRepository implements TripRepository {
     @Override
     public Trip findById(int tripId) {
 
-        final String sql = "select trip_id, start_time, end_time, review, total_distance, name from trip where trip_id = ?;";
+        final String sql = "select trip_id, start_time, end_time, review, total_distance, name, disabled from trip where trip_id = ?;";
 
         Trip trip = jdbcTemplate.query(sql, new TripMapper(), tripId).stream().findFirst().orElse(null);
 
-        // if not null add list of locations to trip
+        // if not null add list of locations, items, and comments to trip
 
         return trip;
     }
@@ -43,7 +43,7 @@ public class TripJdbcTemplateRepository implements TripRepository {
     @Override
     public Trip add(Trip trip) {
 
-        final String sql = "insert into trip (start_time, end_time, review, total_distance, name) values (?,?,?,?,?);";
+        final String sql = "insert into trip (start_time, end_time, review, total_distance, name, disabled) values (?,?,?,?,?,?);";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int rowsAffected = jdbcTemplate.update(connection -> {
@@ -53,6 +53,7 @@ public class TripJdbcTemplateRepository implements TripRepository {
         ps.setInt(3, trip.getTripReview());
         ps.setInt(4, trip.getTotalDistance());
         ps.setString(5, trip.getName());
+        ps.setBoolean(6, trip.isDisabled());
         return ps;
         }, keyHolder);
 
@@ -72,7 +73,8 @@ public class TripJdbcTemplateRepository implements TripRepository {
                 + "end_time = ?,"
                 + "review = ?,"
                 + "total_distance = ?,"
-                + "name = ? "
+                + "name = ?,"
+                + "disabled = ? "
                 + "where trip_id = ?;";
 
         return jdbcTemplate.update(sql,
@@ -81,16 +83,20 @@ public class TripJdbcTemplateRepository implements TripRepository {
                 trip.getTripReview(),
                 trip.getTotalDistance(),
                 trip.getName(),
+                trip.isDisabled(),
                 trip.getTripId()) > 0;
     }
 
-    // Transactional with Locations
     @Override
     public boolean deleteById(int tripId) {
-        return false;
+
+        final String sql = "update trip set "
+                + " disabled = 1 "
+                + "where trip_id = ?";
+
+        return jdbcTemplate.update(sql,
+                tripId) > 0;
     }
 
-    // AddLocations method
-
-    // ask question about transactional
+    // AddLocations, Additems, AddComments method
 }
