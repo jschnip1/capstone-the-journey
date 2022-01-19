@@ -14,6 +14,10 @@ public class Comment {
         this.profileId = profileId;
     }
 
+    public Comment() {
+
+    }
+
     public int getCommentId() {
         return commentId;
     }

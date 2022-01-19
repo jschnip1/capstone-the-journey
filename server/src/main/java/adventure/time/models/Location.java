@@ -18,6 +18,10 @@ public class Location {
         this.type = type;
     }
 
+    public Location() {
+
+    }
+
     public int getLocationId() {
         return locationId;
     }

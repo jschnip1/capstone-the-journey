@@ -1,4 +1,4 @@
-package adventure.time.data.mapper;
+package adventure.time.data.mappers;
 
 import adventure.time.models.AppUser;
 import org.springframework.jdbc.core.RowMapper;

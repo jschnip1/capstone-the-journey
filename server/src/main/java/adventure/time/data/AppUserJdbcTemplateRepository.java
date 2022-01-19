@@ -1,6 +1,6 @@
 package adventure.time.data;
 
-import adventure.time.data.mapper.AppUserMapper;
+import adventure.time.data.mappers.AppUserMapper;
 import adventure.time.models.AppUser;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
