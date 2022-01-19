@@ -8,6 +8,7 @@ public class Location {
     private String name;
     private String type;
     private String photoUrl;
+    private boolean disabled;
 
     public Location(int locationId, String latitude, String longitude, String name, String type) {
         this.locationId = locationId;
@@ -63,5 +64,13 @@ public class Location {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 }
