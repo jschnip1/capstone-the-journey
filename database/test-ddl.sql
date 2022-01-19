@@ -29,11 +29,12 @@ CREATE TABLE `app_user_role` (
 
 CREATE TABLE `trip` (
   `trip_id` INT PRIMARY KEY NOT NULL auto_increment,
-  `start_date` DATE NULL,
-  `end_date` DATE NULL,
+  `start_time` DATE NULL,
+  `end_time` DATE NULL,
   `review` INT NULL,
   `total_distance` INT NULL,
-  `name` VARCHAR(45) NOT NULL
+  `name` VARCHAR(45) NOT NULL,
+  `disabled` TINYINT NULL
 );
 
 CREATE TABLE `profile` (
@@ -66,7 +67,8 @@ CREATE TABLE `location` (
   `longitude` VARCHAR(45) NOT NULL,
   `name` VARCHAR(45) NULL,
   `type` VARCHAR(45) NULL,
-  `photo_url` VARCHAR(45) NULL
+  `photo_url` TEXT NULL,
+  `disabled` TINYINT NULL
 );
 
 
@@ -148,15 +150,15 @@ begin
     delete from `location`;
     alter table `location` auto_increment = 1;
     
-    insert into location (latitude, longitude, `name`, `type`, photo_url) values
-		("41.081444","-81.519005", "Akron,OH","City","https://uploads-ssl.webflow.com/58e984c0a0e2f91e7c795e7a/60cb3c0ce6b1c3d8df753e9a_akron-oh-real-estate.jpg"),
-        ("41.499321","-81.694359",null,null,null),
-        ("39.961178","-82.998795","Columbus,OH","City",null),
-        ("41.447019","-81.713324","Cleveland Metroparks Zoo","Zoo","https://www.clevelandmetroparks.com/getmedia/4755d368-c69b-436e-85a3-65fddb2e35c5/KCL_5322.jpg.ashx?width=1440&height=864&ext=.jpg&w=1440&h=863");
+    insert into location (latitude, longitude, `name`, `type`, photo_url, disabled) values
+		("41.081444","-81.519005", "Akron,OH","City","https://uploads-ssl.webflow.com/58e984c0a0e2f91e7c795e7a/60cb3c0ce6b1c3d8df753e9a_akron-oh-real-estate.jpg",0),
+        ("41.499321","-81.694359",null,null,null,0),
+        ("39.961178","-82.998795","Columbus,OH","City",null,0),
+        ("41.447019","-81.713324","Cleveland Metroparks Zoo","Zoo","https://www.clevelandmetroparks.com/getmedia/4755d368-c69b-436e-85a3-65fddb2e35c5/KCL_5322.jpg.ashx?width=1440&height=864&ext=.jpg&w=1440&h=863",0);
         
-	insert into trip (start_time, end_time, review, total_distance, `name`) values
-		("2022-01-20","2022-01-22",3,165,"Major Ohio Cities"),
-        ("2021-11-11","2021-11-12",4,81,"Zoo to Akron");
+	insert into trip (start_time, end_time, review, total_distance, `name`, disabled) values
+		("2022-01-20","2022-01-22",3,165,"Major Ohio Cities",0),
+        ("2021-11-11","2021-11-12",4,81,"Zoo to Akron",0);
         
 	insert into trip_location (trip_id, location_id, sort_order) values
 		(1,2,1),
