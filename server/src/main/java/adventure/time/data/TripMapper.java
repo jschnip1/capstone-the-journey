@@ -21,6 +21,7 @@ public class TripMapper implements RowMapper<Trip> {
         trip.setTripReview(resultSet.getInt("review"));
         trip.setTotalDistance(resultSet.getInt("total_distance"));
         trip.setName(resultSet.getString("name"));
+        trip.setDisabled(resultSet.getBoolean("disabled"));
         return trip;
     }
 }
