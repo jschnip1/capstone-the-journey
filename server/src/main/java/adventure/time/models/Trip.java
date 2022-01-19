@@ -1,5 +1,9 @@
 package adventure.time.models;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Trip {
 
     private int tripId;
@@ -8,8 +12,12 @@ public class Trip {
     private int tripReview;
     private int totalDistance;
     private String name;
-    private List<Item> itemList;
-    private List<Comment> commentList;
+    private List<Item> itemList = new ArrayList<>();
+    private List<Comment> commentList = new ArrayList<>();
+    private List<TripLocation> locations = new ArrayList<>();
+
+    public Trip() {
+    }
 
     public Trip(int tripId, LocalDate startTime, LocalDate endTime, int tripReview, int totalDistance, String name) {
         this.tripId = tripId;
@@ -82,5 +90,13 @@ public class Trip {
 
     public void setCommentList(List<Comment> commentList) {
         this.commentList = commentList;
+    }
+
+    public List<TripLocation> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(List<TripLocation> locations) {
+        this.locations = locations;
     }
 }

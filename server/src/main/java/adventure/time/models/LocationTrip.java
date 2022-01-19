@@ -1,5 +1,7 @@
 package adventure.time.models;
 
+import java.util.List;
+
 public class LocationTrip {
 
     private int tripLocationId;
