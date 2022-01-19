@@ -5,12 +5,14 @@ import adventure.time.models.AppUser;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.Collection;
 import java.util.List;
 
+@Repository
 public class AppUserJdbcTemplateRepository implements AppUserRepository {
 
     private final JdbcTemplate jdbcTemplate;
@@ -34,6 +36,9 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository {
 
     @Override
     public AppUser create(AppUser user) {
+        if(user == null){
+            return null;
+        }
         final String sql = "insert into app_user (username, password_hash) values (?, ?);";
 
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
