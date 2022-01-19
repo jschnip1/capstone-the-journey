@@ -35,15 +35,27 @@ CREATE TABLE `trip` (
   `total_distance` INT NULL,
   `name` VARCHAR(45) NOT NULL
 );
+
+CREATE TABLE `profile` (
+  `profile_id` INT PRIMARY KEY NOT NULL auto_increment,
+  `profile_photo` BLOB NULL,
+  `about_me` VARCHAR(100) NULL,
+  `name` VARCHAR(100) NOT NULL,
+  `app_user_id` INT NOT NULL,
+  UNIQUE INDEX `profile_id_UNIQUE` (`profile_id` ASC) VISIBLE,
+  CONSTRAINT `fk_profile_app_user_id`
+    FOREIGN KEY (`app_user_id`)
+    REFERENCES `app_user` (`app_user_id`)
+);
   
-CREATE TABLE `user_trip` (
-  `user_trip_app_user_id` INT NOT NULL,
-  `user_trip_id` INT NOT NULL,
-  CONSTRAINT `fk_user_trip_app_user_id`
-    FOREIGN KEY (`user_trip_app_user_id`)
-    REFERENCES `app_user` (`app_user_id`),
-  CONSTRAINT `fk_user_trip_id`
-    FOREIGN KEY (`user_trip_id`)
+CREATE TABLE `profile_trip` (
+  `profile_id` INT NOT NULL,
+  `trip_id` INT NOT NULL,
+  CONSTRAINT `fk_profile_trip_profile_id`
+    FOREIGN KEY (`profile_id`)
+    REFERENCES `profile` (`profile_id`),
+  CONSTRAINT `fk_profile_trip_id`
+    FOREIGN KEY (`trip_id`)
     REFERENCES `trip` (`trip_id`)
 );
 
@@ -69,18 +81,6 @@ CREATE TABLE `trip_location` (
   CONSTRAINT `fk_trip_location_location_id`
     FOREIGN KEY (`location_id`)
     REFERENCES `location` (`location_id`)
-);
-
-
-CREATE TABLE `profile` (
-  `profile_id` INT PRIMARY KEY NOT NULL auto_increment,
-  `profile_photo` BLOB NULL,
-  `about_me` VARCHAR(100) NULL,
-  `app_user_id` INT NOT NULL,
-  UNIQUE INDEX `profile_id_UNIQUE` (`profile_id` ASC) VISIBLE,
-  CONSTRAINT `fk_profile_app_user_id`
-    FOREIGN KEY (`app_user_id`)
-    REFERENCES `app_user` (`app_user_id`)
 );
 
 CREATE TABLE `comment` (
@@ -129,8 +129,8 @@ begin
     alter table `photo` auto_increment = 1;
     delete from `trip_location`;
     alter table `trip_location` auto_increment = 1;
-    delete from `user_trip`;
-    alter table `user_trip`;
+    delete from `profile_trip`;
+    alter table `profile_trip`;
     delete from `app_user_role`;
     alter table `app_user_role`;
     delete from `comment`;
@@ -184,11 +184,11 @@ begin
 		("photo of cleveland",1, "This is a photo of cleveland"),
         ("photo of elephant",5,"This is a photo of an elephant");
         
-	insert into `profile` (profile_photo, about_me, app_user_id) values
-		("photo of John", "I have a generic name", 1),
-        ("photo of Sally", "I like turtles", 2);
+	insert into `profile` (profile_photo, about_me, app_user_id, `name`) values
+		("photo of John", "I have a generic name", 1, "John Smith"),
+        ("photo of Sally", "I like turtles", 2, "Sally Jones");
         
-	insert into user_trip (user_trip_app_user_id, user_trip_id) values
+	insert into profile_trip (`profile_id`, `trip_id`) values
 		(1,1),
         (2,2);
         
