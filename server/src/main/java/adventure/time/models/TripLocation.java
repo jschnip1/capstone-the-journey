@@ -2,19 +2,11 @@ package adventure.time.models;
 
 public class TripLocation {
 
-    private int tripLocationId;
     private int tripId;
     private Location location;
+    private int tripLocationId;
     private int sortOrder;
     private List<Photo> photoList;
-
-    public int getTripLocationId() {
-        return tripLocationId;
-    }
-
-    public void setTripLocationId(int tripLocationId) {
-        this.tripLocationId = tripLocationId;
-    }
 
     public int getTripId() {
         return tripId;
@@ -30,6 +22,14 @@ public class TripLocation {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public int getTripLocationId() {
+        return tripLocationId;
+    }
+
+    public void setTripLocationId(int tripLocationId) {
+        this.tripLocationId = tripLocationId;
     }
 
     public int getSortOrder() {

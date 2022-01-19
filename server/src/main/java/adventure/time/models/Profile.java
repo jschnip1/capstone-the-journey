@@ -1,19 +1,26 @@
 package adventure.time.models;
 
+import java.sql.Blob;
+import java.util.List;
+
 public class Profile {
 
     private int profileId;
-    private String profilePhoto;
+    private Blob profilePhoto;
     private String profileDescription;
     private int userId;
     private List<Comment> commentList;
     private List<Item> itemList;
 
-    public Profile(int profileId, String profilePhoto, String profileDescription, int userId) {
+    public Profile(int profileId, Blob profilePhoto, String profileDescription, int userId) {
         this.profileId = profileId;
         this.profilePhoto = profilePhoto;
         this.profileDescription = profileDescription;
         this.userId = userId;
+    }
+
+    public Profile() {
+
     }
 
     public int getProfileId() {
@@ -24,11 +31,11 @@ public class Profile {
         this.profileId = profileId;
     }
 
-    public String getProfilePhoto() {
+    public Blob getProfilePhoto() {
         return profilePhoto;
     }
 
-    public void setProfilePhoto(String profilePhoto) {
+    public void setProfilePhoto(Blob profilePhoto) {
         this.profilePhoto = profilePhoto;
     }
 

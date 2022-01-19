@@ -20,6 +20,10 @@ public class Item {
         this.isPacked = isPacked;
     }
 
+    public Item() {
+
+    }
+
     public int getItemId() {
         return itemId;
     }
