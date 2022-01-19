@@ -123,6 +123,7 @@ An app that simplifies road trip planning. A user will be able to:
     * POST: /authenticate
     * POST: /refresh-token
     * POST: /register
+    * third party authentication: https://www.callicoder.com/spring-boot-security-oauth2-social-login-part-1/
 * [ ] TripLocationController
     * /trip/location
     * POST: /trip/location
