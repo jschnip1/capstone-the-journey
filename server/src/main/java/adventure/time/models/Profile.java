@@ -1,5 +1,7 @@
 package adventure.time.models;
 
+import java.util.List;
+
 public class Profile {
 
     private int profileId;
