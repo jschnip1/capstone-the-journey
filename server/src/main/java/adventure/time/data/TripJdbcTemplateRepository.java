@@ -1,11 +1,13 @@
 package adventure.time.data;
 
+
 import adventure.time.data.mappers.TripMapper;
 import adventure.time.models.Trip;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -21,6 +23,9 @@ public class TripJdbcTemplateRepository implements TripRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    // TODO
+    // AddLocations method
+
 
     @Override
     public List<Trip> findAll() {
@@ -28,15 +33,19 @@ public class TripJdbcTemplateRepository implements TripRepository {
         return jdbcTemplate.query(sql, new TripMapper());
     }
 
-    // Transactional with Locations, items, comments?
     @Override
-    public Trip findById(int tripId) {
+    @Transactional
+    public Trip findById(int tripId, boolean loadPhotos) {
 
         final String sql = "select trip_id, start_time, end_time, review, total_distance, name, disabled from trip where trip_id = ?;";
 
         Trip trip = jdbcTemplate.query(sql, new TripMapper(), tripId).stream().findFirst().orElse(null);
 
-        // if not null add list of locations, items, and comments to trip
+        if (trip != null) {
+            addItems(trip);
+            addComments(trip);
+            addLocations(trip, loadPhotos);
+        }
 
         return trip;
     }
@@ -99,5 +108,38 @@ public class TripJdbcTemplateRepository implements TripRepository {
                 tripId) > 0;
     }
 
-    // AddLocations, Additems, AddComments method
+    private void addItems(Trip trip) {
+        final String sql = "select item_id, name, trip_id, description, profile_id, quantity, is_packed "
+                + "from item "
+                + "where trip_id = ?;";
+
+        var items = jdbcTemplate.query(sql, new ItemMapper(), trip.getTripId());
+        trip.setItemList(items);
+    }
+
+    private void addComments(Trip trip) {
+        final String sql = "select comment_id, trip_id, comment_body, profile_id "
+                + "from comment "
+                +"where trip_id = ?;";
+
+        var comments = jdbcTemplate.query(sql, new CommentMapper(), trip.getTripId());
+        trip.setCommentList(comments);
+    }
+
+    private void addLocations(Trip trip, boolean loadPhotos) {
+
+        final String sql = "select tl.trip_location_id, tl.trip_id, tl.location_id, tl.sort_order, "
+                + "l.latitude, l.longitude, l.name, l.type, l.photo_url "
+                + "from trip_location tl "
+                + "inner join location l on tl.location_id = l.location_id "
+                + "where tl.trip_id = ?";
+
+        // addPhotos sub of locations
+        final String otherSql = "";
+
+        var tripLocations = jdbcTemplate.query(sql, new TripLocationMapper(), trip.getTripId());
+        trip.setLocations(tripLocations);
+    }
+
+
 }

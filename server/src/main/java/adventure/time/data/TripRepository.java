@@ -8,12 +8,11 @@ public interface TripRepository {
 
     List<Trip> findAll();
 
-    Trip findById(int tripId);
+    Trip findById(int tripId, boolean loadPhotos);
 
     Trip add(Trip trip);
 
     boolean update(Trip trip);
 
-    // Transactional?
     boolean deleteById(int tripId);
 }
