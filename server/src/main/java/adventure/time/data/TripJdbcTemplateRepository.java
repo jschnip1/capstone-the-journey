@@ -1,10 +1,14 @@
 package adventure.time.data;
 
+import adventure.time.data.mappers.CommentMapper;
+import adventure.time.data.mappers.ItemMapper;
+import adventure.time.data.mappers.TripMapper;
 import adventure.time.models.Trip;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -27,8 +31,8 @@ public class TripJdbcTemplateRepository implements TripRepository {
         return jdbcTemplate.query(sql, new TripMapper());
     }
 
-    // Transactional with Locations, items, comments?
     @Override
+    @Transactional
     public Trip findById(int tripId) {
 
         final String sql = "select trip_id, start_time, end_time, review, total_distance, name, disabled from trip where trip_id = ?;";
@@ -36,6 +40,10 @@ public class TripJdbcTemplateRepository implements TripRepository {
         Trip trip = jdbcTemplate.query(sql, new TripMapper(), tripId).stream().findFirst().orElse(null);
 
         // if not null add list of locations, items, and comments to trip
+        if (trip != null) {
+            addItems(trip);
+            addComments(trip);
+        }
 
         return trip;
     }
@@ -98,5 +106,30 @@ public class TripJdbcTemplateRepository implements TripRepository {
                 tripId) > 0;
     }
 
-    // AddLocations, Additems, AddComments method
+    // TODO
+    // AddLocations method
+
+    private void addItems(Trip trip) {
+        final String sql = "select item_id, name, trip_id, description, profile_id, quantity, is_packed "
+                + "from item "
+                + "where trip_id = ?;";
+
+        var items = jdbcTemplate.query(sql, new ItemMapper(), trip.getTripId());
+        trip.setItemList(items);
+    }
+
+    private void addComments(Trip trip) {
+        final String sql = "select comment_id, trip_id, comment_body, profile_id "
+                + "from comment "
+                +"where trip_id = ?;";
+
+        var comments = jdbcTemplate.query(sql, new CommentMapper(), trip.getTripId());
+        trip.setCommentList(comments);
+    }
+
+    private void addLocations(Trip trip) {
+
+    }
+
+
 }

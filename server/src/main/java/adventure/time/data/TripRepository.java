@@ -14,6 +14,5 @@ public interface TripRepository {
 
     boolean update(Trip trip);
 
-    // Transactional?
     boolean deleteById(int tripId);
 }

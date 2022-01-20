@@ -1,6 +1,6 @@
 package adventure.time.data.mappers;
 
-import adventure.time.data.TripMapper;
+import adventure.time.data.mappers.TripMapper;
 import adventure.time.models.LocationTrip;
 import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
