@@ -8,7 +8,7 @@ public interface TripRepository {
 
     List<Trip> findAll();
 
-    Trip findById(int tripId);
+    Trip findById(int tripId, boolean loadPhotos);
 
     Trip add(Trip trip);
 

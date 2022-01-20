@@ -33,7 +33,7 @@ class TripJdbcTemplateRepositoryTest {
 
     @Test
     void shouldFindById() {
-        Trip trip = repository.findById(1);
+        Trip trip = repository.findById(1, false);
         assertEquals(1, trip.getTripId());
         assertEquals(3, trip.getTripReview());
         assertEquals(165, trip.getTotalDistance());

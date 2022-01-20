@@ -1,8 +1,6 @@
 package adventure.time.data;
 
-import adventure.time.data.mappers.CommentMapper;
-import adventure.time.data.mappers.ItemMapper;
-import adventure.time.data.mappers.TripMapper;
+import adventure.time.data.mappers.*;
 import adventure.time.models.Trip;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -24,6 +22,9 @@ public class TripJdbcTemplateRepository implements TripRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    // TODO
+    // AddLocations method
+
 
     @Override
     public List<Trip> findAll() {
@@ -33,16 +34,16 @@ public class TripJdbcTemplateRepository implements TripRepository {
 
     @Override
     @Transactional
-    public Trip findById(int tripId) {
+    public Trip findById(int tripId, boolean loadPhotos) {
 
         final String sql = "select trip_id, start_time, end_time, review, total_distance, name, disabled from trip where trip_id = ?;";
 
         Trip trip = jdbcTemplate.query(sql, new TripMapper(), tripId).stream().findFirst().orElse(null);
 
-        // if not null add list of locations, items, and comments to trip
         if (trip != null) {
             addItems(trip);
             addComments(trip);
+            addLocations(trip, loadPhotos);
         }
 
         return trip;
@@ -106,9 +107,6 @@ public class TripJdbcTemplateRepository implements TripRepository {
                 tripId) > 0;
     }
 
-    // TODO
-    // AddLocations method
-
     private void addItems(Trip trip) {
         final String sql = "select item_id, name, trip_id, description, profile_id, quantity, is_packed "
                 + "from item "
@@ -127,8 +125,19 @@ public class TripJdbcTemplateRepository implements TripRepository {
         trip.setCommentList(comments);
     }
 
-    private void addLocations(Trip trip) {
+    private void addLocations(Trip trip, boolean loadPhotos) {
 
+        final String sql = "select tl.trip_location_id, tl.trip_id, tl.location_id, tl.sort_order, "
+                + "l.latitude, l.longitude, l.name, l.type, l.photo_url "
+                + "from trip_location tl "
+                + "inner join location l on tl.location_id = l.location_id "
+                + "where tl.trip_id = ?";
+
+        // addPhotos sub of locations
+        final String otherSql = "";
+
+        var tripLocations = jdbcTemplate.query(sql, new TripLocationMapper(), trip.getTripId());
+        trip.setLocations(tripLocations);
     }
 
 

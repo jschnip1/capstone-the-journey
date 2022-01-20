@@ -1,7 +1,9 @@
 package adventure.time.domain;
 
 import adventure.time.data.TripRepository;
+import adventure.time.models.Location;
 import adventure.time.models.Trip;
+import adventure.time.models.TripLocation;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,8 +36,8 @@ class TripServiceTest {
     @Test
     void shouldFindById() {
         Trip expected = makeTrip();
-        when(repository.findById(1)).thenReturn(expected);
-        Trip actual = service.findById(1);
+        when(repository.findById(1, false)).thenReturn(expected);
+        Trip actual = service.findById(1, false);
         assertEquals(expected, actual);
     }
 
@@ -157,4 +159,6 @@ class TripServiceTest {
 
         return trip;
     }
+
+
 }
