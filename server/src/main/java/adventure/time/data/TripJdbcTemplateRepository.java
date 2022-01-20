@@ -1,5 +1,6 @@
 package adventure.time.data;
 
+import adventure.time.data.mappers.TripMapper;
 import adventure.time.models.Trip;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
