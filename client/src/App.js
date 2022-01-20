@@ -1,19 +1,50 @@
 import { BrowserRouter as Router, Redirect, Route, Switch, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import jwt_decode from "jwt-decode";
+
 import './App.css';
 import AuthContext from "./AuthContext";
 import NavBar from "./NavBar";
+import Login from "./components/Login";
 
 function App() {
+
+  const [user, setUser] = useState({ username: "" });
+
+  const login = (token) => {
+
+    const decodedToken = jwt_decode(token);
+
+    const nextUser = { ...user };
+    nextUser.username = decodedToken.sub;
+    nextUser.roles = decodedToken.authorities.split(",");
+    nextUser.token = token;
+    nextUser.isAdmin = function() {
+      return this.roles?.includes("ROLE_ADMIN");
+    };
+
+    setUser(nextUser);
+  }
+
+  const logout = () => {
+    setUser({ username: "" });
+  };
+
+  const auth = {
+    user,
+    login,
+    logout
+  };
+
   return (
     <>
     <div>
+      <AuthContext.Provider value={auth}>
       <Router>
         <NavBar />
         <Switch>
           <Route path="/login">
-            <h1>Login</h1>
+            <Login>Login</Login>
           </Route>
           <Route path="/register">
             <h1>Register</h1>
@@ -41,6 +72,7 @@ function App() {
           </Route>
         </Switch>
       </Router>
+      </AuthContext.Provider>
     </div>
     </>
   );
