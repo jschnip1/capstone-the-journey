@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -26,6 +27,7 @@ public class ProfileJdbcTemplateRepository implements ProfileRepository{
     }
 
     @Override
+    @Transactional
     public Profile findByUserId(int userId) {
         final String sql = "select profile_id, profile_photo, about_me, `name`, app_user_id " +
                 "from profile " +
