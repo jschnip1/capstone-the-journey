@@ -37,6 +37,7 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(credentials.get("username"), credentials.get("password"));
 
         Authentication authentication = authenticationManager.authenticate(authToken);
+        System.out.println("passed auth manager");
         if (authentication.isAuthenticated()) {
             String jwtToken = converter.getTokenFromUser((User) authentication.getPrincipal());
 
