@@ -8,19 +8,28 @@ public class Profile {
     private int profileId;
     private Blob profilePhoto;
     private String profileDescription;
+    private String name;
     private int userId;
-    private List<Comment> commentList;
-    private List<Item> itemList;
+    private List<Trip> tripList;
 
-    public Profile(int profileId, Blob profilePhoto, String profileDescription, int userId) {
+    public Profile(int profileId, Blob profilePhoto, String profileDescription,String name, int userId) {
         this.profileId = profileId;
         this.profilePhoto = profilePhoto;
         this.profileDescription = profileDescription;
+        this.name = name;
         this.userId = userId;
     }
 
     public Profile() {
 
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getProfileId() {
@@ -55,19 +64,11 @@ public class Profile {
         this.userId = userId;
     }
 
-    public List<Comment> getCommentList() {
-        return commentList;
+    public List<Trip> getTripList() {
+        return tripList;
     }
 
-    public void setCommentList(List<Comment> commentList) {
-        this.commentList = commentList;
-    }
-
-    public List<Item> getItemList() {
-        return itemList;
-    }
-
-    public void setItemList(List<Item> itemList) {
-        this.itemList = itemList;
+    public void setTripList(List<Trip> tripList) {
+        this.tripList = tripList;
     }
 }
