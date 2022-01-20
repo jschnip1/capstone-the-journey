@@ -5,12 +5,14 @@ import adventure.time.models.Location;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 
+@Repository
 public class LocationJdbcTemplateRepository implements LocationRepository {
 
     private final JdbcTemplate jdbcTemplate;
