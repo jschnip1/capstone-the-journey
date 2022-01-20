@@ -1,6 +1,9 @@
 package adventure.time.data;
 
 
+import adventure.time.data.mappers.CommentMapper;
+import adventure.time.data.mappers.ItemMapper;
+import adventure.time.data.mappers.TripLocationMapper;
 import adventure.time.data.mappers.TripMapper;
 import adventure.time.models.Trip;
 import org.springframework.jdbc.core.JdbcTemplate;
