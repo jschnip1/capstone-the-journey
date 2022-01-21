@@ -28,7 +28,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors();
 
         http.authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/authenticate", "/register").permitAll()
+                .antMatchers(HttpMethod.POST,"/authenticate", "/register", "/trip").permitAll()
+                .antMatchers(HttpMethod.GET, "/trip", "/trip/*").permitAll()
+                .antMatchers(HttpMethod.PUT, "/trip/*").permitAll()
                 //.antMatchers("/**").denyAll()
                 .and()
                 .addFilter(new JwtRequestFilter(authenticationManager(), converter))

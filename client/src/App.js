@@ -6,6 +6,8 @@ import './App.css';
 import AuthContext from "./AuthContext";
 import NavBar from "./NavBar";
 import Login from "./components/Login";
+import NotFound from "./NotFound";
+import TripOverview from "./components/TripOverview";
 
 function App() {
 
@@ -61,14 +63,14 @@ function App() {
           <Route path="/travel/buddy/add">
             <h1>Add Travel Buddy</h1>
           </Route>
-          <Route path="/trip/overview">
-            <h1>Trip Overview</h1>
+          <Route path="/trip/overview/:id">
+            <TripOverview />
           </Route>
           <Route exact path="/">
             <h1>Home</h1>
           </Route>
           <Route>
-            <h1>Not Found</h1>
+            <NotFound />
           </Route>
         </Switch>
       </Router>
