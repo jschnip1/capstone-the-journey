@@ -12,7 +12,7 @@ CREATE TABLE `app_user` (
   `app_user_id` INT PRIMARY KEY NOT NULL auto_increment,
   `username` VARCHAR(50) NULL,
   `password_hash` VARCHAR(2048) NULL,
-  `disabled` TINYINT NULL
+  `disabled` TINYINT NOT NULL
 );
 
 
@@ -34,12 +34,12 @@ CREATE TABLE `trip` (
   `review` INT NULL,
   `total_distance` INT NULL,
   `name` VARCHAR(45) NOT NULL,
-  `disabled` TINYINT NULL
+  `disabled` TINYINT NOT NULL
 );
 
 CREATE TABLE `profile` (
   `profile_id` INT PRIMARY KEY NOT NULL auto_increment,
-  `profile_photo` BLOB NULL,
+  `profile_photo` TEXT NULL,
   `about_me` VARCHAR(100) NULL,
   `name` VARCHAR(100) NOT NULL,
   `app_user_id` INT NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE `location` (
   `name` VARCHAR(45) NULL,
   `type` VARCHAR(45) NULL,
   `photo_url` TEXT NULL,
-  `disabled` TINYINT NULL
+  `disabled` TINYINT NOT NULL
 );
 
 
@@ -116,7 +116,7 @@ CREATE TABLE `item` (
 
 CREATE TABLE `photo` (
 	`photo_id` INT PRIMARY KEY NOT NULL auto_increment,
-    `photo` BLOB NOT NULL,
+    `photo` TEXT NOT NULL,
     `trip_location_id` INT NOT NULL,
     `caption` VARCHAR(45) NULL,
     CONSTRAINT `fk_photo_trip_location_id`

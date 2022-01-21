@@ -41,12 +41,19 @@ public class ProfileController {
         return ErrorResponseController.build(result);
     }
 
-//    @DeleteMapping("/{userId}")
-//    public ResponseEntity<Void> deleteById(@PathVariable int userId){
-//        if(service.deleteById(userId)){
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        }
-//        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<Object> update(@PathVariable int userId, @RequestBody Profile profile) {
+        if (userId != profile.getUserId()) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
+        Result<Profile> result = service.update(profile);
+        if (result.isSuccess()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return ErrorResponseController.build(result);
+    }
 
 }
