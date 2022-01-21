@@ -38,7 +38,7 @@ public class TripController {
         return ErrorResponseController.build(result);
     }
 
-    @PutMapping("/{tripId}")
+    @PutMapping("/edit/{tripId}")
     public ResponseEntity<Object> update(@PathVariable int tripId, @RequestBody Trip trip) {
         if (tripId != trip.getTripId()) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -52,7 +52,7 @@ public class TripController {
         return ErrorResponseController.build(result);
     }
 
-    @DeleteMapping("/{tripId}")
+    @PutMapping("/disable/{tripId}")
     public ResponseEntity<Void> deleteById(@PathVariable int tripId) {
         if (service.deleteById(tripId)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
