@@ -55,7 +55,7 @@ public class ProfileJdbcTemplateRepository implements ProfileRepository{
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int rowsAffected = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setBlob(1, profile.getProfilePhoto());
+            ps.setString(1, profile.getProfilePhoto());
             ps.setString(2, profile.getProfileDescription());
             ps.setString(3, profile.getName());
             ps.setInt(4, profile.getUserId());

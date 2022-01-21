@@ -1,5 +1,8 @@
 package adventure.time.controllers;
 
+import adventure.time.domain.Result;
+import adventure.time.domain.ResultType;
+import adventure.time.models.AppUser;
 import adventure.time.security.AppUserService;
 import adventure.time.security.JwtConverter;
 import org.springframework.http.HttpStatus;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.ValidationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,6 +62,18 @@ public class AuthController {
         map.put("jwt_token", jwtToken);
 
         return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
+    @PostMapping("/register")
+    public  ResponseEntity<Object> register (@RequestBody Map<String, String> credentials) {
+        try {
+            AppUser result = appUserService.create(credentials.get("username"), credentials.get("password"));
+            return new ResponseEntity<>( HttpStatus.CREATED);
+        } catch (ValidationException ex) {
+            Result<AppUser> result = new Result<>();
+            result.addMessage(ex.getMessage(), ResultType.INVALID);
+            return ErrorResponseController.build(result);
+        }
     }
 
     /**

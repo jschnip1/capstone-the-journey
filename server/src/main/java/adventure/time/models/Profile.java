@@ -6,13 +6,13 @@ import java.util.List;
 public class Profile {
 
     private int profileId;
-    private Blob profilePhoto;
+    private String profilePhoto;
     private String profileDescription;
     private String name;
     private int userId;
     private List<Trip> tripList;
 
-    public Profile(int profileId, Blob profilePhoto, String profileDescription,String name, int userId) {
+    public Profile(int profileId, String profilePhoto, String profileDescription,String name, int userId) {
         this.profileId = profileId;
         this.profilePhoto = profilePhoto;
         this.profileDescription = profileDescription;
@@ -40,11 +40,11 @@ public class Profile {
         this.profileId = profileId;
     }
 
-    public Blob getProfilePhoto() {
+    public String getProfilePhoto() {
         return profilePhoto;
     }
 
-    public void setProfilePhoto(Blob profilePhoto) {
+    public void setProfilePhoto(String profilePhoto) {
         this.profilePhoto = profilePhoto;
     }
 
