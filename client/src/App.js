@@ -1,17 +1,26 @@
 import { BrowserRouter as Router, Redirect, Route, Switch, Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import React, { useRef, useEffect, useState } from 'react';
 import jwt_decode from "jwt-decode";
 
+import { getProfileByUsername } from "./services/profileApi";
+import 'mapbox-gl/dist/mapbox-gl.css';
 import './App.css';
 import AuthContext from "./AuthContext";
 import NavBar from "./NavBar";
 import Login from "./components/Login";
+import TripPlanner from "./components/TripPlanner";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import NotFound from "./NotFound";
 import TripOverview from "./components/TripOverview";
+import Register from "./components/Register";
+import ProfileForm from "./components/profileComponents/profileForm";
+import ProfileView from "./components/profileComponents/profileView";
 
 function App() {
 
   const [user, setUser] = useState({ username: "" });
+  const [profile, setProfile] = useState({ profileId: 0, profilePhoto: "", profileDescription: "", name: "", userId: 0, tripList: [] })
 
   const login = (token) => {
 
@@ -21,11 +30,14 @@ function App() {
     nextUser.username = decodedToken.sub;
     nextUser.roles = decodedToken.authorities.split(",");
     nextUser.token = token;
-    nextUser.isAdmin = function() {
+    nextUser.isAdmin = function () {
       return this.roles?.includes("ROLE_ADMIN");
     };
 
     setUser(nextUser);
+    getProfileByUsername(nextUser.username)
+      .then(setProfile)
+      .catch(console.log)
   }
 
   const logout = () => {
@@ -34,9 +46,11 @@ function App() {
 
   const auth = {
     user,
+    profile,
     login,
     logout
   };
+
 
   return (
     <>
@@ -54,12 +68,20 @@ function App() {
           <Route path="/about/us">
             <h1>About Us</h1>
           </Route>
+<<<<<<< HEAD
           <Route path="/profile/:profileId">
             <h1>Profile</h1>
             <Link to="/trip/overview/1">Trip</Link>
+=======
+          <Route path="/profile">
+             <ProfileView />
+          </Route>
+          <Route path="/create/profile">
+             <ProfileForm />
+>>>>>>> 3a4f36018b3104e7cd44f4f53d1c8b00df16760f
           </Route>
           <Route path="/adventure/planning">
-            <h1>Adventure Planning</h1>
+            <TripPlanner></TripPlanner>
           </Route>
           <Route path="/travel/buddy/add">
             <h1>Add Travel Buddy</h1>
@@ -76,6 +98,7 @@ function App() {
         </Switch>
       </Router>
       </AuthContext.Provider>
+      <ToastContainer />
     </div>
     </>
   );

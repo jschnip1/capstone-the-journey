@@ -2,6 +2,7 @@ import { useState, useContext} from "react";
 import { useHistory } from "react-router-dom";
 import AuthContext from "../AuthContext";
 import { authenticate } from "../services/authApi";
+import { Button } from 'semantic-ui-react';
 
 
 function Login() {
@@ -26,7 +27,7 @@ function Login() {
             .then((data) => {
 
                 auth.login(data.jwt_token);
-                history.push("/");
+                history.push("/profile");
             })
             .catch(setErrors); 
     }
@@ -43,7 +44,7 @@ function Login() {
                     <label className="form-label">Password</label>
                     <input className="form-control" type="password" value={credentials.password} name="password" onChange={handleChange} />
                 </div>
-                <button className="btn btn-primary" type="submit">Submit</button>
+                <Button className="btn btn-primary" type="submit">Submit</Button>
             </form>
     
         </div>

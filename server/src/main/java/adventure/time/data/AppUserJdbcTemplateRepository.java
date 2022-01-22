@@ -39,13 +39,14 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository {
         if(user == null){
             return null;
         }
-        final String sql = "insert into app_user (username, password_hash) values (?, ?);";
+        final String sql = "insert into app_user (username, password_hash, disabled) values (?, ?, ?);";
 
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         int rowsAffected = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPassword());
+            ps.setInt(3, 0);
             return ps;
         }, keyHolder);
 
