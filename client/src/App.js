@@ -1,11 +1,14 @@
 import { BrowserRouter as Router, Redirect, Route, Switch, Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import React, { useRef, useEffect, useState } from 'react';
 import jwt_decode from "jwt-decode";
-
+import 'mapbox-gl/dist/mapbox-gl.css';
 import './App.css';
 import AuthContext from "./AuthContext";
 import NavBar from "./NavBar";
 import Login from "./components/Login";
+import TripPlanner from "./components/TripPlanner";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import NotFound from "./NotFound";
 import TripOverview from "./components/TripOverview";
 
@@ -58,7 +61,7 @@ function App() {
             <h1>Profile</h1>
           </Route>
           <Route path="/adventure/planning">
-            <h1>Adventure Planning</h1>
+            <TripPlanner></TripPlanner>
           </Route>
           <Route path="/travel/buddy/add">
             <h1>Add Travel Buddy</h1>
@@ -75,6 +78,7 @@ function App() {
         </Switch>
       </Router>
       </AuthContext.Provider>
+      <ToastContainer />
     </div>
     </>
   );
