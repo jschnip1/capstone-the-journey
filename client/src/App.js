@@ -68,11 +68,17 @@ function App() {
           <Route path="/about/us">
             <h1>About Us</h1>
           </Route>
+<<<<<<< HEAD
+          <Route path="/profile/:profileId">
+            <h1>Profile</h1>
+            <Link to="/trip/overview/1">Trip</Link>
+=======
           <Route path="/profile">
              <ProfileView />
           </Route>
           <Route path="/create/profile">
              <ProfileForm />
+>>>>>>> 3a4f36018b3104e7cd44f4f53d1c8b00df16760f
           </Route>
           <Route path="/adventure/planning">
             <TripPlanner></TripPlanner>
