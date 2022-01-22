@@ -24,10 +24,21 @@ public class CommentController {
         return service.findAll();
     }
 
-    @GetMapping("/{commentId}")
+    @GetMapping("/commentId/{commentId}")
     public Comment findByCommentId(@PathVariable int commentId){
         return service.findById(commentId);
     }
+
+    @GetMapping("/tripId/{tripId}")
+    public List<Comment> findByTripId(@PathVariable int tripId) {
+        return service.findByTripId(tripId);
+    }
+
+    @GetMapping("/profileId/{profileId}")
+    public List<Comment> findByProfileId(@PathVariable int profileId) {
+        return service.findByProfileId(profileId);
+    }
+
 
     @PostMapping
     public ResponseEntity<Object> add(@RequestBody Comment comment){
@@ -52,9 +63,17 @@ public class CommentController {
         return ErrorResponseController.build(result);
     }
 
-    @DeleteMapping("/{commentId}")
+    @DeleteMapping("/commentId/{commentId}")
     public ResponseEntity<Void> deleteById(@PathVariable int commentId) {
         if (service.deleteById(commentId)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/tripId/{tripId}")
+    public ResponseEntity<Void> deleteByTripId(@PathVariable int tripId) {
+        if (service.deleteByTripId(tripId)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

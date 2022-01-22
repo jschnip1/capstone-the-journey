@@ -56,6 +56,7 @@ function App() {
           </Route>
           <Route path="/profile/:profileId">
             <h1>Profile</h1>
+            <Link to="/trip/overview/1">Trip</Link>
           </Route>
           <Route path="/adventure/planning">
             <h1>Adventure Planning</h1>

@@ -9,7 +9,7 @@ export async function fetchAll() {
 }
 
 export async function fetchById(id) {
-    const response = await fetch(`${url}/${id}`);
+    const response = await fetch(`${url}/commentId/${id}`);
     if (response.status === 404) {
         throw new Error(response.statusText);
     }
@@ -20,19 +20,33 @@ export async function fetchById(id) {
 }
 
 export async function fetchByTripId(id) {
-
+    const response = await fetch(`${url}/tripId/${id}`);
+    if (response.status === 404) {
+        throw new Error(response.statusText);
+    }
+    if (response.status !== 200) {
+        return Promise.reject("Could not fetch comment");
+    }
+    return await response.json();
 }
 
 export async function fetchByProfileId(id) {
-
+    const response = await fetch(`${url}/profileId/${id}`);
+    if (response.status === 404) {
+        throw new Error(response.statusText);
+    }
+    if (response.status !== 200) {
+        return Promise.reject("Could not fetch comment");
+    }
+    return await response.json();
 }
 
-export async function save(comment, token) {
+export async function save(comment) {
     const init = {
         headers: {
             "Content-Type": "application/json",
-            "Accept": "application/json",
-            "Authorization": `Bearer ${token}`
+            "Accept": "application/json"
+            // "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify(comment)
     };
@@ -67,12 +81,21 @@ export async function deleteById(id, token) {
             "Authorized": `Bearer ${token}`
         }
     };
-    const response = await fetch(`${url}/${id}`, init);
+    const response = await fetch(`${url}/commentId/${id}`, init);
     if (response.status !== 204) {
         return Promise.reject(`Could not delete comment: ${id}`);
     }
 }
 
 export async function deleteByTripId(id, token) {
-
+    const init = {
+        method: "DELETE",
+        headers: {
+            "Authorized": `Bearer ${token}`
+        }
+    };
+    const response = await fetch(`${url}/tripId/${id}`, init);
+    if (response.status !== 204) {
+        return Promise.reject(`Could not delete comment: ${id}`);
+    }
 }

@@ -1,10 +1,29 @@
-import React, { Component } from 'react'
-import { Grid, Menu, Segment } from 'semantic-ui-react'
+import React, { Component } from 'react';
+import { Grid, Menu, Segment, Comment, Header } from 'semantic-ui-react';
+import { Link } from "react-router-dom";
+import ViewComments from "./ViewComments";
+import ViewTrips from './ViewTrips';
 
 export default class MenuExampleTabularOnLeft extends Component {
-  state = { activeItem: 'bio' }
+  state = { activeItem: 'trip' }
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+
+  viewSegment = (activeItem) => {
+      if (activeItem === "trip") {
+          return <>
+            <ViewTrips />
+          </>
+      } else if (activeItem === "pictures") {
+          return "picture content"
+      } else if (activeItem === "items") {
+          return "Item table"
+      }else if (activeItem === "comments") {
+          return <>
+            <ViewComments />
+          </>
+      }
+  };
 
   render() {
     const { activeItem } = this.state
@@ -24,6 +43,11 @@ export default class MenuExampleTabularOnLeft extends Component {
               onClick={this.handleItemClick}
             />
             <Menu.Item
+              name='items'
+              active={activeItem === 'items'}
+              onClick={this.handleItemClick}
+            />
+            <Menu.Item
               name='comments'
               active={activeItem === 'comments'}
               onClick={this.handleItemClick}
@@ -33,7 +57,7 @@ export default class MenuExampleTabularOnLeft extends Component {
 
         <Grid.Column stretched width={12}>
           <Segment>
-            Content
+              {this.viewSegment(activeItem)}
           </Segment>
         </Grid.Column>
       </Grid>
