@@ -26,7 +26,7 @@ function Login() {
             .then((data) => {
 
                 auth.login(data.jwt_token);
-                history.push("/");
+                history.push("/profile");
             })
             .catch(setErrors); 
     }

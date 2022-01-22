@@ -1,28 +1,27 @@
-import { useEffect, useContext, useState  } from "react";
+import { useEffect, useContext  } from "react";
 import { useHistory } from "react-router-dom";
 
-import { getProfileByUsername } from "../../services/profileApi";
 import AuthContext from "../../AuthContext";
 
 function ProfileView() {
-    
-    const [profile, setProfile] = useState({profileId: 0, profilePhoto: {}, profileDescription: "", name: "", userId: 0, tripList: []})
 
     const auth = useContext(AuthContext);
     const history = useHistory();
     
     useEffect(() => {
-        getProfileByUsername(auth.user.username)
-        .then(setProfile)
-        .catch(() => {
+        if(!auth.user.username){
+            history.push("/login")
+        }
+        else if(auth.profile.profileId === 0){
             history.push("/create/profile")
-        })
+        }
+        
     },[auth, history])
 
     return (
         <>
-         <h1>Profile</h1>
-         {console.log(profile)}
+         <h1>{auth.profile.name}</h1>
+         <h2>{auth.profile.profilePhoto}</h2>
         </>
     )
 }

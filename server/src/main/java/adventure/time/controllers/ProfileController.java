@@ -25,13 +25,15 @@ public class ProfileController {
     public Profile findById(@PathVariable String username){
 //        System.out.println(service.findByUserId(1));
         int userId = appUserService.getUserIdByUsername(username);
-        if(userId != 0){
-            return service.findByUserId(userId);
+        Profile result = service.findByUserId(userId);
+        if(result == null){
+            return new Profile();
         }
-        return null;
+        return result;
+
     }
 
-    @PostMapping("/username")
+    @PostMapping("/{username}")
     public ResponseEntity<Object> add(@PathVariable String username, @RequestBody Profile profile){
         profile.setUserId(appUserService.getUserIdByUsername(username));
         Result<Profile> result = service.add(profile);

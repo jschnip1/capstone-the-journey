@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { Form, Button, FormField, Popup } from "semantic-ui-react";
 
 import { register, authenticate } from "../services/authApi";
+import ErrorSummary from "../ErrorSummary"
 import AuthContext from "../AuthContext";
 
 function Register() {
@@ -15,8 +16,8 @@ function Register() {
     const history = useHistory();
 
     useEffect(() => {
-        if (auth.user.username !== "") {
-            history.push("/")
+        if (auth.user.username ) {
+            history.push("/create/profile")
         }
 
     }, [auth, history])
@@ -42,14 +43,11 @@ function Register() {
                     authenticate(credentials)
                         .then((data) => {
                             auth.login(data.jwt_token);
-                            history.push("/create/profile");
                         })
                         .catch(setErrors);
                 })
                 .catch((error) => setErrors(error));
         }
-
-
     }
 
     return (<div>
@@ -72,7 +70,7 @@ function Register() {
             </FormField>
             <Button type="submit">Submit</Button>
         </Form>
-        {/* <p>{errors}</p> */}
+        <ErrorSummary errors={errors}/>
     </div>
     )
 }
