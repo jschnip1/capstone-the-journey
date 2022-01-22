@@ -32,6 +32,15 @@ public class AppUserService implements UserDetailsService {
         return appUser;
     }
 
+    public int getUserIdByUsername(String username) {
+        AppUser appUser = repository.findByUsername(username);
+
+        if(appUser == null){
+            return 0;
+        }
+        return appUser.getAppUserId();
+    }
+
     public AppUser create(String username, String password) {
         validate(username);
         validatePassword(password);
