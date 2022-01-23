@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
 import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
-import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
+import "../styling/TripPlanner.css";
+import { MdAddLocation } from "react-icons/fa";
 
 function TripPlanner() {
   mapboxgl.accessToken =
@@ -10,20 +10,30 @@ function TripPlanner() {
 
   const [map, setMap] = useState(null);
   const mapContainer = useRef(null);
-  const [lng, setLng] = useState(-81.69929332417247);
-  const [lat, setLat] = useState(41.506492186234055);
-  const [zoom, setZoom] = useState(12);
+  const [lng, setLng] = useState(38.8977);
+  const [lat, setLat] = useState(-77.0365);
+  const [zoom, setZoom] = useState(13);
+  const [currentLocation, setCurrentLocation] = useState(false);
 
-  let directions = new MapboxDirections({
-    accessToken: mapboxgl.accessToken,
-  });
+  function successLocation(position) {
+    setCurrentLocation(true);
+    setLat(position.coords.latitude);
+    setLng(position.coords.longitude);
+    map.flyTo({ center: [lat, lng], zoom: 10 });
+    setCurrentLocation(false);
+  }
+
+  function errorLocation() {
+    setLat(38.8977);
+    setLng(-77.0365);
+  }
 
   useEffect(() => {
     const initializeMap = ({ setMap, mapContainer }) => {
       const map = new mapboxgl.Map({
         container: mapContainer.current,
         style: "mapbox://styles/yellow-ranger/ckyolpbst29pe15pq1cniobi5",
-        center: [lng, lat],
+        center: [lat, lng],
         zoom: zoom,
       });
 
@@ -31,21 +41,28 @@ function TripPlanner() {
         setMap(map);
         map.resize();
       });
+      const directions = new MapboxDirections({
+        accessToken: mapboxgl.getRTLTextPluginStatus.accessToken,
+      });
+      map.addControl(directions, "top-left");
+      const nav = new mapboxgl.NavigationControl();
+      map.addControl(nav);
       map.addControl(
-        new MapboxDirections({
-          accessToken: mapboxgl.accessToken,
-        }),
-        "top-left"
+        new mapboxgl.GeolocateControl({
+          positionOptions: {
+            enableHighAccuracy: true,
+          },
+          trackUserLocation: true,
+          showUserHeading: true,
+        })
       );
     };
-
     if (!map) initializeMap({ setMap, mapContainer });
   }, [map]);
 
   useEffect(() => {
     if (!map) return;
-    console.log(map);
-    console.log(mapContainer);
+    if (currentLocation) return;
     map.on("move", () => {
       setLng(map.getCenter().lng.toFixed(4));
       setLat(map.getCenter().lat.toFixed(4));
@@ -53,10 +70,45 @@ function TripPlanner() {
     });
   });
 
-  const addDestination = () => {
-    directions.addWaypoint(0, [77.0365, 38.8977]);
-    map.addDestination.addControl(directions, "top-left");
+  var geoJson = {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        properties: {
+          "marker-color": "#f76565",
+          "marker-symbol": "circle-stroked",
+          "marker-color": "ff1f20",
+          "marker-size": "medium",
+          route: { id: 1, type: "origin", points: 2 },
+        },
+        geometry: {
+          type: "Point",
+          coordinates: ["144.9758769", "-37.8437403"],
+        },
+      },
+      {
+        type: "Feature",
+        properties: {
+          "marker-color": "#f76565",
+          "marker-symbol": "circle-stroked",
+          "marker-color": "23be20",
+          "marker-size": "medium",
+          route: { id: 2, type: "destination", points: 3 },
+        },
+        geometry: {
+          type: "Point",
+          coordinates: ["115.869578", "-31.980216"],
+        },
+      },
+    ],
   };
+
+  const origin = geoJson.features[0];
+  const destination = geoJson.features[1];
+  // let directions = new MapboxDirections({
+  //   accessToken: mapboxgl.accessToken,
+  // });
 
   return (
     <div>
