@@ -1,0 +1,86 @@
+diff --git a/node_modules/@mapbox/mapbox-gl-directions/src/directions.js b/node_modules/@mapbox/mapbox-gl-directions/src/directions.js
+index bc21f57..7470a59 100644
+--- a/node_modules/@mapbox/mapbox-gl-directions/src/directions.js
++++ b/node_modules/@mapbox/mapbox-gl-directions/src/directions.js
+@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
+ import { decode } from '@mapbox/polyline';
+ import utils from './utils';
+ import rootReducer from './reducers';
++import AddLocationButton from '../../../../src/components/AddLocationButton';
+ 
+ const storeWithMiddleware = applyMiddleware(thunk)(createStore);
+ const store = storeWithMiddleware(rootReducer);
+@@ -10,6 +11,7 @@ const store = storeWithMiddleware(rootReducer);
+ // State object management via redux
+ import * as actions from './actions';
+ import directionsStyle from './directions_style';
++import '../../../../src/styling/TripPlanner.css';
+ 
+ // Controls
+ import Inputs from './controls/inputs';
+diff --git a/node_modules/@mapbox/mapbox-gl-directions/src/templates/inputs.html b/node_modules/@mapbox/mapbox-gl-directions/src/templates/inputs.html
+index bd7b3dc..af69435 100644
+--- a/node_modules/@mapbox/mapbox-gl-directions/src/templates/inputs.html
++++ b/node_modules/@mapbox/mapbox-gl-directions/src/templates/inputs.html
+@@ -4,22 +4,51 @@
+       <label class='mapbox-form-label'>
+         <span class='directions-icon directions-icon-depart'></span>
+       </label>
+-      <div id='mapbox-directions-origin-input'></div>
++      <div id='mapbox-directions-origin-input'>
++        <div class="mapboxgl-ctrl-geocoder">
++          <span class="geocoder-icon geocoder-icon-search"></span>
++          <input
++            type="text"
++            placeholder="Choose a starting place"
++          >
++          <ul
++            class="suggestions"
++            style= "display: none;"
++          ></ul>
++          <div class="geocoder-pin-right">
++            <button class="geocoder-icon geocoder-icon-close"></button>
++            <span class="geocoder-icon geocoder-icon-loading"></span>
++          </div>
++        </div>
++      </div>
+     </div>
+ 
+     <button
+-      class='directions-icon directions-icon-reverse directions-reverse js-reverse-inputs'
+-      title='Reverse origin &amp; destination'>
+-    </button>
++    class='directions-icon directions-icon-reverse directions-reverse js-reverse-inputs'
++    title='Reverse origin &amp; destination'>
++  </button>
+ 
+-    <div class='mapbox-directions-destination'>
+-      <label class='mapbox-form-label'>
+-        <span class='directions-icon directions-icon-arrive'></span>
+-      </label>
+-      <div id='mapbox-directions-destination-input'></div>
++  <div class='mapbox-directions-destination'>
++    <label class='mapbox-form-label'>
++      <span class='directions-icon directions-icon-arrive'></span>
++    </label>
++    <div id='mapbox-directions-destination-input'>
++      <div class="mapboxgl-ctrl-geocoder">
++        <span class="geocoder-icon geocoder-icon-search"></span>
++        <input type="text" placeholder="Choose destination" />
++        <ul
++          class="suggestions"
++          style="display: none;"
++        ></ul>
++        <div class="geocoder-pin-right">
++          <button class="geocoder-icon geocoder-icon-close"></button>
++          <span class="geocoder-icon geocoder-icon-loading"></span>
++        </div>
++      </div>
+     </div>
+   </div>
+-
++</div>
++<div class="insertAddLocationButton">InsertButton</div>  
+   <% if (controls.profileSwitcher) { %>
+   <div class='mapbox-directions-profile mapbox-directions-component-keyline mapbox-directions-clearfix'><input
+       id='mapbox-directions-profile-driving-traffic'

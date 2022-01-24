@@ -1,8 +1,10 @@
 import React, { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
 import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
-import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
+import "../styling/TripPlanner.css";
+import ReactDOM from "react-dom";
+import reactDom from "react-dom";
+import AddLocationButton from "./AddLocationButton";
 
 function TripPlanner() {
   mapboxgl.accessToken =
@@ -10,13 +12,22 @@ function TripPlanner() {
 
   const [map, setMap] = useState(null);
   const mapContainer = useRef(null);
-  const [lng, setLng] = useState(-81.69929332417247);
-  const [lat, setLat] = useState(41.506492186234055);
-  const [zoom, setZoom] = useState(12);
-
-  let directions = new MapboxDirections({
-    accessToken: mapboxgl.accessToken,
-  });
+  const addLocationNode = useRef(null);
+  const [lng, setLng] = useState(
+    window.localStorage.getItem("current-location-lng") === null
+      ? -77.037
+      : window.localStorage.getItem("current-location-lng")
+  );
+  const [lat, setLat] = useState(
+    window.localStorage.getItem("current-location-lat") === null
+      ? 38.895
+      : window.localStorage.getItem("current-location-lat")
+  );
+  const [zoom, setZoom] = useState(
+    window.localStorage.getItem("current-location-zoom") === null
+      ? 16
+      : window.localStorage.getItem("current-location-zoom")
+  );
 
   useEffect(() => {
     const initializeMap = ({ setMap, mapContainer }) => {
@@ -25,48 +36,137 @@ function TripPlanner() {
         style: "mapbox://styles/yellow-ranger/ckyolpbst29pe15pq1cniobi5",
         center: [lng, lat],
         zoom: zoom,
+        pitch: 75,
       });
 
       map.on("load", () => {
         setMap(map);
         map.resize();
       });
+      const directions = new MapboxDirections({
+        accessToken: mapboxgl.accessToken,
+      });
+      map.addControl(directions, "top-left");
+      const nav = new mapboxgl.NavigationControl();
+      map.addControl(nav);
       map.addControl(
-        new MapboxDirections({
-          accessToken: mapboxgl.accessToken,
-        }),
-        "top-left"
+        new mapboxgl.GeolocateControl({
+          positionOptions: {
+            enableHighAccuracy: true,
+          },
+          trackUserLocation: true,
+          showUserHeading: true,
+        })
       );
     };
-
     if (!map) initializeMap({ setMap, mapContainer });
   }, [map]);
 
   useEffect(() => {
     if (!map) return;
-    console.log(map);
-    console.log(mapContainer);
     map.on("move", () => {
       setLng(map.getCenter().lng.toFixed(4));
       setLat(map.getCenter().lat.toFixed(4));
       setZoom(map.getZoom().toFixed(2));
+      window.localStorage.setItem("current-location-lat", lat);
+      window.localStorage.setItem("current-location-lng", lng);
+      window.localStorage.setItem("current-location-zoom", zoom);
+      //if(addLocationNode.)
+      addLocationNode.current =
+        mapContainer.current.childNodes[2].childNodes[0].childNodes[0].childNodes[0].childNodes[0];
+      //mapContainer.current.childNodes[2].childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes[1];
+      //console.log(addLocationNode.current);
+
+      //reactDom.render(<AddLocationButton />, addLocationNode.current);
+      // document.createElement("div");
+      // addLocationNode.classList.add("addLocation");
+      // addLocationNode.setAttribute("id", "addLocationNode");
+      // document
+      //   .querySelector(
+      //     "#root > div > div:nth-child(2) > div.map-container.mapboxgl-map > div.mapboxgl-control-container > div.mapboxgl-ctrl-top-left > div > div.directions-control.directions-control-inputs > div"
+      //   )
+      //   .insertBefore(addLocationNode, null);
+      //console.log(mapContainer.current);
     });
   });
 
-  const addDestination = () => {
-    directions.addWaypoint(0, [77.0365, 38.8977]);
-    map.addDestination.addControl(directions, "top-left");
+  var geoJson = {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        properties: {
+          "marker-color": "#f76565",
+          "marker-symbol": "circle-stroked",
+          "marker-color": "ff1f20",
+          "marker-size": "medium",
+          route: { id: 1, type: "origin", points: 2 },
+        },
+        geometry: {
+          type: "Point",
+          coordinates: ["144.9758769", "-37.8437403"],
+        },
+      },
+      {
+        type: "Feature",
+        properties: {
+          "marker-color": "#f76565",
+          "marker-symbol": "circle-stroked",
+          "marker-color": "23be20",
+          "marker-size": "medium",
+          route: { id: 2, type: "destination", points: 3 },
+        },
+        geometry: {
+          type: "Point",
+          coordinates: ["115.869578", "-31.980216"],
+        },
+      },
+    ],
   };
+
+  const origin = geoJson.features[0];
+  const destination = geoJson.features[1];
+  // let directions = new MapboxDirections({
+  //   accessToken: mapboxgl.accessToken,
+  // });
+
+  // map.on("click", (e) => {
+  //   console.log(e);
+  // });
+
+  /** 
+  // Add markers to the map.
+for (const marker of geojson.features) {
+  // Create a DOM element for each marker.
+  const el = document.createElement('div');
+  const width = marker.properties.iconSize[0];
+  const height = marker.properties.iconSize[1];
+  el.className = 'marker';
+  el.style.backgroundImage = `url(https://placekitten.com/g/${width}/${height}/)`;
+  el.style.width = `${width}px`;
+  el.style.height = `${height}px`;
+  el.style.backgroundSize = '100%';
+   
+  el.addEventListener('click', () => {
+  window.alert(marker.properties.message);
+  });
+   
+  // Add markers to the map.
+  new mapboxgl.Marker(el)
+  .setLngLat(marker.geometry.coordinates)
+  .addTo(map);
+  }
+
+  **/
+
+  //const addLocationNode = this.mapContainer.current;
 
   return (
     <div>
       <div className="sidebar">
         Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
       </div>
-      <div
-        ref={(el) => (mapContainer.current = el)}
-        className="map-container"
-      />
+      <div ref={mapContainer} className="map-container" />
     </div>
   );
 }
