@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import ViewComments from "./ViewComments";
 import ViewTrips from './ViewTrips';
 import ViewPhoto from "./ViewPhoto";
+import "../TripOverview.css";
+import { Renderer } from 'leaflet';
+import { render } from '@testing-library/react';
 
 export default class MenuExampleTabularOnLeft extends Component {
   state = { activeItem: 'trip' }
@@ -32,6 +35,7 @@ export default class MenuExampleTabularOnLeft extends Component {
     const { activeItem } = this.state
 
     return (
+      <div id="trip-main">
       <Grid>
         <Grid.Column width={4}>
           <Menu fluid vertical tabular>
@@ -64,6 +68,7 @@ export default class MenuExampleTabularOnLeft extends Component {
           </Segment>
         </Grid.Column>
       </Grid>
+      </div>
     )
   }
 }

@@ -55,7 +55,7 @@ function App() {
 
   return (
     <>
-    <div>
+    <div id="home-main">
       <AuthContext.Provider value={auth}>
       <Router>
         <NavBar />
@@ -64,7 +64,7 @@ function App() {
             <Login>Login</Login>
           </Route>
           <Route path="/register">
-            <h1>Register</h1>
+            <Register />
           </Route>
           <Route path="/about/us">
             <h1>About Us</h1>
