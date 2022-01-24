@@ -81,6 +81,11 @@ public class CommentService {
             return result;
         }
 
+        if (comment.getCommentBody() == null) {
+            result.addMessage("commentBody cannot be null", ResultType.INVALID);
+            return result;
+        }
+
         if (comment.getCommentBody().isBlank() || comment.getCommentBody().isEmpty()) {
             result.addMessage("commentBody cannot be empty", ResultType.INVALID);
             return result;
