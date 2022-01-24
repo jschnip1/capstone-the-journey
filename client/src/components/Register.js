@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router-dom";
-import { Form, Button, FormField, Popup } from "semantic-ui-react";
-
+import { Button, Form, Grid, Header, Icon, Message, Segment } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 import { register, authenticate } from "../services/authApi";
 import ErrorSummary from "../ErrorSummary"
 import AuthContext from "../AuthContext";
@@ -50,28 +50,51 @@ function Register() {
         }
     }
 
-    return (<div>
-        <h2>Register</h2>
+    return (
+    
+        // <div>
+        /* <h2>Register</h2>
         <Form onSubmit={handleSubmit}>
 
-            <FormField>
+            <Form.Field>
                 <label>Email *</label>
                 <input type="text" placeholder='example@example.com' value={credentials.username} name="username" onChange={handleChange} />
-            </FormField>
+            </Form.Field>
 
-            <FormField>
+            <Form.Field>
                 <label className="form-label">Password *</label>
                 <input className="form-control" type="password" value={credentials.password} name="password" onChange={handleChange} />
-            </FormField>
+            </Form.Field>
 
-            <FormField>
+            <Form.Field>
                 <label className="form-label">Confirm Password *</label>
                 <input className="form-control" type="password" value={confirmPass.confirmPassword} name="confirmPassword" onChange={handleChange} />
-            </FormField>
+            </Form.Field>
             <Button type="submit">Submit</Button>
         </Form>
         <ErrorSummary errors={errors}/>
-    </div>
+    </div> */
+        <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
+            <Grid.Column style={{ maxWidth: 450 }}>
+            <Header as='h2' color='teal' textAlign='center'>
+                <Icon name="map signs" /> Register a New Account
+            </Header>
+            <Form size='large' onSubmit={handleSubmit}>
+                <Segment stacked>
+                <Form.Input fluid icon='user' iconPosition='left' placeholder='E-mail address' type="text" value={credentials.username} name="username" onChange={handleChange} />
+                <Form.Input fluid icon='lock' iconPosition='left' placeholder='Password' type='password' value={credentials.password} name="password" onChange={handleChange} />
+                <Form.Input fluid icon='lock' iconPosition='left' placeholder='Confirm Password' type='password' value={confirmPass.confirmPassword} name="confirmPassword" onChange={handleChange} />
+        
+                <Button color='teal' fluid size='large' type="submit"> 
+                    Register
+                </Button>
+                </Segment>
+            </Form>
+            <Message>
+                Already have an account? <Link to="/login">Login</Link>
+            </Message>
+            </Grid.Column>
+        </Grid>
     )
 }
 

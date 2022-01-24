@@ -16,6 +16,7 @@ import TripOverview from "./components/TripOverview";
 import Register from "./components/Register";
 import ProfileForm from "./components/profileComponents/profileForm";
 import ProfileView from "./components/profileComponents/profileView";
+import ViewHome from "./components/ViewHome";
 
 function App() {
 
@@ -54,7 +55,7 @@ function App() {
 
   return (
     <>
-    <div>
+    <div id="home-main">
       <AuthContext.Provider value={auth}>
       <Router>
         <NavBar />
@@ -63,7 +64,7 @@ function App() {
             <Login>Login</Login>
           </Route>
           <Route path="/register">
-            <h1>Register</h1>
+            <Register />
           </Route>
           <Route path="/about/us">
             <h1>About Us</h1>
@@ -84,7 +85,7 @@ function App() {
             <TripOverview />
           </Route>
           <Route exact path="/">
-            <h1>Home</h1>
+            <ViewHome />
           </Route>
           <Route>
             <NotFound />
