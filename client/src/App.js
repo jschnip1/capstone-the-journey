@@ -16,6 +16,7 @@ import TripOverview from "./components/TripOverview";
 import Register from "./components/Register";
 import ProfileForm from "./components/profileComponents/profileForm";
 import ProfileView from "./components/profileComponents/profileView";
+import ViewHome from "./components/ViewHome";
 
 function App() {
 
@@ -84,7 +85,7 @@ function App() {
             <TripOverview />
           </Route>
           <Route exact path="/">
-            <h1>Home</h1>
+            <ViewHome />
           </Route>
           <Route>
             <NotFound />
