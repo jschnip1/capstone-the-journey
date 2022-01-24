@@ -148,10 +148,20 @@ class TripServiceTest {
         assertFalse(actual);
     }
 
+    @Test
+    void shouldNotDisableIfStartDateHasPassed() {
+        Trip trip = makeTrip();
+        trip.setTripId(3);
+        trip.setStartTime(LocalDate.of(2021,12,30));
+        when(repository.findById(3, false)).thenReturn(trip);
+        boolean actual = service.deleteById(3);
+        assertFalse(actual);
+    }
+
     private Trip makeTrip() {
         Trip trip = new Trip();
-        trip.setStartTime(LocalDate.of(2022, 2, 10));
-        trip.setEndTime(LocalDate.of(2022, 2, 12));
+        trip.setStartTime(LocalDate.of(2023, 2, 10));
+        trip.setEndTime(LocalDate.of(2023, 2, 12));
         trip.setTripReview(5);
         trip.setTotalDistance(200);
         trip.setName("Trip to Canada");
