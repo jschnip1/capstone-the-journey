@@ -3,6 +3,7 @@ import { Grid, Menu, Segment, Comment, Header } from 'semantic-ui-react';
 import { Link } from "react-router-dom";
 import ViewComments from "./ViewComments";
 import ViewTrips from './ViewTrips';
+import ViewPhoto from "./ViewPhoto";
 
 export default class MenuExampleTabularOnLeft extends Component {
   state = { activeItem: 'trip' }
@@ -15,7 +16,9 @@ export default class MenuExampleTabularOnLeft extends Component {
             <ViewTrips />
           </>
       } else if (activeItem === "pictures") {
-          return "picture content"
+          return <>
+            <ViewPhoto />
+          </>
       } else if (activeItem === "items") {
           return "Item table"
       }else if (activeItem === "comments") {

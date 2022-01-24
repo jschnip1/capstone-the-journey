@@ -11,7 +11,6 @@ function ViewComments() {
 
     const { id } = useParams();
 
-    // this needs to be changed to fetching by tripid not fetch all
     useEffect(() => {
         if (id) {
             fetchByTripId(id)

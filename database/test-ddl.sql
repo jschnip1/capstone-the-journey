@@ -183,8 +183,8 @@ begin
 		(2, 1);
         
 	insert into photo (photo, trip_location_id, caption) values
-		("photo of cleveland",1, "This is a photo of cleveland"),
-        ("photo of elephant",5,"This is a photo of an elephant");
+		("https://img2.10bestmedia.com/Images/Photos/372221/Cleveland-Letters-at-Edgewater-Park-Normal-Edit-2_54_990x660.jpg",1, "This is a photo of cleveland"),
+        ("https://static.scientificamerican.com/sciam/cache/file/065ACE5F-1E4B-4D3E-8E1E7CE0397D7681_source.jpg?w=590&h=800&07BA3C6D-C2F7-4A0C-877A316951C83AC0",5,"This is a photo of an elephant");
         
 	insert into `profile` (profile_photo, about_me, app_user_id, `name`) values
 		("photo of John", "I have a generic name", 1, "John Smith"),
