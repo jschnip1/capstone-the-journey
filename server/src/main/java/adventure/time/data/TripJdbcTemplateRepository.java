@@ -36,6 +36,8 @@ public class TripJdbcTemplateRepository implements TripRepository {
         return jdbcTemplate.query(sql, new TripMapper());
     }
 
+
+
     @Override
     @Transactional
     public Trip findById(int tripId, boolean loadPhotos) {
