@@ -1,13 +1,14 @@
 import { Form, Button, FormField } from "semantic-ui-react";
 import { useState, useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-
 import AuthContext from "../../AuthContext";
 import { getProfileByUsername, save } from "../../services/profileApi";
 import ErrorSummary from "../../ErrorSummary";
 
 
 function ProfileForm() {
+
+    // TODO: Update to fit with them
 
     const [profile, setProfile] = useState({ profileId: 0, profilePhoto: "", profileDescription: "", name: "", userId: 0 })
     const [errors, setErrors] = useState([]);

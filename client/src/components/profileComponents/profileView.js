@@ -5,6 +5,8 @@ import AuthContext from "../../AuthContext";
 
 function ProfileView() {
 
+    // TODO: Change the path for the link, add trip fetch with profileId, profile photo needs updating.
+
     const auth = useContext(AuthContext);
     const history = useHistory();
     
@@ -15,16 +17,14 @@ function ProfileView() {
         else if(auth.profile.profileId === 0){
             history.push("/create/profile")
         }
-        
     },[auth, history])
 
     return (
         <>
         <div id="profile-view">
-            <Image src='https://www.pumpkin.care/dog-breeds/wp-content/uploads/2021/03/Husky-Hero.png' size='small' id="profile-pic" />
+            <Image src={auth.profile.profilePhoto !== null ? auth.profile.profilePhoto : "https://cdn.pixabay.com/photo/2019/07/07/14/03/fiat-4322521_1280.jpg"} size='small' id="profile-pic" />
             <h1 id="profile-name">{auth.profile.name}</h1>
             <Divider />
-            {/* <h2>{auth.profile.profilePhoto}</h2> */}
             <h3>About Me</h3>
             <Divider />
             <p>{auth.profile.profileDescription}</p>
