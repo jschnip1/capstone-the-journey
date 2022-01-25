@@ -15,19 +15,19 @@ public class ItemService {
         this.repository = repository;
     }
 
-    Item findById(int itemId){
+    public Item findById(int itemId){
         return repository.findById(itemId);
     }
 
-    List<Item> findByTripId(int tripId){
+    public List<Item> findByTripId(int tripId){
         return repository.findByTripId(tripId);
     }
 
-    List<Item> findByProfileId(int profileId){
+    public List<Item> findByProfileId(int profileId){
         return repository.findByProfileId(profileId);
     }
 
-    Result<Item> add(Item item){
+    public Result<Item> add(Item item){
         Result<Item> result = validation(item);
 
         if(item.getItemId() != 0){
@@ -43,7 +43,7 @@ public class ItemService {
         return result;
     }
 
-    Result<Item> update(Item item){
+    public Result<Item> update(Item item){
         Result<Item> result = validation(item);
 
         if(item.getItemId() <= 0){
@@ -61,7 +61,7 @@ public class ItemService {
         return result;
     }
 
-    Result<Item> deleteById(int itemId){
+    public Result<Item> deleteById(int itemId){
         Result<Item> result = new Result<>();
 
         if(itemId <= 0){

@@ -81,7 +81,7 @@ function App() {
           <Route path="/travel/buddy/add">
             <h1>Add Travel Buddy</h1>
           </Route>
-          <Route path="/trip/overview/:id">
+          <Route path="/trip/overview/:tripId">
             <TripOverview />
           </Route>
           <Route exact path="/">
