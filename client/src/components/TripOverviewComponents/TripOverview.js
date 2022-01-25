@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import { Grid, Menu, Segment, Comment, Header } from 'semantic-ui-react';
 import { Link } from "react-router-dom";
-import ViewComments from "./ViewComments";
-import ViewTrips from './ViewTrips';
-import ViewPhoto from "./ViewPhoto";
+import ViewComments from "../CommentComponents/ViewComments";
+import ViewTrips from '../TripComponents/ViewTrips';
+import ViewPhoto from "../PhotoComponents/ViewPhoto";
 
-import ItemTable from './itemComponents/ItemTable';
+import ItemTable from '../itemComponents/ItemTable';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react/cjs/react.development';
-import { fetchById } from '../services/TripApi';
-import "../TripOverview.css";
+import { fetchById } from '../../services/TripApi';
 import { Renderer } from 'leaflet';
 import { render } from '@testing-library/react';
 
@@ -27,7 +26,7 @@ export default function MenuExampleTabularOnLeft() {
       disable: false,
       itemList: [],
       commentList: [],
-      location: []
+      locations: []
     })
 
 
@@ -40,7 +39,7 @@ export default function MenuExampleTabularOnLeft() {
       </>
     } else if (activeItem === "pictures") {
       return <>
-        <ViewPhoto />
+        <ViewPhoto locations={trip.locations} />
       </>
     } else if (activeItem === "items") {
       return <>
@@ -48,7 +47,7 @@ export default function MenuExampleTabularOnLeft() {
       </>
     } else if (activeItem === "comments") {
       return <>
-        <ViewComments />
+        <ViewComments comments={trip.commentList} />
       </>
     }
   };
@@ -62,6 +61,7 @@ export default function MenuExampleTabularOnLeft() {
   }, [tripId])
 
   return (
+    <div id="trip-main">
     <Grid>
       <Grid.Column width={4}>
         <Menu fluid vertical tabular>
@@ -94,5 +94,6 @@ export default function MenuExampleTabularOnLeft() {
         </Segment>
       </Grid.Column>
     </Grid>
+    </div>
   )
 }

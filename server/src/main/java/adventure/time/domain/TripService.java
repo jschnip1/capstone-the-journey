@@ -29,7 +29,7 @@ public class TripService {
     }
 
     public Trip findById(int tripId, boolean loadPhotos) {
-        return tripRepository.findById(tripId, loadPhotos);
+        return tripRepository.findById(tripId);
     }
 
     public Result<Trip> add(Trip trip) {

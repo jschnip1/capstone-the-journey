@@ -1,4 +1,4 @@
-import AuthContext from "../AuthContext";
+import AuthContext from "../../AuthContext";
 import { Image, Divider,Card, Icon } from 'semantic-ui-react';
 import { useHistory, Link } from "react-router-dom";
 import { useContext } from "react";
