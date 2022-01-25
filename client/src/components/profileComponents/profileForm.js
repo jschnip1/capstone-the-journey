@@ -8,7 +8,6 @@ import ErrorSummary from "../../ErrorSummary";
 
 function ProfileForm() {
 
-    // TODO: Update to fit with them
 
     const [profile, setProfile] = useState({ profileId: 0, profilePhoto: "", profileDescription: "", name: "", userId: 0 })
     const [errors, setErrors] = useState([]);
@@ -45,26 +44,28 @@ function ProfileForm() {
 
     return (
         <>
-            <Form onSubmit={handleSubmit}>
-                <FormField>
-                    <label>Name</label>
-                    <input type="text" placeholder='John Doe' value={profile.name} name="name" onChange={handleChange} />
-                </FormField>
-                {/* <FormField>
-                <label>Last Name</label>
-                <input type="text" placeholder='Doe' />
-            </FormField> */}
-                <Form.Field>
-                    <label>About</label>
-                    <textarea placeholder='Tell us more about you...' value={profile.profileDescription} name="profileDescription" onChange={handleChange} />
-                </Form.Field>
-                <Form.Field>
-                    <label>About</label>
-                    <input type="file" value={profile.profilePhoto} name="profilePhoto" onChange={handleChange} />
-                </Form.Field>
-                <Button type='submit'>Submit</Button>
-            </Form>
-            <ErrorSummary errors={errors}/>
+            <div id="profile-form">
+                <Form onSubmit={handleSubmit}>
+                    <FormField>
+                        <label>Name</label>
+                        <input type="text" placeholder='John Doe' value={profile.name} name="name" onChange={handleChange} />
+                    </FormField>
+                    {/* <FormField>
+                    <label>Last Name</label>
+                    <input type="text" placeholder='Doe' />
+                </FormField> */}
+                    <Form.Field>
+                        <label>About</label>
+                        <textarea placeholder='Tell us more about you...' value={profile.profileDescription} name="profileDescription" onChange={handleChange} />
+                    </Form.Field>
+                    <Form.Field>
+                        <label>About</label>
+                        <input type="file" value={profile.profilePhoto} name="profilePhoto" onChange={handleChange} />
+                    </Form.Field>
+                    <Button type='submit'>Submit</Button>
+                </Form>
+                <ErrorSummary errors={errors}/>
+            </div>
         </>
     )
 }

@@ -74,3 +74,11 @@
 #profile-pic {
   border-radius: 50%;
 }
+
+#profile-form {
+  background-color: white;
+  height: 100vh;
+  padding-left: 30px;
+  padding-top: 30px;
+  padding-right: 100px;
+}

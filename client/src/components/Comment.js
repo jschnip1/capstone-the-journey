@@ -5,7 +5,8 @@ import AuthContext from '../AuthContext';
 
 function Comments({comment}) {
 
-    // TODO: If signed in profileId matches comment profileId show delete link
+    // TODO: how to get commentId in order to delete that specific comment
+    // add console.log to confirm what comment is selected
 
     const auth = useContext(AuthContext);
 
