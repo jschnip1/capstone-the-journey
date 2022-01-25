@@ -27,7 +27,7 @@ function CommentForm() {
         const nextComment = {...theComment};
         nextComment[evt.target.name] = evt.target.value;
         nextComment["tripId"] = id;
-        nextComment["profileId"] = 1;
+        nextComment["profileId"] = auth.profile.profileId;
         setTheComment(nextComment);
     }
 

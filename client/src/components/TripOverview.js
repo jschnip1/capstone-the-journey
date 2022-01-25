@@ -4,10 +4,15 @@ import { Link } from "react-router-dom";
 import ViewComments from "./ViewComments";
 import ViewTrips from './ViewTrips';
 import ViewPhoto from "./ViewPhoto";
+
 import ItemTable from './itemComponents/ItemTable';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react/cjs/react.development';
 import { fetchById } from '../services/TripApi';
+import "../TripOverview.css";
+import { Renderer } from 'leaflet';
+import { render } from '@testing-library/react';
+
 
 export default function MenuExampleTabularOnLeft() {
   
@@ -90,5 +95,4 @@ export default function MenuExampleTabularOnLeft() {
       </Grid.Column>
     </Grid>
   )
-
 }
