@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Button, Table } from 'semantic-ui-react'
 import { useParams } from 'react-router-dom'
 
-// import { fetchByTripId } from '../../services/itemsApi'
+import { fetchByTripId } from '../../services/itemsApi'
 import Item from './Item'
 import ErrorSummary from '../../ErrorSummary'
 import ItemModal from './ItemModal'
@@ -11,9 +11,21 @@ function ItemTable({ items }) {
 
     const [itemList, setItemList] = useState(items)
 
+    const removeFromList = (tripId) => {
+        fetchByTripId(tripId)
+            .then(setItemList)
+            .catch(console.log);
+    }
+
+    const addToList = (item) => {
+        const newItemList = [...itemList];
+        newItemList.push(item)
+        setItemList(newItemList);
+    }
+
     return (
         <div>
-            <ItemModal/>
+            <ItemModal onAdd={addToList}/>
             <Table>
                 <Table.Header>
                     <Table.Row>
@@ -25,9 +37,8 @@ function ItemTable({ items }) {
                 </Table.Header>
 
                 <Table.Body>
-                    {itemList.map(item => <Item key={item.itemId} item={item} />)}
+                    {itemList.map(item => <Item key={item.itemId} item={item} onDelete={removeFromList}/>)}
                 </Table.Body>
-                <ErrorSummary />
             </Table>
         </div>
     )

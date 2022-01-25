@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/item")
 public class ItemController {
@@ -21,6 +23,11 @@ public class ItemController {
     @GetMapping("/{itemId}")
     public Item findByItemId(@PathVariable int itemId){
         return service.findById(itemId);
+    }
+
+    @GetMapping("/trip/{tripId}")
+    public List<Item> findByTripId(@PathVariable int tripId){
+        return service.findByTripId(tripId);
     }
 
     @PostMapping
@@ -43,5 +50,14 @@ public class ItemController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return ErrorResponseController.build(result);
+    }
+
+    @DeleteMapping("/{itemId}")
+    public ResponseEntity<Object> delete(@PathVariable int itemId) {
+        Result<Item> result = service.deleteById(itemId);
+        if (result.isSuccess()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

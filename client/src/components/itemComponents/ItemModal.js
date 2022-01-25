@@ -7,7 +7,7 @@ import AuthContext from '../../AuthContext'
 import ErrorSummary from '../../ErrorSummary'
 import { save } from '../../services/itemsApi'
 
-function ItemModal() {
+function ItemModal({ onAdd }) {
 
     const { tripId } = useParams();
     const auth = useContext(AuthContext);
@@ -26,10 +26,11 @@ function ItemModal() {
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
-        console.log("it is trying to submit")
-        console.log(item)
         save(item)
-            .then(() => setOpen(false))
+            .then((data) => {
+                onAdd(data);
+                setOpen(false);
+            })
             .catch(setErrors)
         
     }

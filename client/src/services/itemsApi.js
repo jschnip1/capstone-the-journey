@@ -8,6 +8,14 @@ export async function fetchByItemId(itemId){
     return await response.json();
 }
 
+export async function fetchByTripId(tripId){
+    const response = await fetch(`${url}/trip/${tripId}`)
+    if (response.status !== 200) {
+        return Promise.reject("Could not find Item")
+    }
+    return await response.json();
+}
+
 export async function save (item, token) {
     const init = {
         headers: {
@@ -39,5 +47,18 @@ export async function save (item, token) {
             return await response.json();
         }
         return Promise.reject("Item not created!");
+    }
+}
+
+export async function deleteByItemId (item, token) {
+    const init = {
+        headers: {
+            //"Authorization": `Bearer ${token}`
+        },
+        method: "DELETE"
+    };
+    const response = await fetch(`${url}/${item.itemId}`, init);
+    if (response.status !== 204) {
+        return Promise.reject(`Could not delete agent: ${item.itemId}`);
     }
 }
