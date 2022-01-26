@@ -14,7 +14,6 @@ import "./styling/App.css";
 import AuthContext from "./AuthContext";
 import NavBar from "./NavBar";
 import Login from "./components/Login";
-import TripPlanner from "./components/TripPlanner";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NotFound from "./NotFound";
@@ -22,6 +21,8 @@ import TripOverview from "./components/TripOverview";
 import Register from "./components/Register";
 import ProfileForm from "./components/profileComponents/profileForm";
 import ProfileView from "./components/profileComponents/profileView";
+import Map from "./components/Map";
+import TripPlanner from "./components/LocationList";
 
 function App() {
   const [user, setUser] = useState({ username: "" });
@@ -83,7 +84,7 @@ function App() {
                 <ProfileForm />
               </Route>
               <Route path="/adventure/planning">
-                <TripPlanner></TripPlanner>
+                <Map />
               </Route>
               <Route path="/travel/buddy/add">
                 <h1>Add Travel Buddy</h1>

@@ -1,11 +1,96 @@
-.directions-icon-arrive {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512' fill='none'%3E%3Cpath d='M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z' fill='%23FF0000' stroke='%23000000'/%3E%3C/svg%3E");
-  background-size: contain;
+.main {
+  height: 100%;
+  color: cornflowerblue;
 }
 
-.directions-icon-depart {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512' fill='none'%3E%3Cpath d='M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z' fill='%2300FF00' stroke='%23000000'/%3E%3C/svg%3E");
-  background-size: contain;
+.mapContainer,
+canvas.mapboxgl-canvas {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  height: 90vh;
+  width: 100vw;
 }
 
+.trip-planner-overview {
+  z-index: 1;
+  position: absolute;
+  bottom: 10%;
+  left: 5%;
+  width: 25vw;
+  height: 60vh;
+  padding-left: auto;
+  padding-right: auto;
+  background-color: rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 5px 5px 20px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.5) 5px 5px 20px;
+  box-shadow: rgba(0, 0, 0, 0.5) 5px 5px 20px;
+}
 
+.trip-planner-overview > h1 {
+  text-align: center;
+  margin-top: 0.5em !important;
+  margin-bottom: 1.5em;
+}
+
+.origin-destination-inline-block {
+  z-index: 1;
+  margin-top: 5em;
+}
+
+.origin-destination-fields {
+  position: relative;
+  z-index: 1000;
+}
+
+.mapboxgl-ctrl-geocoder {
+  min-width: 100%;
+}
+
+.mapboxgl-ctrl-geocoder--input {
+  text-align: center;
+  overflow-y: hidden;
+  display: inline-block;
+  margin-bottom: 60px;
+  z-index: 1;
+}
+
+#starting-location-label,
+#destination-label {
+  display: block;
+  margin-left: 3em;
+  margin-top: 0.2em;
+}
+
+.button-container {
+  margin-left: 3em;
+}
+
+.button-container-addLocationButton {
+  margin-left: 3em;
+  margin-top: -2em;
+}
+
+.location {
+  width: 100%;
+  margin-bottom: 1em;
+  margin-left: 2em;
+}
+
+.json-result {
+  visibility: hidden;
+}
+
+.mapboxgl-ctrl-top-right > .mapboxgl-ctrl-geocoder.mapboxgl-ctrl {
+  visibility: hidden;
+}
+
+.mapboxgl-ctrl-top-right > .mapboxgl-ctrl.mapboxgl-ctrl-group {
+  margin-top: 3em;
+  margin-right: 3em;
+}
+
+.ui.text.container.trip-planner-overview {
+  max-width: 20% !important;
+  align-items: center;
+}
