@@ -53,6 +53,14 @@ function App() {
 
   const logout = () => {
     setUser({ username: "" });
+    setProfile({
+      profileId: 0,
+      profilePhoto: "",
+      profileDescription: "",
+      name: "",
+      userId: 0,
+      tripList: []
+    })
   };
 
   const auth = {

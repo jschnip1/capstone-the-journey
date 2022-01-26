@@ -6,8 +6,6 @@ import TripCards from "../TripCards";
 
 function ProfileView() {
 
-    // TODO: profile photo needs updating. If profile already exists display that message.
-
     const auth = useContext(AuthContext);
     const history = useHistory();
     
