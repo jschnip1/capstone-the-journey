@@ -14,6 +14,10 @@ public class ProfileService {
         this.repository = repository;
     }
 
+    public Profile findByProfileId(int profileId) {
+        return repository.findByProfileId(profileId);
+    }
+
     public Profile findByUserId(int userId) {
         return repository.findByUserId(userId);
     }

@@ -21,7 +21,13 @@ public class ProfileController {
         this.appUserService = appUserService;
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("profileId/{profileId}")
+    public Profile findById(@PathVariable int profileId){
+        return service.findByProfileId(profileId);
+
+    }
+
+    @GetMapping("username/{username}")
     public Profile findById(@PathVariable String username){
 //        System.out.println(service.findByUserId(1));
         int userId = appUserService.getUserIdByUsername(username);

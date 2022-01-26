@@ -21,6 +21,17 @@ class ProfileServiceTest {
     ProfileRepository repository;
 
     @Test
+    void shouldFindByProfileId() {
+        Profile mockOut = new Profile(2, null, "about me", "name", 1);
+
+        when(repository.findByProfileId(2)).thenReturn(mockOut);
+
+        Profile result = service.findByProfileId(2);
+
+        assertNotNull(result);
+    }
+
+    @Test
     void shouldFindByUserId() {
         Profile mockOut = new Profile(2, null, "about me", "name", 1);
 

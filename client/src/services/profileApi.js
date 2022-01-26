@@ -1,10 +1,25 @@
 const url = "http://localhost:8080/profile"
 
+
+export async function getProfilebyProfileId(profileId) {
+    const init = {
+        method: "GET",
+    };
+    const response = await fetch(`${url}/profile/${profileId}`, init);
+    if (response.status === 404) {
+        return Promise.reject("Profile not found");
+    }
+    if (response.status === 200) {
+        return await response.json();
+    }
+    return Promise.reject("Could not fetch Profile");
+}
+
 export async function getProfileByUsername(username, token) {
     const init = {
         method: "GET",
     };
-    const response = await fetch(`${url}/${username}`, init);
+    const response = await fetch(`${url}/username/${username}`, init);
     if (response.status === 404) {
         return Promise.reject("Profile not found");
     }
