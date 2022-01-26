@@ -56,7 +56,7 @@ export default function MenuExampleTabularOnLeft() {
       </>
     } else if (activeItem === "upload photo") {
       return <>
-        <PhotoForm />
+        <PhotoForm locations={trip.locations} />
       </>
     }
   };

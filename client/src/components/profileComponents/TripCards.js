@@ -13,7 +13,7 @@ function TripCards() {
                 <Card.Content header={a.name} />
                 <Card.Content content={`Start Time: ${a.startTime}`} />
                 <Card.Content extra>
-                <Icon name='map' />{a.totalDistance}
+                <Icon name='map' />{a.totalDistance} miles
                 </Card.Content>
             </Card>)}
     </>

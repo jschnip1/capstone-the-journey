@@ -55,8 +55,7 @@ function LocationList({
     <Container text className="trip-planner-overview">
       <h1>Trip Overview</h1>
       <div id="addLocationControlBar">
-        {origin && destination && startTrip ? (
-          visiblity ? (
+          {visiblity ? (
             <AddLocationButton handleAddLocation={handleAddLocation} />
           ) : (
             <div className="ui form">
@@ -67,12 +66,6 @@ function LocationList({
                 />
               </div>
             </div>
-          )
-        ) : (
-          <AddLocationButton
-            handleAddLocation={handleAddLocation}
-            style={{ visibility: "hidden" }}
-          />
         )}
       </div>
       <Divider />

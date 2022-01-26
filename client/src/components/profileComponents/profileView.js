@@ -6,8 +6,6 @@ import TripCards from "./TripCards";
 
 function ProfileView() {
 
-    // TODO: profile photo needs updating. If profile already exists display that message.
-
     const auth = useContext(AuthContext);
     const history = useHistory();
     
@@ -23,6 +21,7 @@ function ProfileView() {
     return (
         <>
         <div id="profile-view">
+
             <Image src={auth.profile.profilePhoto !== null ? auth.profile.profilePhoto : "https://www.loveyourdog.com/wp-content/uploads/2020/04/Siberian-Husky-in-Snow.jpg"} size='small' id="profile-pic" />
             <h1 id="profile-name">{auth.profile.name}</h1>
             <Divider />
