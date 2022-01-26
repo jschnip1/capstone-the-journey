@@ -10,10 +10,10 @@ public class PhotoMapper implements RowMapper<Photo> {
     @Override
     public Photo mapRow(ResultSet resultSet, int i) throws SQLException {
         Photo photo = new Photo();
-        photo.setPhoto(resultSet.getBlob("photo"));
+        photo.setPhoto(resultSet.getString("photo"));
         photo.setPhotoId(resultSet.getInt("photo_id"));
         photo.setCaption(resultSet.getString("caption"));
-        photo.setTripLocationId(resultSet.getInt("trip_location"));
+        photo.setTripLocationId(resultSet.getInt("trip_location_id"));
         return photo;
     }
 }

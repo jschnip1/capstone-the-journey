@@ -21,8 +21,12 @@ import TripOverview from "./components/TripOverview";
 import Register from "./components/Register";
 import ProfileForm from "./components/profileComponents/profileForm";
 import ProfileView from "./components/profileComponents/profileView";
+<<<<<<< HEAD
 import Map from "./components/Map";
 import TripPlanner from "./components/LocationList";
+=======
+import ViewHome from "./components/ViewHome";
+>>>>>>> main
 
 function App() {
   const [user, setUser] = useState({ username: "" });
@@ -63,6 +67,7 @@ function App() {
 
   return (
     <>
+<<<<<<< HEAD
       <div>
         <AuthContext.Provider value={auth}>
           <Router>
@@ -103,6 +108,48 @@ function App() {
         </AuthContext.Provider>
         <ToastContainer />
       </div>
+=======
+    <div id="home-main">
+      <AuthContext.Provider value={auth}>
+      <Router>
+        <NavBar />
+        <Switch>
+          <Route path="/login">
+            <Login>Login</Login>
+          </Route>
+          <Route path="/register">
+            <Register />
+          </Route>
+          <Route path="/about/us">
+            <h1>About Us</h1>
+          </Route>
+          <Route path="/profile">
+             <ProfileView />
+          </Route>
+          <Route path="/create/profile">
+             <ProfileForm />
+          </Route>
+          <Route path="/adventure/planning">
+            <TripPlanner></TripPlanner>
+          </Route>
+          <Route path="/travel/buddy/add">
+            <h1>Add Travel Buddy</h1>
+          </Route>
+          <Route path="/trip/overview/:tripId">
+            <TripOverview />
+          </Route>
+          <Route exact path="/">
+            <ViewHome />
+          </Route>
+          <Route>
+            <NotFound />
+          </Route>
+        </Switch>
+      </Router>
+      </AuthContext.Provider>
+      <ToastContainer />
+    </div>
+>>>>>>> main
     </>
   );
 }

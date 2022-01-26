@@ -1,16 +1,14 @@
 package adventure.time.models;
 
 
-import java.sql.Blob;
-
 public class Photo {
 
     private int photoId;
-    private Blob photo;
+    private String photo;
     private int tripLocationId;
     private String caption;
 
-    public Photo(int photoId, Blob photo, int tripLocationId, String caption) {
+    public Photo(int photoId, String photo, int tripLocationId, String caption) {
         this.photoId = photoId;
         this.photo = photo;
         this.tripLocationId = tripLocationId;
@@ -29,11 +27,11 @@ public class Photo {
         this.photoId = photoId;
     }
 
-    public Blob getPhoto() {
+    public String getPhoto() {
         return photo;
     }
 
-    public void setPhoto(Blob photo) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
 
