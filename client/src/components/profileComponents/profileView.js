@@ -21,7 +21,8 @@ function ProfileView() {
     return (
         <>
         <div id="profile-view">
-            <Image src='https://www.pumpkin.care/dog-breeds/wp-content/uploads/2021/03/Husky-Hero.png' size='small' id="profile-pic" />
+            {console.log(auth.profile.profilePhoto)}
+            <Image src={auth.profile.profilePhoto} size='small' id="profile-pic" />
             <h1 id="profile-name">{auth.profile.name}</h1>
             <Divider />
             {/* <h2>{auth.profile.profilePhoto}</h2> */}
