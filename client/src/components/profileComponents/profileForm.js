@@ -3,6 +3,7 @@ import { useState, useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import AuthContext from "../../AuthContext";
 import { getProfileByUsername, save } from "../../services/profileApi";
+import { uploadFile } from "../../services/s3Api";
 import ErrorSummary from "../../ErrorSummary";
 
 
@@ -10,6 +11,8 @@ function ProfileForm() {
 
 
     const [profile, setProfile] = useState({ profileId: 0, profilePhoto: "", profileDescription: "", name: "", userId: 0 })
+    const [formData, setFormData] = useState(new FormData())
+    const [file, setFile] = useState("");
     const [errors, setErrors] = useState([]);
 
     const auth = useContext(AuthContext);
@@ -28,18 +31,37 @@ function ProfileForm() {
         setProfile(nextProfile);
     };
 
+    const handleImageChange = (evt) => {
+        setFile(evt.target.value)
+
+        const newFormData = new FormData();
+        newFormData.append('type', 'file');
+        newFormData.append('image', evt.target.files[0]);
+
+        setFormData(newFormData);
+    }
+
     const handleSubmit = (evt) => {
         evt.preventDefault();
-        save(profile, auth.user.username, auth.token)
-            .then(() => {
-                getProfileByUsername(auth.user.username)
-                    .then((data) => {
-                        auth.profile = data;
-                        history.push("/profile")
+
+        uploadFile(formData)
+            .then((data) => {
+
+                profile.profilePhoto = data.url;
+
+                save(profile, auth.user.username, auth.token)
+                    .then(() => {
+                        getProfileByUsername(auth.user.username)
+                            .then((data) => {
+                                auth.profile = data;
+                                history.push("/profile")
+                            })
+                            .catch(setErrors);
                     })
-                    .catch(setErrors);
+                    .catch(setErrors)
             })
-            .catch(setErrors)
+
+
     }
 
     return (
@@ -59,8 +81,8 @@ function ProfileForm() {
                         <textarea placeholder='Tell us more about you...' value={profile.profileDescription} name="profileDescription" onChange={handleChange} />
                     </Form.Field>
                     <Form.Field>
-                        <label>About</label>
-                        <input type="file" value={profile.profilePhoto} name="profilePhoto" onChange={handleChange} />
+                        <label>Profile Photo</label>
+                        <input type="file" value={file} onChange={handleImageChange} />
                     </Form.Field>
                     <Button type='submit'>Submit</Button>
                 </Form>
