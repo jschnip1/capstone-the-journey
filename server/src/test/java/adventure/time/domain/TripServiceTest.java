@@ -36,7 +36,7 @@ class TripServiceTest {
     @Test
     void shouldFindById() {
         Trip expected = makeTrip();
-        when(repository.findById(1, false)).thenReturn(expected);
+        when(repository.findById(1)).thenReturn(expected);
         Trip actual = service.findById(1, false);
         assertEquals(expected, actual);
     }
@@ -153,7 +153,7 @@ class TripServiceTest {
         Trip trip = makeTrip();
         trip.setTripId(3);
         trip.setStartTime(LocalDate.of(2021,12,30));
-        when(repository.findById(3, false)).thenReturn(trip);
+        when(repository.findById(3)).thenReturn(trip);
         boolean actual = service.deleteById(3);
         assertFalse(actual);
     }

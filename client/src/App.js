@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import React, { useRef, useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
-
+import { Button } from 'semantic-ui-react';
 import { getProfileByUsername } from "./services/profileApi";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./styling/App.css";
@@ -17,7 +17,7 @@ import Login from "./components/Login";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NotFound from "./NotFound";
-import TripOverview from "./components/TripOverview";
+import TripOverview from "./components/TripOverviewComponents/TripOverview";
 import Register from "./components/Register";
 import ProfileForm from "./components/profileComponents/profileForm";
 import ProfileView from "./components/profileComponents/profileView";

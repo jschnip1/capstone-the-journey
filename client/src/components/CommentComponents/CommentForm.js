@@ -1,10 +1,9 @@
 import { Button, Comment, Form} from 'semantic-ui-react';
 import { useState, useEffect, useContext } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { save } from "../services/CommentApi";
-import ErrorSummary from "../ErrorSummary";
-import AuthContext from '../AuthContext';
-import { fetchAll } from "../services/CommentApi";
+import { save } from "../../services/CommentApi";
+import ErrorSummary from "../../ErrorSummary";
+import AuthContext from '../../AuthContext';
 
 const EMPTY_COMMENT = {
     "commentId": 0,
@@ -13,20 +12,20 @@ const EMPTY_COMMENT = {
     "profileId": 0
 }
 
-function CommentForm() {
+function CommentForm({ onAdd }) {
     const [theComment, setTheComment] = useState(EMPTY_COMMENT);
     const [errors, setErrors] = useState([]);
+    const [inputValue, setInputValue] = useState("");
 
     const auth = useContext(AuthContext);
 
-    const { id } = useParams();
-
-    const history = useHistory();
+    const { tripId } = useParams();
 
     const handleChange = (evt) => {
+        setInputValue(evt.target.value);
         const nextComment = {...theComment};
         nextComment[evt.target.name] = evt.target.value;
-        nextComment["tripId"] = id;
+        nextComment["tripId"] = tripId;
         nextComment["profileId"] = auth.profile.profileId;
         setTheComment(nextComment);
     }
@@ -34,8 +33,9 @@ function CommentForm() {
     const handleSubmit = (evt) => {
         evt.preventDefault();
         save(theComment)
-            .then(() => {
-                history.push(`trip/overview/${id}`)
+            .then((data) => {
+                onAdd(data);
+                setInputValue("");
             })
             .catch(setErrors);
     }
@@ -44,7 +44,7 @@ function CommentForm() {
 
     return <>
         <Form reply>
-            <Form.TextArea  name="commentBody" onChange={handleChange} />
+            <Form.TextArea  name="commentBody" onChange={handleChange} value={inputValue} />
             <Button content='Add Reply' labelPosition='left' icon='edit' primary onClick={handleSubmit}/>
         </Form>
         <ErrorSummary errors={errors} />

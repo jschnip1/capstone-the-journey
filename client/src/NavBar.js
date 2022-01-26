@@ -6,11 +6,6 @@ import AuthContext from "./AuthContext"
 
 
 function NavBar() {
-  // const state = { activeItem: 'home' }
-
-  // const handleItemClick = (e, { name }) => this.setState({ activeItem: name })
-
-  //   const { activeItem } = this.state
 
   const auth = useContext(AuthContext);
   const history = useHistory();
