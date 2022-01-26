@@ -1,14 +1,11 @@
-import { Item } from 'semantic-ui-react';
+import { Item, Image  } from 'semantic-ui-react';
+import { useState } from "react";
 
-function Photo({photo}) {
-
-    console.log(photo);
+function Photo({photos}) {
 
     return <>
-        <Item>
-            <Item.Image size='medium' src={photo.photo} />
-            <Item.Content verticalAlign='bottom'>{photo.caption}</Item.Content>
-        </Item>
+        {photos.length > 0 ? photos.map(a=> <div><Image size='medium' src={a.photo} float="left" verticalAlign="top" />
+        <p>{a.caption}</p></div>) : null}
     </>
 }
 

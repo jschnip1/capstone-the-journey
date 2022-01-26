@@ -4,16 +4,21 @@ import { Link } from "react-router-dom";
 import ViewComments from "../CommentComponents/ViewComments";
 import ViewTrips from '../TripComponents/ViewTrips';
 import ViewPhoto from "../PhotoComponents/ViewPhoto";
-
 import ItemTable from '../itemComponents/ItemTable';
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react/cjs/react.development';
+import { useEffect, useState, useContext } from 'react/cjs/react.development';
 import { fetchById } from '../../services/TripApi';
 import { Renderer } from 'leaflet';
 import { render } from '@testing-library/react';
+import AuthContext from "../../AuthContext";
+import PhotoForm from "../PhotoComponents/PhotoForm";
 
 
 export default function MenuExampleTabularOnLeft() {
+
+   // TODO: ternary operator to make sure only person associated with trip can upload photo
+
+   const auth = useContext(AuthContext);
   
     const [activeItem, setActiveItem] = useState('trip');
     const [trip, setTrip] = useState({
@@ -48,6 +53,10 @@ export default function MenuExampleTabularOnLeft() {
     } else if (activeItem === "comments") {
       return <>
         <ViewComments comments={trip.commentList} />
+      </>
+    } else if (activeItem === "upload photo") {
+      return <>
+        <PhotoForm />
       </>
     }
   };
@@ -85,7 +94,13 @@ export default function MenuExampleTabularOnLeft() {
             active={activeItem === 'comments'}
             onClick={handleItemClick}
           />
+          <Menu.Item
+            name='upload photo'
+            active={activeItem === 'upload photo'}
+            onClick={handleItemClick}
+          />
         </Menu>
+        
       </Grid.Column>
 
       <Grid.Column stretched width={12}>
