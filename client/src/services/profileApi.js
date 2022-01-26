@@ -5,7 +5,7 @@ export async function getProfilebyProfileId(profileId) {
     const init = {
         method: "GET",
     };
-    const response = await fetch(`${url}/profile/${profileId}`, init);
+    const response = await fetch(`${url}/profileId/${profileId}`, init);
     if (response.status === 404) {
         return Promise.reject("Profile not found");
     }
