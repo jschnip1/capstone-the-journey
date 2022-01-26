@@ -30,7 +30,6 @@ canvas.mapboxgl-canvas {
 .trip-planner-overview > h1 {
   text-align: center;
   margin-top: 0.5em !important;
-  margin-bottom: 1.5em;
 }
 
 .origin-destination-inline-block {
@@ -67,8 +66,8 @@ canvas.mapboxgl-canvas {
 }
 
 .button-container-addLocationButton {
-  margin-left: 3em;
-  margin-top: -2em;
+  display: flex;
+  justify-content: center;
 }
 
 .location {
@@ -92,5 +91,14 @@ canvas.mapboxgl-canvas {
 
 .ui.text.container.trip-planner-overview {
   max-width: 20% !important;
-  align-items: center;
+}
+
+.trip-planner-overview {
+  justify-content: center;
+  padding: 1em;
+}
+
+#location-request {
+  justify-content: center !important;
+  margin-left: -3.5em;
 }

@@ -3,6 +3,7 @@ import mapboxgl from "mapbox-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "../styling/TripPlanner.css";
 import LocationList from "./LocationList";
+import LocationSearch from "./LocationSearch";
 import DeckGL, { GeoJsonLayer } from "deck.gl";
 import { Button, Icon } from "semantic-ui-react";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
@@ -12,10 +13,10 @@ function Map() {
     "pk.eyJ1IjoieWVsbG93LXJhbmdlciIsImEiOiJja3lrZHJnaW4waTh2MnBvMGsyM2YxZm1lIn0.Hl-fBAj0_GaGVa1YVTlUMg";
 
   const geocoderContainerRef = useRef(null);
+  const [startTrip, setStartTrip] = useState(false);
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
   const [locationList, setLocationList] = useState([]);
-  const [startTrip, setStartTrip] = useState(0);
   const [map, setMap] = useState(null);
   const mapContainer = useRef(null);
   const [lng, setLng] = useState(
@@ -53,6 +54,11 @@ function Map() {
     mapboxgl: mapboxgl,
   });
 
+  const geocoder3 = new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken,
+    mapboxgl: mapboxgl,
+  });
+
   useEffect(() => {
     const initializeMap = ({ setMap, mapContainer }) => {
       const map = new mapboxgl.Map({
@@ -78,6 +84,7 @@ function Map() {
       );
       map.addControl(geocoder);
       map.addControl(geocoder2);
+      map.addControl(geocoder3);
     };
 
     if (!map) initializeMap({ setMap, mapContainer });
@@ -102,55 +109,47 @@ function Map() {
       .appendChild(geocoder2.onAdd(map));
   }, []);
 
-  const targetNode = document.getElementById("origin-request");
-  const results = document.getElementById("origin-result");
+  const handleStartTrip = (e) => {
+    e.preventDefault();
+    locationList.push(origin);
+    locationList.push(destination);
+    setStartTrip(true);
+  };
 
   geocoder.on("result", (e) => {
     setOrigin(e.result);
-  });
-
-  geocoder.on("clear", () => {
-    results.innerText = " ";
   });
 
   geocoder2.on("result", (e) => {
     setDestination(e.result);
   });
 
-  geocoder2.on("clear", () => {
-    results.innerText = " ";
-  });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setStartTrip((prev) => prev + 1);
-  };
-
   return (
     <div className="main">
       <form
         className="ui form origin-destination-inline-block"
-        onSubmit={handleSubmit}
+        onSubmit={handleStartTrip}
       >
         <div className="two-fields">
           <div className="fields origin-destination-fields">
             <div className="field">
               <label id="starting-location-label">Starting Location</label>
-              <div id="origin-request" ref={geocoderContainerRef}></div>
+              <LocationSearch
+                geocoderContainerRef={geocoderContainerRef}
+                id="origin-request"
+              />
             </div>
             <div className="field">
               <label id="destination-label">Destination</label>
-              <div id="destination-request" ref={geocoderContainerRef}></div>
+              <LocationSearch
+                geocoderContainerRef={geocoderContainerRef}
+                id="destination-request"
+              />
             </div>
           </div>
         </div>
         <div className="button-container">
-          <Button
-            className="startTripButton"
-            animated
-            onSubmit={handleSubmit}
-            type="submit"
-          >
+          <Button className="startTripButton" animated type="submit">
             <Button.Content visible>Plan Trip</Button.Content>
             <Button.Content hidden>
               <Icon name="arrow circle right" />
@@ -163,7 +162,11 @@ function Map() {
         destination={destination}
         locationList={locationList}
         setLocationList={setLocationList}
+        geocoderContainerRef={geocoderContainerRef}
         startTrip={startTrip}
+        geocoder3={geocoder3}
+        setDestination={setDestination}
+        map={map}
       />
       <pre id="origin-result json-result"></pre>
       <pre id="destination-result json-result"></pre>
