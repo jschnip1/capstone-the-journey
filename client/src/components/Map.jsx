@@ -126,50 +126,51 @@ function Map() {
 
   return (
     <div className="main">
-      <form
-        className="ui form origin-destination-inline-block"
-        onSubmit={handleStartTrip}
-      >
-        <div className="two-fields">
-          <div className="fields origin-destination-fields">
-            <div className="field">
-              <label id="starting-location-label">Starting Location</label>
-              <LocationSearch
-                geocoderContainerRef={geocoderContainerRef}
-                id="origin-request"
-              />
-            </div>
-            <div className="field">
-              <label id="destination-label">Destination</label>
-              <LocationSearch
-                geocoderContainerRef={geocoderContainerRef}
-                id="destination-request"
-              />
+      {!(origin && destination && startTrip) ? (
+        <form
+          className="ui form origin-destination-inline-block"
+          onSubmit={handleStartTrip}
+        >
+          <div className="two-fields">
+            <div className="fields origin-destination-fields">
+              <div className="field">
+                <label id="starting-location-label">Starting Location</label>
+                <LocationSearch
+                  geocoderContainerRef={geocoderContainerRef}
+                  id="origin-request"
+                />
+              </div>
+              <div className="field">
+                <label id="destination-label">Destination</label>
+                <LocationSearch
+                  geocoderContainerRef={geocoderContainerRef}
+                  id="destination-request"
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <div className="button-container">
-          <Button className="startTripButton" animated type="submit">
-            <Button.Content visible>Plan Trip</Button.Content>
-            <Button.Content hidden>
-              <Icon name="arrow circle right" />
-            </Button.Content>
-          </Button>
-        </div>
-      </form>
-      <LocationList
-        origin={origin}
-        destination={destination}
-        locationList={locationList}
-        setLocationList={setLocationList}
-        geocoderContainerRef={geocoderContainerRef}
-        startTrip={startTrip}
-        geocoder3={geocoder3}
-        setDestination={setDestination}
-        map={map}
-      />
-      <pre id="origin-result json-result"></pre>
-      <pre id="destination-result json-result"></pre>
+          <div className="button-container">
+            <Button className="startTripButton" animated type="submit">
+              <Button.Content visible>Plan Trip</Button.Content>
+              <Button.Content hidden>
+                <Icon name="arrow circle right" />
+              </Button.Content>
+            </Button>
+          </div>
+        </form>
+      ) : (
+        <LocationList
+          origin={origin}
+          destination={destination}
+          locationList={locationList}
+          setLocationList={setLocationList}
+          geocoderContainerRef={geocoderContainerRef}
+          startTrip={startTrip}
+          geocoder3={geocoder3}
+          setDestination={setDestination}
+          map={map}
+        />
+      )}
       <div ref={mapContainer} className="mapContainer" id="map" />
     </div>
   );
