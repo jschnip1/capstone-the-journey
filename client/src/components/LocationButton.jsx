@@ -1,9 +1,15 @@
 import React from "react";
 import { Button, Icon, List } from "semantic-ui-react";
 
-function LocationButton({ handleClick, style, actionText, iconName }) {
+function LocationButton({
+  handleClick,
+  style,
+  actionText,
+  iconName,
+  classNameProp,
+}) {
   return (
-    <div>
+    <div className={classNameProp}>
       <div className="button-container-LocationButton" style={style}>
         <Button
           className="LocationButton"

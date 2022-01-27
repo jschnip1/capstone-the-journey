@@ -7,10 +7,12 @@ import { Container, Divider } from "semantic-ui-react";
 import { Button, Icon, List, Form } from "semantic-ui-react";
 import LocationButton from "./LocationButton";
 import LocationSearch from "./LocationSearch";
+import mapboxgl from "mapbox-gl";
 
 function LocationList({
   origin,
   destination,
+  coordinateList,
   locationList,
   setLocationList,
   setCoordinateList,
@@ -18,16 +20,27 @@ function LocationList({
   startTrip,
   geocoder3,
   setDestination,
+  fetchTripRoute,
   map,
 }) {
   const [visiblity, setVisibility] = useState(true);
-  const [waypoint, setWaypoint] = useState("");
 
   const handleAddLocation = () => {
     setVisibility(false);
   };
 
-  const handleSaveLocation = () => {};
+  const handleSaveTrip = () => {
+    console.log("tried to save trip");
+    console.log(locationList);
+  };
+
+  const handleStopSearch = async () => {
+    setVisibility(true);
+    await fetchTripRoute(coordinateList);
+    const marker = new mapboxgl.Marker()
+      .setLngLat(coordinateList.pop())
+      .addTo(map);
+  };
 
   geocoder3.on("result", (e) => {
     setDestination(e.result);
@@ -43,41 +56,67 @@ function LocationList({
     }
   }, [visiblity]);
 
-  geocoder3.on("result", (e) => {
-    setWaypoint(e.result);
+  geocoder3.on("result", async (e) => {
+    const nextLocationList = [...locationList, e.result];
+    const nextCoordinateList = [
+      ...coordinateList,
+      e.result.geometry.coordinates,
+    ];
+    setLocationList(nextLocationList);
+    setCoordinateList(nextCoordinateList);
     geocoder3.clear();
+    console.log(locationList);
   });
-
-  useEffect(() => {
-    if (!visiblity) {
-      locationList.features.push(waypoint);
-    }
-  }, [waypoint]);
 
   return (
     <Container text className="trip-planner-overview">
       <h1>Trip Overview</h1>
       <div id="addLocationControlBar">
         {visiblity ? (
-          <>
-            <LocationButton
-              onClick={handleAddLocation}
-              iconName="plus circle"
-              actionText="Add Location"
-            />
-            <LocationButton
-              onClick={handleSaveLocation}
-              iconName="car"
-              actionText="Save Trip"
-            />
-          </>
+          <div className="ui form">
+            <div className="two-fields">
+              <div className="fields">
+                <div className="field control-bar-button">
+                  <LocationButton
+                    compact
+                    handleClick={handleAddLocation}
+                    iconName="plus circle"
+                    actionText="Add Location"
+                    classNameProp={"addLocation-button"}
+                  />
+                </div>
+                <div className="field control-bar-button">
+                  <LocationButton
+                    compact
+                    handleClick={handleSaveTrip}
+                    iconName="car"
+                    actionText="Save Trip"
+                    classNameProp={"saveTrip-button"}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         ) : (
           <div className="ui form">
-            <div className="field add-location">
-              <LocationSearch
-                geocoderContainerRef={geocoderContainerRef}
-                id="location-request"
-              />
+            <div className="two-fields">
+              <div className="fields search-field">
+                <div className="field add-location">
+                  <LocationSearch
+                    geocoderContainerRef={geocoderContainerRef}
+                    id="location-request"
+                  />
+                </div>
+                <div className="field control-bar-button exit-search">
+                  <LocationButton
+                    compact
+                    handleClick={handleStopSearch}
+                    iconName="stop"
+                    actionText="Exit Search"
+                    classNameProp={"stopSearch-button"}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         )}

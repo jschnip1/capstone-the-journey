@@ -25,6 +25,7 @@ canvas.mapboxgl-canvas {
   -webkit-box-shadow: rgba(0, 0, 0, 0.5) 5px 5px 20px;
   -moz-box-shadow: rgba(0, 0, 0, 0.5) 5px 5px 20px;
   box-shadow: rgba(0, 0, 0, 0.5) 5px 5px 20px;
+  overflow-y: scroll;
 }
 
 .trip-planner-overview > h1 {
@@ -71,9 +72,8 @@ canvas.mapboxgl-canvas {
   margin-left: 3em;
 }
 
-.button-container-addLocationButton {
-  width: fit-content;
-  justify-content: center;
+.button-container-LocationButton {
+  width: 100%;
 }
 
 .location {
@@ -104,23 +104,78 @@ canvas.mapboxgl-canvas {
   padding: 1em;
 }
 
-#location-request {
+/* #location-request {
   margin: 0%;
   padding: 0%;
-  width: 100%;
-}
+  width: 10%;
+} */
 
 .add-location {
-  justify-content: center !important;
-  padding: 0%;
-  margin: 0%;
+  display: flex;
+  min-width: 75%;
+}
+
+#location-request {
+  margin: 0;
+  display: flex;
 }
 
 #location-request > .mapboxgl-ctrl-geocoder.mapboxgl-ctrl {
+  display: block;
+  margin: 0;
+  padding: 0;
+  min-width: 100% !important;
+}
+
+#location-request
+  > .mapboxgl-ctrl-geocoder.mapboxgl-ctrl
+  > .mapboxgl-ctrl-geocoder--input {
+  text-align: left;
+  height: 100%;
+  display: flex;
+}
+
+/* #location-request > .mapboxgl-ctrl-geocoder.mapboxgl-ctrl {
   margin: 0%;
+  width: 100%;
+} */
+
+#addLocationControlBar {
   width: 100%;
 }
 
-.addLocationControlBar {
-  display: inline-block;
+.addLocation-button,
+.saveTrip-button {
+  min-width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.control-bar-button {
+  display: flex;
+  min-width: 50%;
+}
+
+#location-request {
+  min-width: 75%;
+  padding: 0;
+  margin: 0;
+}
+
+.field.control-bar-button.exit-search {
+  min-width: 5%;
+  margin: 0;
+  padding: 0;
+}
+
+.stopSearch-button {
+  width: 100%;
+}
+
+.fields.search-field {
+  max-width: 100%;
+}
+
+.ui.animated.button.LocationButton {
+  min-width: 100%;
 }

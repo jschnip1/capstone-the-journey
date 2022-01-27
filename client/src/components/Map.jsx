@@ -161,54 +161,6 @@ function Map() {
       .appendChild(geocoder2.onAdd(map));
   }, []);
 
-  const pointHopper = {};
-
-  function updateWayPoints(geojson) {
-    map.getSource("trip-location-symbol").setData(geojson);
-    for (let i = 0; i < geojson.length; i++) {
-      //new mapboxgl.Marker(marker).setLngLat(geojson[i]).addTo(map);
-      //marker.setLngLat(geojson[i]).addTo(map);
-      newWayPoint(geojson[i]);
-      console.log("geojson loop " + geojson[i]);
-    }
-  }
-
-  // async function addWaypoints(event) {
-  //   await newWayPoint(map.unproject(event.point));
-  //   updateWayPoints(coordinateList);
-  // }
-
-  async function newWayPoint(coordinates) {
-    const pt = turf.point(coordinates, {
-      key: Math.abs(coordinates[0] * coordinates[1]) * Math.random(),
-    });
-    console.log("pt " + pt);
-    coordinateList.features.geometry.push(pt);
-    pointHopper[pt.properties.key] = pt;
-    console.log("pushed to pontHopper");
-    const query = await fetch(assembleQueryURL(), { method: "GET" }).then(
-      console.log(query)
-    );
-    const response = await query.json().then(console.log(response));
-
-    if (response.code !== "Ok") {
-      const handleMessage =
-        response.code === "InvalidInput"
-          ? "Refresh to start a new route"
-          : "Try a different point.";
-      alert(`${response.code} - ${response.message}\n\n${handleMessage}`);
-      coordinateList.features.pop();
-      delete pointHopper[pt.properties.key];
-      return;
-    }
-
-    const routeGeoJSON = turf.featureCollection([
-      turf.feature(response.trips[0].geometry),
-    ]);
-
-    map.getSource("route").setData(routeGeoJSON);
-  }
-
   function assembleQueryURL(coordinateList) {
     const coordinateString = coordinateList.map((c) => c.join(",")).join(";");
 
@@ -251,7 +203,6 @@ function Map() {
       },
     };
 
-    console.log(routeGeoJSON);
     if (map.getSource("route")) {
       map.getSource("route").setData(routeGeoJSON);
     } else {
@@ -321,10 +272,12 @@ function Map() {
         <LocationList
           origin={origin}
           destination={destination}
+          coordinateList={coordinateList}
           locationList={locationList}
           setLocationList={setLocationList}
           setCoordinateList={setCoordinateList}
           geocoderContainerRef={geocoderContainerRef}
+          fetchTripRoute={fetchTripRoute}
           startTrip={startTrip}
           geocoder3={geocoder3}
           setDestination={setDestination}
