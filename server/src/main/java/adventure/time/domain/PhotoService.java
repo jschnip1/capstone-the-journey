@@ -54,6 +54,11 @@ public class PhotoService {
             return result;
         }
 
+        if (photo.getPhoto() == null) {
+            result.addMessage("photo url cannot be null", ResultType.INVALID);
+            return result;
+        }
+
         if (photo.getPhoto().isEmpty() || photo.getPhoto().isBlank()) {
             result.addMessage("photo url cannot be empty", ResultType.INVALID);
             return result;

@@ -1,4 +1,4 @@
-import { Form, Button, FormField, Dropdown } from "semantic-ui-react";
+import { Form, Button, FormField, Dropdown, Modal, Icon, Header } from "semantic-ui-react";
 import { useState, useContext, useEffect } from "react";
 import { uploadFile } from "../../services/s3Api";
 import { save } from "../../services/PhotoApi";
@@ -12,7 +12,7 @@ const EMPTY_PHOTO = {
     "caption": ""
 }
 
-function PhotoForm({ locations }) {
+function PhotoForm({ locations, onAddPhoto }) {
 
     // TODO: S3 integration, and tripLocationId === locationId for save.
 
@@ -21,6 +21,7 @@ function PhotoForm({ locations }) {
     const [formData, setFormData] = useState(new FormData())
     const [file, setFile] = useState("");
     const auth = useContext(AuthContext);
+    const [open, setOpen] = useState(false);
 
 
     const handleChange = (evt) => {
@@ -48,10 +49,15 @@ function PhotoForm({ locations }) {
                 thePhoto.photo = data.url;
 
                 save(thePhoto, auth.user.token)
-                    .then(console.log(thePhoto))
-                    .catch(setErrors);
+                    .then((data) => {
+                        setThePhoto(EMPTY_PHOTO);
+                        onAddPhoto(data);
+                        setOpen(true);
+                        setFile("");
+                    })
+                    .catch(console.log);
             })
-            .catch(setErrors);
+            .catch(console.log);
     };
 
     return <>
@@ -68,12 +74,25 @@ function PhotoForm({ locations }) {
                 <label for="location-select">Location: </label>
                 <select name="tripLocationId" value={thePhoto.tripLocationId} id="location-select" onChange={handleChange}>
                     <option value="">Select a location</option>
-                    {locations.map(a => <option value={a.location.locationId}>{a.location.name}</option>)}
+                    {locations.map(a => <option value={a.sortOrder}>{a.location.name}</option>)}
                 </select>
             </Form.Field>
             <Button type='submit'>Submit</Button>
         </Form>
         <ErrorSummary errors={errors}/>
+        <Modal
+            closeIcon
+            open={open}
+            onClose={() => setOpen(false)}
+            onOpen={() => setOpen(true)}
+            >
+            <Header content='Success!' />
+            <Modal.Content>
+                <p>
+                Photo was uploaded
+                </p>
+            </Modal.Content>
+        </Modal>
     </>
 }
 

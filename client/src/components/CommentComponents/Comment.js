@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import AuthContext from '../../AuthContext';
 import CommentConfirmDelete from './CommentConfirmDelete';
+import { getProfilebyProfileId } from "../../services/profileApi";
 
 function Comments({comment, onDelete }) {
 
@@ -10,11 +11,18 @@ function Comments({comment, onDelete }) {
     // at the moment there is no way to get usernames of people not signed in.
 
     const auth = useContext(AuthContext);
+    const [profile, setProfile] = useState({ profileId: 0, profilePhoto: "", profileDescription: "", name: "", userId: 0 })
+
+    useEffect(() => {
+        getProfilebyProfileId(comment.profileId)
+            .then(setProfile)
+            .catch(console.log)
+    }, [comment.profileId]);
 
     return <>
         <Comment>
             <Comment.Content>
-                <Comment.Author>{comment.profileId}</Comment.Author>
+                <Comment.Author>{profile.name}</Comment.Author>
                 <Comment.Text>{comment.commentBody} </Comment.Text>
                   {auth.profile.profileId === comment.profileId ?       
                     <CommentConfirmDelete comment={comment} onConfirm={onDelete}/> : null}
