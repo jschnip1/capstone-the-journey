@@ -72,7 +72,6 @@ export default function MenuExampleTabularOnLeft() {
       .catch(console.log)
 
     setOwner(authTripList.includes(parseInt(tripId)))
-
   }, [auth, tripId])
 
   return (

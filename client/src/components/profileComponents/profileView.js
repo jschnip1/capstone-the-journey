@@ -16,6 +16,7 @@ function ProfileView() {
         else if(auth.profile.profileId === 0){
             history.push("/create/profile")
         }
+        console.log(auth.profile)
     },[auth, history])
 
     return (

@@ -66,6 +66,9 @@ function App() {
 
   const editableTrips = () => {
     const tripIds = [];
+    if(profile.tripList === null){
+      return tripIds;
+    }
     profile.tripList.map(trip => tripIds.push(trip.tripId))
     return tripIds;
   }
