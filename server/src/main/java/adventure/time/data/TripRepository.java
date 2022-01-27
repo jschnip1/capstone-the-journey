@@ -10,7 +10,7 @@ public interface TripRepository {
 
     Trip findById(int tripId);
 
-    Trip add(Trip trip);
+    Trip add(Trip trip, int profileId);
 
     boolean update(Trip trip);
 

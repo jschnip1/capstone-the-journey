@@ -23,6 +23,7 @@ function ViewTrips({ trip, owner }) {
   // const [trip, setTrip] = useState();
   const [rate, setRate] = useState(trip.tripReview);
 
+
   const handleRate = (evt, { rating }) => {
     setRate(rating);
     trip.tripReview = rating;
@@ -30,6 +31,7 @@ function ViewTrips({ trip, owner }) {
       toast.error(`${error}`);
     });
   };
+
 
   return (
     <>

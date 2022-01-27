@@ -44,7 +44,7 @@ class TripJdbcTemplateRepositoryTest {
     @Test
     void shouldAdd() {
         Trip trip = makeTrip();
-        Trip actual = repository.add(trip);
+        Trip actual = repository.add(trip, 1);
         assertNotNull(actual);
         assertEquals(5, actual.getTripReview());
     }

@@ -32,8 +32,6 @@ function ProfileView() {
             <h3 className="profile-sub-title">My Trips</h3>
             <Divider />
             <TripCards />
-            <Link to="/trip/overview/1">Trip 1</Link>
-            <Link to="/trip/overview/2">Trip 2</Link>
          </div>
         </>
     )

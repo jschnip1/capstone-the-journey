@@ -52,8 +52,27 @@ public class TripJdbcTemplateRepository implements TripRepository {
         return trip;
     }
 
+    private boolean addProfileTrip(int profileId, int tripId) {
+        final String sql = "insert into profile_trip (profile_id, trip_id) values (?,?);";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int rowsAffected = jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, profileId);
+            ps.setInt(2, tripId);
+            return ps;
+        }, keyHolder);
+
+        if (rowsAffected <= 0) {
+            return false;
+        }
+
+        return true;
+    }
+
     @Override
-    public Trip add(Trip trip) {
+    @Transactional
+    public Trip add(Trip trip, int profileId) {
 
         final String sql = "insert into trip (start_time, end_time, review, total_distance, name, disabled) values (?,?,?,?,?,?);";
 
@@ -74,6 +93,7 @@ public class TripJdbcTemplateRepository implements TripRepository {
         }
 
         trip.setTripId(keyHolder.getKey().intValue());
+        addProfileTrip(profileId, trip.getTripId());
         return trip;
     }
 
