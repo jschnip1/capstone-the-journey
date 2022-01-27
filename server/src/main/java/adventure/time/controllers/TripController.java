@@ -29,9 +29,9 @@ public class TripController {
         return service.findById(tripId, true);
     }
 
-    @PostMapping
-    public ResponseEntity<Object> add(@RequestBody Trip trip){
-        Result<Trip> result = service.add(trip);
+    @PostMapping("/{profileId}")
+    public ResponseEntity<Object> add(@RequestBody Trip trip, @PathVariable int profileId){
+        Result<Trip> result = service.add(trip, profileId);
         if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
         }

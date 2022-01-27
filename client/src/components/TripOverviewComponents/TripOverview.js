@@ -15,7 +15,9 @@ import { toast } from "react-toastify";
 export default function MenuExampleTabularOnLeft() {
   // TODO: ternary operator to make sure only person associated with trip can upload photo
 
+
   const auth = useContext(AuthContext);
+
 
   const [owner, setOwner] = useState(false);
   const [authTripList, setAuthTripList] = useState(auth.editableTrips());

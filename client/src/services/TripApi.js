@@ -19,7 +19,7 @@ export async function fetchById(id) {
     return await response.json();
 }
 
-export async function save(trip, token) {
+export async function saveTrip(trip, token, profileId) {
     const init = {
         headers: {
             "Content-Type": "application/json",
@@ -41,7 +41,7 @@ export async function save(trip, token) {
         }
     } else {
         init.method = "POST";
-        const response = await fetch(url, init);
+        const response = await fetch(`${url}/${profileId}`, init);
         if (response.status === 400) {
             const errors = await response.json();
             return Promise.reject(errors);

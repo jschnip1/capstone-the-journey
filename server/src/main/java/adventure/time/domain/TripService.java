@@ -12,8 +12,6 @@ import java.util.List;
 @Service
 public class TripService {
 
-    //TODO
-    // # of locations validation
 
     private final TripRepository tripRepository;
 
@@ -32,7 +30,7 @@ public class TripService {
         return tripRepository.findById(tripId);
     }
 
-    public Result<Trip> add(Trip trip) {
+    public Result<Trip> add(Trip trip, int profileId) {
         Result<Trip> result = validate(trip);
         if(!result.isSuccess()) {
             return result;
@@ -43,7 +41,7 @@ public class TripService {
             return result;
         }
 
-        trip = tripRepository.add(trip);
+        trip = tripRepository.add(trip, profileId);
         result.setPayload(trip);
         return result;
     }
