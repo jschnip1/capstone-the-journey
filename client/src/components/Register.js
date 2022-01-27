@@ -22,7 +22,7 @@ function Register() {
     password: "",
   });
   const [confirmPass, setConfirmPass] = useState({ confirmPassword: "" });
-
+  const [showPassword, setShowPassword] = useState(false);
   const auth = useContext(AuthContext);
 
   const history = useHistory();

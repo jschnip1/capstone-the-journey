@@ -8,6 +8,7 @@ import {
   Grid,
   Header,
   Icon,
+  Input,
   Message,
   Segment,
 } from "semantic-ui-react";
@@ -16,6 +17,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [visibilityIcon, setVisibilityIcon] = useState("eye slash");
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
@@ -26,9 +29,11 @@ function Login() {
   const history = useHistory();
 
   const handleChange = (evt) => {
+    console.log(evt);
     const nextCredentials = { ...credentials };
     nextCredentials[evt.target.name] = evt.target.value;
     setCredentials(nextCredentials);
+    console.log(credentials);
   };
 
   const handleSubmit = async (evt) => {
@@ -70,24 +75,37 @@ function Login() {
           <Segment stacked>
             <Form.Input
               fluid
+              name="username"
               icon="user"
               iconPosition="left"
               placeholder="E-mail address"
               type="text"
               value={credentials.username}
-              name="username"
               onChange={handleChange}
             />
-            <Form.Input
-              fluid
-              icon="lock"
-              iconPosition="left"
-              placeholder="Password"
-              type="password"
-              value={credentials.password}
-              name="password"
-              onChange={handleChange}
-            />
+            <div className="password-input-div">
+              <Form.Input
+                fluid
+                name="password"
+                icon={
+                  <Icon
+                    name={visibilityIcon}
+                    link
+                    onClick={() => {
+                      setShowPassword((prevState) => !prevState);
+                      visibilityIcon === "eye"
+                        ? setVisibilityIcon("eye slash")
+                        : setVisibilityIcon("eye");
+                    }}
+                  />
+                }
+                iconPosition="left"
+                placeholder="Password"
+                type={showPassword ? "text" : "password"}
+                value={credentials.password}
+                onChange={handleChange}
+              />
+            </div>
 
             <Button color="teal" fluid size="large" type="submit">
               Login

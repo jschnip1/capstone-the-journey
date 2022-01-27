@@ -49,7 +49,7 @@
 }
 
 #main-title {
-  font-family: 'Sedgwick Ave', cursive;
+  font-family: "Sedgwick Ave", cursive;
   font-size: 4em;
   /* font-weight: normal; */
   color: orange;
@@ -66,11 +66,11 @@
   height: 100vh;
   padding-left: 30px;
   padding-top: 30px;
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
 }
 
 #profile-name {
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
 }
 
 #profile-pic {
@@ -78,7 +78,7 @@
 }
 
 .profile-sub-title {
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
 }
 
 #profile-form {
@@ -96,4 +96,8 @@
 #not-found {
   background-color: white;
   height: 100vh;
+}
+
+.password-input-div {
+  margin-bottom: 2rem;
 }
