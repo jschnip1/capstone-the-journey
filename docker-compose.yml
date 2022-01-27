@@ -1,0 +1,24 @@
+version: "3.0"
+
+services:
+
+  adventure-time-ui:
+    image: 932204825147.dkr.ecr.us-east-2.amazonaws.com/adventure-time-ui
+    ports:
+      - "80:80"
+    depends_on:
+      - field-agent-api
+
+  adventure-time-api:
+    image: 932204825147.dkr.ecr.us-east-2.amazonaws.com/adventure-time-api
+    environment:
+      - DB_URL=jdbc:mysql://adventure-time-db.cdtqegjqlsvt.us-east-2.rds.amazonaws.com:3306/adventure_time_test
+      - DB_USERNAME=admin
+      - DB_PASSWORD=soccerBalls
+      - AWS-ACCESS-KEY=AKIA5SC54ZI5XNC5JDV5
+      - AWS-SECRET-KEY=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
+      - ALLOWED_ORIGINS=*
+    ports:
+      - "8080:8080"
+
+      
