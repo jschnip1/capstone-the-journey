@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { Card } from "semantic-ui-react";
+import { Card, Container } from "semantic-ui-react";
 import { fetchAll } from "../../services/TripApi";
 import AllTripCards from "./allTripCards";
 import { toast } from "react-toastify";
@@ -22,11 +22,11 @@ function AllTrips() {
     });
 
     return (
-        <>
-            <Card.Group>
+        <Container>
+            <Card.Group centered itemsPerRow={3}>
                 {allTrips.map(trip => <AllTripCards key={trip.tripId} tripInfo={trip} />)}
             </Card.Group>
-        </>
+        </Container>
     )
 }
 

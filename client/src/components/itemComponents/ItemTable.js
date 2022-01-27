@@ -25,32 +25,30 @@ function ItemTable({ items, owner }) {
     setItemList(newItemList);
   };
 
-  return (
-    <div>
-      {owner ? <ItemModal onAdd={addToList} /> : <></>}
-      <Table>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Name</Table.HeaderCell>
-            <Table.HeaderCell>Decription</Table.HeaderCell>
-            <Table.HeaderCell>Quantity</Table.HeaderCell>
-            {owner ? <Table.HeaderCell>Packed?</Table.HeaderCell> : <></>}
-          </Table.Row>
-        </Table.Header>
-
-        <Table.Body>
-          {itemList.map((item) => (
-            <Item
-              key={item.itemId}
-              item={item}
-              onDelete={removeFromList}
-              owner={owner}
-            />
-          ))}
-        </Table.Body>
-      </Table>
-    </div>
-  );
+    return (
+        <div>
+            {owner ? (<ItemModal onAdd={addToList}/>) : (<></>)}
+            <Table celled padded size='large'>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell>Name</Table.HeaderCell>
+                        <Table.HeaderCell>Decription</Table.HeaderCell>
+                        <Table.HeaderCell>Quantity</Table.HeaderCell>
+                        {owner ? (
+                            <Table.HeaderCell>Packed?</Table.HeaderCell>
+                        ) : (
+                            <></>
+                        )}
+                        
+                    </Table.Row>
+                </Table.Header>
+                
+                <Table.Body>
+                    {itemList.map(item => <Item key={item.itemId} item={item} onDelete={removeFromList} owner={owner}/>)}
+                </Table.Body>
+            </Table>
+        </div>
+    )
 }
 
 export default ItemTable;

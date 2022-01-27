@@ -47,7 +47,6 @@ function AllTripCards({ tripInfo }) {
           {tripInfo.totalDistance} miles
         </Card.Content>
       </Card>
-    </>
   );
 }
 
