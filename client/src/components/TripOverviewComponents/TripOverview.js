@@ -34,6 +34,9 @@ export default function MenuExampleTabularOnLeft() {
       locations: []
     })
 
+    const onAddPhoto = (photo) => {
+        trip.locations[photo.tripLocationId - 1].photoList.push(photo);
+    };
 
   const handleItemClick = (e, { name }) => { setActiveItem(name)}
 
@@ -56,7 +59,7 @@ export default function MenuExampleTabularOnLeft() {
       </>
     } else if (activeItem === "upload photo") {
       return <>
-        <PhotoForm locations={trip.locations} />
+        <PhotoForm locations={trip.locations} onAddPhoto={onAddPhoto} />
       </>
     }
   };
