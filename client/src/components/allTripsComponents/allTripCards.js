@@ -18,7 +18,6 @@ function AllTripCards({ tripInfo }) {
 
     })
 
-    // console.log(tripInfo.tripReview)
     return <>
         <Card key={tripInfo.tripId} as={Link} to={`/trip/overview/${tripInfo.tripId}`}>
             <Card.Content header={tripInfo.name} />

@@ -26,7 +26,7 @@ function ItemTable({ items, owner }) {
     return (
         <div>
             {owner ? (<ItemModal onAdd={addToList}/>) : (<></>)}
-            <Table>
+            <Table celled padded size='large'>
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Name</Table.HeaderCell>
