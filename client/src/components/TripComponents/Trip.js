@@ -6,7 +6,7 @@ function Trip({trip}) {
         <Item>
             <Icon name="map pin" />
             <Item.Content verticalAlign='middle'>
-                <Item.Header>{trip.locationId}</Item.Header>
+                <Item.Header>{trip.name !== null ? trip.name : "Unknown"}</Item.Header>
             </Item.Content>
         </Item>
     </>

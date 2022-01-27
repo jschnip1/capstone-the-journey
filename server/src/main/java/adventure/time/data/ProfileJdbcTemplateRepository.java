@@ -27,6 +27,23 @@ public class ProfileJdbcTemplateRepository implements ProfileRepository{
     }
 
     @Override
+    public Profile findByProfileId(int profileId) {
+        final String sql = "select profile_id, profile_photo, about_me, `name`, app_user_id " +
+                "from profile " +
+                "where profile_id = ?";
+
+        Profile profile = jdbcTemplate.query(sql, new ProfileMapper(),profileId)
+                .stream()
+                .findFirst().orElse(null);
+
+        if(profile != null){
+            addTrips(profile);
+        }
+
+        return profile;
+    }
+
+    @Override
     @Transactional
     public Profile findByUserId(int userId) {
         final String sql = "select profile_id, profile_photo, about_me, `name`, app_user_id " +

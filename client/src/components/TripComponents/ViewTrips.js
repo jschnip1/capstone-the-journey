@@ -2,7 +2,7 @@ import { Item } from 'semantic-ui-react';
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Trip from "./Trip";
-import { fetchById } from "../services/TripApi";
+import { fetchById } from "../../services/TripApi";
 
 const EMPTY_TRIP = {
     "tripId": 0,
@@ -21,19 +21,19 @@ function ViewTrips() {
 
     const [trip, setTrip] = useState(EMPTY_TRIP);
 
-    const { id } = useParams();
+    const { tripId } = useParams();
 
     useEffect(() => {
-        if (id) {
-            fetchById(id)
+        if (tripId) {
+            fetchById(tripId)
                 .then(setTrip)
                 .catch(console.log);
         }
-    }, [id]);
+    }, [tripId]);
 
     return <>
         <Item.Group>
-            <h3>Start Date: {trip.startTime}    End Date: {trip.endTime}</h3>
+            <h3>Start Date: {trip.startTime}    <span id="end-date-trip">End Date: {trip.endTime}</span></h3>
             {trip.locations.map(a => <Trip key={a.location.locationId} trip={a.location} />)}
         </Item.Group>
     </>

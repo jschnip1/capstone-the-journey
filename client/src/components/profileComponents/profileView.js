@@ -2,7 +2,7 @@ import { useEffect, useContext  } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { Image, Divider,Card, Icon } from 'semantic-ui-react'
 import AuthContext from "../../AuthContext";
-import TripCards from "../TripCards";
+import TripCards from "./TripCards";
 
 function ProfileView() {
 
@@ -25,13 +25,14 @@ function ProfileView() {
             <Image src={auth.profile.profilePhoto !== null ? auth.profile.profilePhoto : "https://www.loveyourdog.com/wp-content/uploads/2020/04/Siberian-Husky-in-Snow.jpg"} size='small' id="profile-pic" />
             <h1 id="profile-name">{auth.profile.name}</h1>
             <Divider />
-            <h3>About Me</h3>
+            <h3 className="profile-sub-title">About Me</h3>
             <Divider />
             <p>{auth.profile.profileDescription}</p>
-            <h3>My Trips</h3>
+            <h3 className="profile-sub-title">My Trips</h3>
             <Divider />
             <TripCards />
             <Link to="/trip/overview/1">Trip 1</Link>
+            <Link to="/trip/overview/2">Trip 2</Link>
          </div>
         </>
     )

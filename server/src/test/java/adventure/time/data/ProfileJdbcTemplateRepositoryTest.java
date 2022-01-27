@@ -20,6 +20,17 @@ class ProfileJdbcTemplateRepositoryTest {
     @BeforeEach
     void setup() { knownGoodState.set(); }
 
+
+    @Test
+    void shouldFindByProfileId() {
+        Profile profile = repository.findByProfileId(1);
+
+        assertEquals("John Smith", profile.getName());
+        assertEquals(1, profile.getUserId());
+        assertEquals(1, profile.getTripList().size());
+        assertEquals("Major Ohio Cities", profile.getTripList().get(0).getName());
+    }
+
     @Test
     void shouldFindByUserId() {
         Profile profile = repository.findByUserId(1);
