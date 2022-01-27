@@ -97,6 +97,7 @@ function TripCreationForm({ locationList }) {
               })
               .catch(console.log)
           }
+          auth.profile.tripList.push(tripData);
           history.push("/profile");
         })
         .catch(console.log);
