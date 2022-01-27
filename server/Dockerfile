@@ -30,5 +30,5 @@ COPY --from=builder /jre $JAVA_HOME
 # 5. Continue with application deployment.
 EXPOSE 8080/tcp
 WORKDIR /home/app
-COPY --from=builder /home/app/target/field-agent-1.0-SNAPSHOT.jar app.jar
+COPY --from=builder /home/app/target/server-1.0-SNAPSHOT.jar app.jar
 CMD ["java", "-jar", "./app.jar"]
