@@ -7,14 +7,16 @@ import LocationList from "./LocationList";
 import LocationSearch from "./LocationSearch";
 import DeckGL, { GeoJsonLayer } from "deck.gl";
 import { Button, Icon } from "semantic-ui-react";
+import TripCreationForm from "./TripCreationForm";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
 function Map() {
   mapboxgl.accessToken =
     "pk.eyJ1IjoieWVsbG93LXJhbmdlciIsImEiOiJja3lrZHJnaW4waTh2MnBvMGsyM2YxZm1lIn0.Hl-fBAj0_GaGVa1YVTlUMg";
 
-  const [coordinateList, setCoordinateList] = useState([]);
+  const [saveTrip, setSaveTrip] = useState(false);
   const nullList = turf.featureCollection([]);
+  const [coordinateList, setCoordinateList] = useState([]);
   const geocoderContainerRef = useRef(null);
   const [startTrip, setStartTrip] = useState(false);
   const [origin, setOrigin] = useState("");
@@ -235,57 +237,66 @@ function Map() {
   });
 
   return (
-    <div className="main">
-      {!(origin && destination && startTrip) ? (
-        <form
-          className="ui form origin-destination-inline-block"
-          onSubmit={handleStartTrip}
-        >
-          <div className="two-fields">
-            <div className="fields origin-destination-fields">
-              <div className="field">
-                <label id="starting-location-label">Starting Location</label>
-                <LocationSearch
-                  geocoderContainerRef={geocoderContainerRef}
-                  id="origin-request"
-                />
-              </div>
-              <div className="field">
-                <label id="destination-label">Destination</label>
-                <LocationSearch
-                  geocoderContainerRef={geocoderContainerRef}
-                  id="destination-request"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="button-container">
-            <Button className="startTripButton" animated type="submit">
-              <Button.Content visible>Plan Trip</Button.Content>
-              <Button.Content hidden>
-                <Icon name="arrow circle right" />
-              </Button.Content>
-            </Button>
-          </div>
-        </form>
+    <>
+      {saveTrip ? (
+        <TripCreationForm locationList={locationList}/>
       ) : (
-        <LocationList
-          origin={origin}
-          destination={destination}
-          coordinateList={coordinateList}
-          locationList={locationList}
-          setLocationList={setLocationList}
-          setCoordinateList={setCoordinateList}
-          geocoderContainerRef={geocoderContainerRef}
-          fetchTripRoute={fetchTripRoute}
-          startTrip={startTrip}
-          geocoder3={geocoder3}
-          setDestination={setDestination}
-          map={map}
-        />
+        <div className="main">
+          {!(origin && destination && startTrip) ? (
+            <form
+              className="ui form origin-destination-inline-block"
+              onSubmit={handleStartTrip}
+            >
+              <div className="two-fields">
+                <div className="fields origin-destination-fields">
+                  <div className="field">
+                    <label id="starting-location-label">
+                      Starting Location
+                    </label>
+                    <LocationSearch
+                      geocoderContainerRef={geocoderContainerRef}
+                      id="origin-request"
+                    />
+                  </div>
+                  <div className="field">
+                    <label id="destination-label">Destination</label>
+                    <LocationSearch
+                      geocoderContainerRef={geocoderContainerRef}
+                      id="destination-request"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="button-container">
+                <Button className="startTripButton" animated type="submit">
+                  <Button.Content visible>Plan Trip</Button.Content>
+                  <Button.Content hidden>
+                    <Icon name="arrow circle right" />
+                  </Button.Content>
+                </Button>
+              </div>
+            </form>
+          ) : (
+            <LocationList
+              origin={origin}
+              destination={destination}
+              coordinateList={coordinateList}
+              locationList={locationList}
+              setLocationList={setLocationList}
+              setCoordinateList={setCoordinateList}
+              geocoderContainerRef={geocoderContainerRef}
+              fetchTripRoute={fetchTripRoute}
+              startTrip={startTrip}
+              geocoder3={geocoder3}
+              setDestination={setDestination}
+              map={map}
+              setSaveTrip={setSaveTrip}
+            />
+          )}
+          <div ref={mapContainer} className="mapContainer" id="map" />
+        </div>
       )}
-      <div ref={mapContainer} className="mapContainer" id="map" />
-    </div>
+    </>
   );
 }
 

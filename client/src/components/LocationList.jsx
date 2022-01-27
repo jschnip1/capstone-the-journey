@@ -22,6 +22,7 @@ function LocationList({
   setDestination,
   fetchTripRoute,
   map,
+  setSaveTrip
 }) {
   const [visiblity, setVisibility] = useState(true);
 
@@ -30,8 +31,7 @@ function LocationList({
   };
 
   const handleSaveTrip = () => {
-    console.log("tried to save trip");
-    console.log(locationList);
+    setSaveTrip(true);
   };
 
   const handleStopSearch = async () => {
