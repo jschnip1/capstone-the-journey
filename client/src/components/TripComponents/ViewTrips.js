@@ -1,8 +1,9 @@
-import { Item } from 'semantic-ui-react';
-import { useState, useEffect } from "react";
+import { Item, Rating, RatingIcon } from 'semantic-ui-react';
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Trip from "./Trip";
-import { fetchById } from "../../services/TripApi";
+import { fetchById, save } from "../../services/TripApi";
+import { authenticate } from '../../services/authApi';
 
 const EMPTY_TRIP = {
     "tripId": 0,
@@ -17,24 +18,29 @@ const EMPTY_TRIP = {
     "locations": []
 }
 
-function ViewTrips() {
+function ViewTrips({ trip, owner }) {
 
-    const [trip, setTrip] = useState(EMPTY_TRIP);
+    // const [trip, setTrip] = useState();
+    const [rate, setRate] = useState(trip.tripReview)
 
-    const { tripId } = useParams();
-
-    useEffect(() => {
-        if (tripId) {
-            fetchById(tripId)
-                .then(setTrip)
-                .catch(console.log);
-        }
-    }, [tripId]);
+    const handleRate = (evt, { rating }) => {
+        setRate(rating)
+        trip.tripReview = rating;
+        save(trip)
+            .catch(console.log)
+    }
 
     return <>
+    {console.log(trip)}
         <Item.Group>
             <h3>Start Date: {trip.startTime}    <span id="end-date-trip">End Date: {trip.endTime}</span></h3>
-            {trip.locations.map(a => <Trip key={a.location.locationId} trip={a.location} />)}
+            {owner ? (
+                
+                <Rating icon='star' rating={trip.tripReview} maxRating={5} onRate={handleRate} />
+            ) : (
+                <Rating icon='star' rating={trip.tripReview} maxRating={5} onRate={handleRate} disabled/>
+            )}
+            {trip.locations.map(a => <Trip key={a.location.sortOrder} trip={a.location} />)}
         </Item.Group>
     </>
 }

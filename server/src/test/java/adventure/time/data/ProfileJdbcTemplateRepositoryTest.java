@@ -42,6 +42,16 @@ class ProfileJdbcTemplateRepositoryTest {
     }
 
     @Test
+    void shouldFindByTripId() {
+        Profile profile = repository.findByTripId(1);
+
+        assertEquals("John Smith", profile.getName());
+        assertEquals(1, profile.getUserId());
+        assertEquals(1, profile.getTripList().size());
+        assertEquals("Major Ohio Cities", profile.getTripList().get(0).getName());
+    }
+
+    @Test
     void shouldAdd() {
         Profile expected = new Profile(3, null, "about me", "test", 1);
 
