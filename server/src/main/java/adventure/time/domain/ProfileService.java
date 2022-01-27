@@ -22,6 +22,10 @@ public class ProfileService {
         return repository.findByUserId(userId);
     }
 
+    public Profile findByTripId(int tripId) {
+        return repository.findByTripId(tripId);
+    }
+
     public Result<Profile> add(Profile profile){
         Result<Profile> result = new Result<>();
 

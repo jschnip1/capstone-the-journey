@@ -29,6 +29,20 @@ export async function getProfileByUsername(username, token) {
     return Promise.reject("Could not fetch Profile");
 }
 
+export async function getProfileByTripId(tripId) {
+    const init = {
+        method: "GET",
+    };
+    const response = await fetch(`${url}/tripId/${tripId}`, init);
+    if (response.status === 404) {
+        return Promise.reject("Profile not found");
+    }
+    if (response.status === 200) {
+        return await response.json();
+    }
+    return Promise.reject("Could not fetch Profile");
+}
+
 export async function save(profile, username, token) {
 
     const init = {

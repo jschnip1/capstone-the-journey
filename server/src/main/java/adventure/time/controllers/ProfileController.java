@@ -28,7 +28,7 @@ public class ProfileController {
     }
 
     @GetMapping("username/{username}")
-    public Profile findById(@PathVariable String username){
+    public Profile findByUsername(@PathVariable String username){
 //        System.out.println(service.findByUserId(1));
         int userId = appUserService.getUserIdByUsername(username);
         Profile result = service.findByUserId(userId);
@@ -36,6 +36,12 @@ public class ProfileController {
             return new Profile();
         }
         return result;
+
+    }
+
+    @GetMapping("tripId/{tripId}")
+    public Profile findByTripId(@PathVariable int tripId){
+        return service.findByTripId(tripId);
 
     }
 

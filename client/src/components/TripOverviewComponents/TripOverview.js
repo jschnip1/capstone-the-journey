@@ -8,8 +8,6 @@ import ItemTable from '../itemComponents/ItemTable';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState, useContext } from 'react/cjs/react.development';
 import { fetchById } from '../../services/TripApi';
-import { Renderer } from 'leaflet';
-import { render } from '@testing-library/react';
 import AuthContext from "../../AuthContext";
 import PhotoForm from "../PhotoComponents/PhotoForm";
 
@@ -20,6 +18,8 @@ export default function MenuExampleTabularOnLeft() {
 
    const auth = useContext(AuthContext);
   
+    const [owner, setOwner] = useState(false);
+    const [authTripList, setAuthTripList] = useState(auth.editableTrips());
     const [activeItem, setActiveItem] = useState('trip');
     const [trip, setTrip] = useState({
       tripId: 0,
@@ -40,15 +40,15 @@ export default function MenuExampleTabularOnLeft() {
   const viewSegment = (activeItem) => {
     if (activeItem === "trip") {
       return <>
-        <ViewTrips />
+        <ViewTrips trip={trip} owner={owner}/>
       </>
     } else if (activeItem === "pictures") {
       return <>
-        <ViewPhoto locations={trip.locations} />
+        <ViewPhoto locations={trip.locations}  />
       </>
     } else if (activeItem === "items") {
       return <>
-        <ItemTable items={trip.itemList} />
+        <ItemTable items={trip.itemList} owner={owner}/>
       </>
     } else if (activeItem === "comments") {
       return <>
@@ -67,7 +67,10 @@ export default function MenuExampleTabularOnLeft() {
     fetchById(tripId)
       .then(setTrip)
       .catch(console.log)
-  }, [tripId])
+
+    setOwner(authTripList.includes(parseInt(tripId)))
+
+  }, [auth, tripId])
 
   return (
     <div id="trip-main">
@@ -94,11 +97,16 @@ export default function MenuExampleTabularOnLeft() {
             active={activeItem === 'comments'}
             onClick={handleItemClick}
           />
+          {owner ? (
           <Menu.Item
             name='upload photo'
             active={activeItem === 'upload photo'}
             onClick={handleItemClick}
           />
+          ) : (
+            <></>
+          )}
+          
         </Menu>
         
       </Grid.Column>

@@ -7,7 +7,7 @@ import Item from './Item'
 import ErrorSummary from '../../ErrorSummary'
 import ItemModal from './ItemModal'
 
-function ItemTable({ items }) {
+function ItemTable({ items, owner }) {
 
     const [itemList, setItemList] = useState(items)
 
@@ -25,19 +25,24 @@ function ItemTable({ items }) {
 
     return (
         <div>
-            <ItemModal onAdd={addToList}/>
+            {owner ? (<ItemModal onAdd={addToList}/>) : (<></>)}
             <Table>
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Name</Table.HeaderCell>
                         <Table.HeaderCell>Decription</Table.HeaderCell>
                         <Table.HeaderCell>Quantity</Table.HeaderCell>
-                        <Table.HeaderCell>Packed?</Table.HeaderCell>
+                        {owner ? (
+                            <Table.HeaderCell>Packed?</Table.HeaderCell>
+                        ) : (
+                            <></>
+                        )}
+                        
                     </Table.Row>
                 </Table.Header>
-
+                
                 <Table.Body>
-                    {itemList.map(item => <Item key={item.itemId} item={item} onDelete={removeFromList}/>)}
+                    {itemList.map(item => <Item key={item.itemId} item={item} onDelete={removeFromList} owner={owner}/>)}
                 </Table.Body>
             </Table>
         </div>
