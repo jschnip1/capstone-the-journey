@@ -24,6 +24,7 @@ import ProfileView from "./components/profileComponents/profileView";
 import Map from "./components/Map";
 import TripPlanner from "./components/LocationList";
 import ViewHome from "./components/ViewHome";
+import AllTrips from "./components/allTripsComponents/allTrips";
 
 function App() {
   const [user, setUser] = useState({ username: "" });
@@ -63,9 +64,16 @@ function App() {
     })
   };
 
+  const editableTrips = () => {
+    const tripIds = [];
+    profile.tripList.map(trip => tripIds.push(trip.tripId))
+    return tripIds;
+  }
+
   const auth = {
     user,
     profile,
+    editableTrips,
     login,
     logout,
   };
@@ -97,6 +105,9 @@ function App() {
               </Route>
               <Route path="/travel/buddy/add">
                 <h1>Add Travel Buddy</h1>
+              </Route>
+              <Route path="/allTrips">
+                <AllTrips/>
               </Route>
               <Route path="/trip/overview/:tripId">
                 <TripOverview />

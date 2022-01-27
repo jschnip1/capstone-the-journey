@@ -43,6 +43,17 @@ class ProfileServiceTest {
     }
 
     @Test
+    void shouldFindByTripId() {
+        Profile mockOut = new Profile(2, null, "about me", "name", 1);
+
+        when(repository.findByTripId(1)).thenReturn(mockOut);
+
+        Profile result = service.findByTripId(1);
+
+        assertNotNull(result);
+    }
+
+    @Test
     void shouldAdd() {
         Profile profile = new Profile(0, null, null, "Test", 1);
 
