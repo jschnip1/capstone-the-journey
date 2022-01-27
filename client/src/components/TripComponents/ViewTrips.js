@@ -2,7 +2,7 @@ import { Item, Rating, RatingIcon } from "semantic-ui-react";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Trip from "./Trip";
-import { fetchById, save } from "../../services/TripApi";
+import { fetchById, saveTrip } from "../../services/TripApi";
 import { authenticate } from "../../services/authApi";
 import { toast } from "react-toastify";
 
@@ -23,15 +23,13 @@ function ViewTrips({ trip, owner }) {
   // const [trip, setTrip] = useState();
   const [rate, setRate] = useState(trip.tripReview);
 
-
   const handleRate = (evt, { rating }) => {
     setRate(rating);
     trip.tripReview = rating;
-    save(trip).catch((error) => {
+    saveTrip(trip).catch((error) => {
       toast.error(`${error}`);
     });
   };
-
 
   return (
     <>
