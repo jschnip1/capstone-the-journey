@@ -3,11 +3,11 @@ import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { deleteById } from "../../services/CommentApi";
 import AuthContext from '../../AuthContext';
+import { toast } from 'react-toastify';
 
 function CommentConfirmDelete({ comment, onConfirm }) {
 
     const [open, setOpen] = useState(false);
-    const [errors, setErrors] = useState([]);
     const [currentComment, setComment] = useState(comment);
 
     const auth = useContext(AuthContext);
@@ -18,7 +18,9 @@ function CommentConfirmDelete({ comment, onConfirm }) {
             onConfirm(currentComment.tripId)
             setOpen(false)
         })
-        .catch(errors)
+        .catch(error => {
+            toast.error(`${error}`)
+        })
     }
 
     return <>

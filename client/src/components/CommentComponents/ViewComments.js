@@ -4,6 +4,7 @@ import { Comment, Header } from 'semantic-ui-react';
 import Comments from './Comment';
 import CommentForm from "./CommentForm";
 import { fetchByTripId } from "../../services/CommentApi";
+import { toast } from "react-toastify";
 
 function ViewComments({ comments }) {
 
@@ -14,7 +15,9 @@ function ViewComments({ comments }) {
     const removeFromList = (tripId) => {
         fetchByTripId(tripId)
             .then(setCommentList)
-            .catch(console.log);
+            .catch((error) => {
+                toast.error(`${error}`);
+              });
     }
 
     const addToList = (comment) => {

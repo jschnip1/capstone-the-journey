@@ -9,6 +9,7 @@ import DeckGL, { GeoJsonLayer } from "deck.gl";
 import { Button, Icon } from "semantic-ui-react";
 import TripCreationForm from "./TripCreationForm";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+import { toast } from "react-toastify";
 
 function Map() {
   mapboxgl.accessToken =
@@ -181,6 +182,7 @@ function Map() {
     ];
     setCoordinateList(nextCoordinateList);
     await fetchTripRoute(nextCoordinateList);
+    toast.info("Starting Trip!");
   };
 
   const fetchTripRoute = async (coordinateList) => {
@@ -239,7 +241,7 @@ function Map() {
   return (
     <>
       {saveTrip ? (
-        <TripCreationForm locationList={locationList}/>
+        <TripCreationForm locationList={locationList} />
       ) : (
         <div className="main">
           {!(origin && destination && startTrip) ? (
