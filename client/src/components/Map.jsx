@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import mapboxgl from "mapbox-gl";
+import * as turf from "@turf/turf";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "../styling/TripPlanner.css";
 import LocationList from "./LocationList";
@@ -12,6 +13,8 @@ function Map() {
   mapboxgl.accessToken =
     "pk.eyJ1IjoieWVsbG93LXJhbmdlciIsImEiOiJja3lrZHJnaW4waTh2MnBvMGsyM2YxZm1lIn0.Hl-fBAj0_GaGVa1YVTlUMg";
 
+  const [coordinateList, setCoordinateList] = useState([]);
+  const nullList = turf.featureCollection([]);
   const geocoderContainerRef = useRef(null);
   const [startTrip, setStartTrip] = useState(false);
   const [origin, setOrigin] = useState("");
@@ -34,6 +37,8 @@ function Map() {
       ? 16
       : window.localStorage.getItem("current-location-zoom")
   );
+
+  const marker = new mapboxgl.Marker();
 
   const geocoder = new MapboxGeocoder({
     accessToken: mapboxgl.accessToken,
@@ -72,7 +77,54 @@ function Map() {
       map.on("load", () => {
         setMap(map);
         map.resize();
+
+        map.addLayer({
+          id: "trip-location-symbol",
+          type: "symbol",
+          source: {
+            data: coordinateList,
+            type: "geojson",
+          },
+          layout: {
+            "icon-allow-overlap": true,
+            "icon-ignore-placement": true,
+            "icon-image": marker,
+          },
+        });
+
+        map.addSource("route", {
+          type: "geojson",
+          data: nullList,
+        });
+
+        map.addLayer(
+          {
+            id: "routeline-active",
+            type: "line",
+            source: "route",
+            layout: {
+              "line-join": "round",
+              "line-cap": "round",
+            },
+            paint: {
+              "line-color": "#3887be",
+              "line-width": [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                12,
+                3,
+                22,
+                12,
+              ],
+            },
+          },
+          "waterway-label"
+        );
+
+        //await map.on("click", addWaypoints);
       });
+
       map.addControl(
         new mapboxgl.GeolocateControl({
           positionOptions: {
@@ -109,11 +161,118 @@ function Map() {
       .appendChild(geocoder2.onAdd(map));
   }, []);
 
-  const handleStartTrip = (e) => {
+  const pointHopper = {};
+
+  function updateWayPoints(geojson) {
+    map.getSource("trip-location-symbol").setData(geojson);
+    for (let i = 0; i < geojson.length; i++) {
+      //new mapboxgl.Marker(marker).setLngLat(geojson[i]).addTo(map);
+      //marker.setLngLat(geojson[i]).addTo(map);
+      newWayPoint(geojson[i]);
+      console.log("geojson loop " + geojson[i]);
+    }
+  }
+
+  // async function addWaypoints(event) {
+  //   await newWayPoint(map.unproject(event.point));
+  //   updateWayPoints(coordinateList);
+  // }
+
+  async function newWayPoint(coordinates) {
+    const pt = turf.point(coordinates, {
+      key: Math.abs(coordinates[0] * coordinates[1]) * Math.random(),
+    });
+    console.log("pt " + pt);
+    coordinateList.features.geometry.push(pt);
+    pointHopper[pt.properties.key] = pt;
+    console.log("pushed to pontHopper");
+    const query = await fetch(assembleQueryURL(), { method: "GET" }).then(
+      console.log(query)
+    );
+    const response = await query.json().then(console.log(response));
+
+    if (response.code !== "Ok") {
+      const handleMessage =
+        response.code === "InvalidInput"
+          ? "Refresh to start a new route"
+          : "Try a different point.";
+      alert(`${response.code} - ${response.message}\n\n${handleMessage}`);
+      coordinateList.features.pop();
+      delete pointHopper[pt.properties.key];
+      return;
+    }
+
+    const routeGeoJSON = turf.featureCollection([
+      turf.feature(response.trips[0].geometry),
+    ]);
+
+    map.getSource("route").setData(routeGeoJSON);
+  }
+
+  function assembleQueryURL(coordinateList) {
+    const coordinateString = coordinateList.map((c) => c.join(",")).join(";");
+
+    return `https://api.mapbox.com/optimized-trips/v1/mapbox/driving/${coordinateString}?overview=full&steps=true&geometries=geojson&source=first&access_token=${mapboxgl.accessToken}`;
+  }
+
+  const handleStartTrip = async (e) => {
     e.preventDefault();
-    locationList.push(origin);
-    locationList.push(destination);
     setStartTrip(true);
+    const nextLocationList = [...locationList, origin, destination];
+    setLocationList(nextLocationList);
+    const nextCoordinateList = [
+      ...coordinateList,
+      origin.geometry.coordinates,
+      destination.geometry.coordinates,
+    ];
+    setCoordinateList(nextCoordinateList);
+    await fetchTripRoute(nextCoordinateList);
+  };
+
+  const fetchTripRoute = async (coordinateList) => {
+    const initialResponse = await fetch(assembleQueryURL(coordinateList));
+    const response = await initialResponse.json();
+
+    if (response.code !== "Ok") {
+      const handleMessage =
+        response.code === "InvalidInput"
+          ? "Refresh to start a new route"
+          : "Try a different point.";
+      coordinateList.features.pop();
+      return;
+    }
+
+    const routeGeoJSON = {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "LineString",
+        coordinates: response.trips[0].geometry.coordinates,
+      },
+    };
+
+    console.log(routeGeoJSON);
+    if (map.getSource("route")) {
+      map.getSource("route").setData(routeGeoJSON);
+    } else {
+      map.addLayer({
+        id: "route",
+        type: "line",
+        source: {
+          data: routeGeoJSON,
+          type: "geojson",
+        },
+        layout: {
+          "line-join": "round",
+          "line-cap": "round",
+        },
+        paint: {
+          "line-color": "#3887be",
+          "line-width": 5,
+          "line-opacity": 0.75,
+        },
+      });
+    }
   };
 
   geocoder.on("result", (e) => {
@@ -164,6 +323,7 @@ function Map() {
           destination={destination}
           locationList={locationList}
           setLocationList={setLocationList}
+          setCoordinateList={setCoordinateList}
           geocoderContainerRef={geocoderContainerRef}
           startTrip={startTrip}
           geocoder3={geocoder3}

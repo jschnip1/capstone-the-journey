@@ -5,7 +5,7 @@ import DeckGL, { GeoJsonLayer } from "deck.gl";
 import LocationItem from "./LocationItem";
 import { Container, Divider } from "semantic-ui-react";
 import { Button, Icon, List, Form } from "semantic-ui-react";
-import AddLocationButton from "./AddLocationButton";
+import LocationButton from "./LocationButton";
 import LocationSearch from "./LocationSearch";
 
 function LocationList({
@@ -13,6 +13,7 @@ function LocationList({
   destination,
   locationList,
   setLocationList,
+  setCoordinateList,
   geocoderContainerRef,
   startTrip,
   geocoder3,
@@ -25,6 +26,8 @@ function LocationList({
   const handleAddLocation = () => {
     setVisibility(false);
   };
+
+  const handleSaveLocation = () => {};
 
   geocoder3.on("result", (e) => {
     setDestination(e.result);
@@ -47,7 +50,7 @@ function LocationList({
 
   useEffect(() => {
     if (!visiblity) {
-      locationList.push(waypoint);
+      locationList.features.push(waypoint);
     }
   }, [waypoint]);
 
@@ -55,17 +58,28 @@ function LocationList({
     <Container text className="trip-planner-overview">
       <h1>Trip Overview</h1>
       <div id="addLocationControlBar">
-          {visiblity ? (
-            <AddLocationButton handleAddLocation={handleAddLocation} />
-          ) : (
-            <div className="ui form">
-              <div className="field add-location">
-                <LocationSearch
-                  geocoderContainerRef={geocoderContainerRef}
-                  id="location-request"
-                />
-              </div>
+        {visiblity ? (
+          <>
+            <LocationButton
+              onClick={handleAddLocation}
+              iconName="plus circle"
+              actionText="Add Location"
+            />
+            <LocationButton
+              onClick={handleSaveLocation}
+              iconName="car"
+              actionText="Save Trip"
+            />
+          </>
+        ) : (
+          <div className="ui form">
+            <div className="field add-location">
+              <LocationSearch
+                geocoderContainerRef={geocoderContainerRef}
+                id="location-request"
+              />
             </div>
+          </div>
         )}
       </div>
       <Divider />

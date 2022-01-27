@@ -72,7 +72,7 @@ canvas.mapboxgl-canvas {
 }
 
 .button-container-addLocationButton {
-  display: flex;
+  width: fit-content;
   justify-content: center;
 }
 
@@ -119,4 +119,8 @@ canvas.mapboxgl-canvas {
 #location-request > .mapboxgl-ctrl-geocoder.mapboxgl-ctrl {
   margin: 0%;
   width: 100%;
+}
+
+.addLocationControlBar {
+  display: inline-block;
 }
