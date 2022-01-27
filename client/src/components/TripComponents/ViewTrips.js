@@ -2,7 +2,7 @@ import { Item, Rating, RatingIcon } from 'semantic-ui-react';
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Trip from "./Trip";
-import { fetchById, save } from "../../services/TripApi";
+import { fetchById, saveTrip } from "../../services/TripApi";
 import { authenticate } from '../../services/authApi';
 
 const EMPTY_TRIP = {
@@ -26,7 +26,7 @@ function ViewTrips({ trip, owner }) {
     const handleRate = (evt, { rating }) => {
         setRate(rating)
         trip.tripReview = rating;
-        save(trip)
+        saveTrip(trip)
             .catch(console.log)
     }
 

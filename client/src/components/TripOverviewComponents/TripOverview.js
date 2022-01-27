@@ -14,7 +14,6 @@ import PhotoForm from "../PhotoComponents/PhotoForm";
 
 export default function MenuExampleTabularOnLeft() {
 
-   // TODO: ternary operator to make sure only person associated with trip can upload photo
 
    const auth = useContext(AuthContext);
   

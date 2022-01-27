@@ -46,9 +46,9 @@ class TripServiceTest {
         Trip trip = makeTrip();
         Trip mockOut = makeTrip();
 
-        when(repository.add(trip)).thenReturn(mockOut);
+        when(repository.add(trip,1)).thenReturn(mockOut);
 
-        Result<Trip> actual = service.add(trip);
+        Result<Trip> actual = service.add(trip,1);
         assertEquals(ResultType.SUCCESS, actual.getType());
         assertEquals(mockOut, actual.getPayload());
     }
@@ -58,17 +58,17 @@ class TripServiceTest {
         Trip trip = makeTrip();
         // trip is null
         Trip nothing = null;
-        Result<Trip> actual = service.add(nothing);
+        Result<Trip> actual = service.add(nothing,1);
         assertEquals(ResultType.INVALID, actual.getType());
         assertEquals("Trip cannot be null", actual.getMessages().get(0));
         // trip name is null or blank
         trip.setName(null);
-        actual = service.add(trip);
+        actual = service.add(trip,1);
         assertEquals(ResultType.INVALID, actual.getType());
         assertEquals("Must name trip", actual.getMessages().get(0));
 
         trip.setName(" ");
-        actual = service.add(trip);
+        actual = service.add(trip,1);
         assertEquals(ResultType.INVALID, actual.getType());
         assertEquals("Must name trip", actual.getMessages().get(0));
     }
@@ -78,7 +78,7 @@ class TripServiceTest {
         Trip trip = makeTrip();
         trip.setStartTime(LocalDate.of(2022,2,1));
         trip.setEndTime(LocalDate.of(2021,2,2));
-        Result<Trip> actual = service.add(trip);
+        Result<Trip> actual = service.add(trip,1);
         assertEquals(ResultType.INVALID, actual.getType());
         assertEquals("End date cannot be before start date", actual.getMessages().get(0));
     }
