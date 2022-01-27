@@ -31,7 +31,6 @@ function ViewTrips({ trip, owner }) {
     }
 
     return <>
-    {console.log(trip)}
         <Item.Group>
             <h3>Start Date: {trip.startTime}    <span id="end-date-trip">End Date: {trip.endTime}</span></h3>
             {owner ? (
