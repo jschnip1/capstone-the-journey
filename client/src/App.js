@@ -7,23 +7,24 @@ import {
 } from "react-router-dom";
 import React, { useRef, useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
-
+import { Button } from "semantic-ui-react";
 import { getProfileByUsername } from "./services/profileApi";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./styling/App.css";
 import AuthContext from "./AuthContext";
 import NavBar from "./NavBar";
 import Login from "./components/Login";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NotFound from "./NotFound";
-import TripOverview from "./components/TripOverview";
+import TripOverview from "./components/TripOverviewComponents/TripOverview";
 import Register from "./components/Register";
 import ProfileForm from "./components/profileComponents/profileForm";
 import ProfileView from "./components/profileComponents/profileView";
 import Map from "./components/Map";
 import TripPlanner from "./components/LocationList";
 import ViewHome from "./components/ViewHome";
+import AllTrips from "./components/allTripsComponents/allTrips";
 
 function App() {
   const [user, setUser] = useState({ username: "" });
@@ -48,7 +49,7 @@ function App() {
     };
 
     setUser(nextUser);
-    getProfileByUsername(nextUser.username).then(setProfile).catch(console.log);
+    getProfileByUsername(nextUser.username).then(setProfile).catch(error => {toast.error(`${error}`)});
   };
 
   const logout = () => {
@@ -59,13 +60,23 @@ function App() {
       profileDescription: "",
       name: "",
       userId: 0,
-      tripList: []
-    })
+      tripList: [],
+    });
+  };
+
+  const editableTrips = () => {
+    const tripIds = [];
+    if (profile.tripList === null) {
+      return tripIds;
+    }
+    profile.tripList.map((trip) => tripIds.push(trip.tripId));
+    return tripIds;
   };
 
   const auth = {
     user,
     profile,
+    editableTrips,
     login,
     logout,
   };
@@ -74,43 +85,48 @@ function App() {
     <>
       <div id="home-main">
         <AuthContext.Provider value={auth}>
-          <Router>
-            <NavBar />
-            <Switch>
-              <Route path="/login">
-                <Login>Login</Login>
-              </Route>
-              <Route path="/register">
-                <Register />
-              </Route>
-              <Route path="/about/us">
-                <h1>About Us</h1>
-              </Route>
-              <Route path="/profile">
-                <ProfileView />
-              </Route>
-              <Route path="/create/profile">
-                <ProfileForm />
-              </Route>
-              <Route path="/adventure/planning">
-                <Map />
-              </Route>
-              <Route path="/travel/buddy/add">
-                <h1>Add Travel Buddy</h1>
-              </Route>
-              <Route path="/trip/overview/:tripId">
-                <TripOverview />
-              </Route>
-              <Route exact path="/">
-                <ViewHome />
-              </Route>
-              <Route>
-                <NotFound />
-              </Route>
-            </Switch>
-          </Router>
+          <div>
+            <Router>
+              <NavBar />
+              <Switch>
+                <Route path="/login">
+                  <Login>Login</Login>
+                </Route>
+                <Route path="/register">
+                  <Register />
+                </Route>
+                <Route path="/about/us">
+                  <h1>About Us</h1>
+                </Route>
+                <Route path="/profile">
+                  <ProfileView />
+                </Route>
+                <Route path="/create/profile">
+                  <ProfileForm />
+                </Route>
+                <Route path="/adventure/planning">
+                  <Map />
+                </Route>
+                <Route path="/travel/buddy/add">
+                  <h1>Add Travel Buddy</h1>
+                </Route>
+                <Route path="/allTrips">
+                  <AllTrips />
+                </Route>
+                <Route path="/trip/overview/:tripId">
+                  <TripOverview />
+                </Route>
+                <Route exact path="/">
+                  <ViewHome />
+                </Route>
+                <Route>
+                  <NotFound />
+                </Route>
+              </Switch>
+            </Router>
+            <ToastContainer />
+          </div>
         </AuthContext.Provider>
-        <ToastContainer />
       </div>
     </>
   );

@@ -37,10 +37,6 @@
   padding-left: 15px;
 }
 
-#top-container {
-
-}
-
 #home-main {
   background-image: url("https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/country-road-along-rocky-mountains-royalty-free-image-678834219-1550781633.jpg");
   background-size: cover;
@@ -53,8 +49,9 @@
 }
 
 #main-title {
+  font-family: 'Sedgwick Ave', cursive;
   font-size: 4em;
-  font-weight: normal;
+  /* font-weight: normal; */
   color: orange;
   margin-bottom: 0;
   margin-top: 3em;
@@ -69,10 +66,19 @@
   height: 100vh;
   padding-left: 30px;
   padding-top: 30px;
+  font-family: 'Roboto Mono', monospace;
+}
+
+#profile-name {
+  font-family: 'Roboto Mono', monospace;
 }
 
 #profile-pic {
   border-radius: 50%;
+}
+
+.profile-sub-title {
+  font-family: 'Roboto Mono', monospace;
 }
 
 #profile-form {
@@ -81,4 +87,13 @@
   padding-left: 30px;
   padding-top: 30px;
   padding-right: 100px;
+}
+
+#end-date-trip {
+  padding-left: 60px;
+}
+
+#not-found {
+  background-color: white;
+  height: 100vh;
 }

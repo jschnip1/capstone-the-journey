@@ -28,6 +28,24 @@ public class ProfileJdbcTemplateRepository implements ProfileRepository{
 
     @Override
     @Transactional
+    public Profile findByProfileId(int profileId) {
+        final String sql = "select profile_id, profile_photo, about_me, `name`, app_user_id " +
+                "from profile " +
+                "where profile_id = ?";
+
+        Profile profile = jdbcTemplate.query(sql, new ProfileMapper(),profileId)
+                .stream()
+                .findFirst().orElse(null);
+
+        if(profile != null){
+            addTrips(profile);
+        }
+
+        return profile;
+    }
+
+    @Override
+    @Transactional
     public Profile findByUserId(int userId) {
         final String sql = "select profile_id, profile_photo, about_me, `name`, app_user_id " +
                 "from profile " +
@@ -43,6 +61,26 @@ public class ProfileJdbcTemplateRepository implements ProfileRepository{
 
         return profile;
     }
+
+    @Override
+    @Transactional
+    public Profile findByTripId(int tripId) {
+        final String sql = "select p.profile_id, p.profile_photo, p.about_me, p.name, p.app_user_id " +
+                "from profile p " +
+                "inner join profile_trip pt on p.profile_id = pt.profile_id " +
+                "where pt.trip_id = ?";
+
+        Profile profile = jdbcTemplate.query(sql, new ProfileMapper(),tripId)
+                .stream()
+                .findFirst().orElse(null);
+
+        if(profile != null){
+            addTrips(profile);
+        }
+
+        return profile;
+    }
+
 
     @Override
     public Profile add(Profile profile) {

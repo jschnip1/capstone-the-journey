@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Button, Icon, Tab, Table } from "semantic-ui-react";
 import { save } from "../../services/itemsApi";
 import ItemConfirmDelete from "./itemConfirmDelete";
+import { toast } from "react-toastify";
 
-function Item({item, onDelete}) {
+function Item({ item, onDelete, owner }) {
 
     const [checked, setChecked] = useState(item.packed)
 
@@ -11,8 +12,10 @@ function Item({item, onDelete}) {
         item.packed = !item.packed;
         setChecked(item.packed)
         save(item)
-            .catch(console.log)
-        
+        .catch((error) => {
+            toast.error(`${error}`);
+          });
+
     }
 
     return (
@@ -20,8 +23,12 @@ function Item({item, onDelete}) {
             <Table.Cell>{item.itemName}</Table.Cell>
             <Table.Cell>{item.itemDescription}</Table.Cell>
             <Table.Cell>{item.itemQuantity}</Table.Cell>
-            <Table.Cell><input type="checkbox" checked={checked} onChange={handleChange}/></Table.Cell>
-            <Table.Cell><ItemConfirmDelete item={item} onConfirm={onDelete}/></Table.Cell>
+            {owner ? (<>
+                <Table.Cell><input type="checkbox" checked={checked} onChange={handleChange} /></Table.Cell>
+                <Table.Cell><ItemConfirmDelete item={item} onConfirm={onDelete} /></Table.Cell>
+            </>
+            ) : (<></>)}
+
         </Table.Row>
     )
 }

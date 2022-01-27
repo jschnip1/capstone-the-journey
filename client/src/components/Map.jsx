@@ -1,17 +1,23 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import mapboxgl from "mapbox-gl";
+import * as turf from "@turf/turf";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "../styling/TripPlanner.css";
 import LocationList from "./LocationList";
 import LocationSearch from "./LocationSearch";
 import DeckGL, { GeoJsonLayer } from "deck.gl";
 import { Button, Icon } from "semantic-ui-react";
+import TripCreationForm from "./TripCreationForm";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+import { toast } from "react-toastify";
 
 function Map() {
   mapboxgl.accessToken =
     "pk.eyJ1IjoieWVsbG93LXJhbmdlciIsImEiOiJja3lrZHJnaW4waTh2MnBvMGsyM2YxZm1lIn0.Hl-fBAj0_GaGVa1YVTlUMg";
 
+  const [saveTrip, setSaveTrip] = useState(false);
+  const nullList = turf.featureCollection([]);
+  const [coordinateList, setCoordinateList] = useState([]);
   const geocoderContainerRef = useRef(null);
   const [startTrip, setStartTrip] = useState(false);
   const [origin, setOrigin] = useState("");
@@ -34,6 +40,8 @@ function Map() {
       ? 16
       : window.localStorage.getItem("current-location-zoom")
   );
+
+  const marker = new mapboxgl.Marker();
 
   const geocoder = new MapboxGeocoder({
     accessToken: mapboxgl.accessToken,
@@ -72,7 +80,54 @@ function Map() {
       map.on("load", () => {
         setMap(map);
         map.resize();
+
+        map.addLayer({
+          id: "trip-location-symbol",
+          type: "symbol",
+          source: {
+            data: coordinateList,
+            type: "geojson",
+          },
+          layout: {
+            "icon-allow-overlap": true,
+            "icon-ignore-placement": true,
+            "icon-image": marker,
+          },
+        });
+
+        map.addSource("route", {
+          type: "geojson",
+          data: nullList,
+        });
+
+        map.addLayer(
+          {
+            id: "routeline-active",
+            type: "line",
+            source: "route",
+            layout: {
+              "line-join": "round",
+              "line-cap": "round",
+            },
+            paint: {
+              "line-color": "#3887be",
+              "line-width": [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                12,
+                3,
+                22,
+                12,
+              ],
+            },
+          },
+          "waterway-label"
+        );
+
+        //await map.on("click", addWaypoints);
       });
+
       map.addControl(
         new mapboxgl.GeolocateControl({
           positionOptions: {
@@ -109,11 +164,70 @@ function Map() {
       .appendChild(geocoder2.onAdd(map));
   }, []);
 
-  const handleStartTrip = (e) => {
+  function assembleQueryURL(coordinateList) {
+    const coordinateString = coordinateList.map((c) => c.join(",")).join(";");
+
+    return `https://api.mapbox.com/optimized-trips/v1/mapbox/driving/${coordinateString}?overview=full&steps=true&geometries=geojson&source=first&access_token=${mapboxgl.accessToken}`;
+  }
+
+  const handleStartTrip = async (e) => {
     e.preventDefault();
-    locationList.push(origin);
-    locationList.push(destination);
     setStartTrip(true);
+    const nextLocationList = [...locationList, origin, destination];
+    setLocationList(nextLocationList);
+    const nextCoordinateList = [
+      ...coordinateList,
+      origin.geometry.coordinates,
+      destination.geometry.coordinates,
+    ];
+    setCoordinateList(nextCoordinateList);
+    await fetchTripRoute(nextCoordinateList);
+    toast.info("Starting Trip!");
+  };
+
+  const fetchTripRoute = async (coordinateList) => {
+    const initialResponse = await fetch(assembleQueryURL(coordinateList));
+    const response = await initialResponse.json();
+
+    if (response.code !== "Ok") {
+      const handleMessage =
+        response.code === "InvalidInput"
+          ? "Refresh to start a new route"
+          : "Try a different point.";
+      coordinateList.features.pop();
+      return;
+    }
+
+    const routeGeoJSON = {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "LineString",
+        coordinates: response.trips[0].geometry.coordinates,
+      },
+    };
+
+    if (map.getSource("route")) {
+      map.getSource("route").setData(routeGeoJSON);
+    } else {
+      map.addLayer({
+        id: "route",
+        type: "line",
+        source: {
+          data: routeGeoJSON,
+          type: "geojson",
+        },
+        layout: {
+          "line-join": "round",
+          "line-cap": "round",
+        },
+        paint: {
+          "line-color": "#3887be",
+          "line-width": 5,
+          "line-opacity": 0.75,
+        },
+      });
+    }
   };
 
   geocoder.on("result", (e) => {
@@ -125,54 +239,66 @@ function Map() {
   });
 
   return (
-    <div className="main">
-      {!(origin && destination && startTrip) ? (
-        <form
-          className="ui form origin-destination-inline-block"
-          onSubmit={handleStartTrip}
-        >
-          <div className="two-fields">
-            <div className="fields origin-destination-fields">
-              <div className="field">
-                <label id="starting-location-label">Starting Location</label>
-                <LocationSearch
-                  geocoderContainerRef={geocoderContainerRef}
-                  id="origin-request"
-                />
-              </div>
-              <div className="field">
-                <label id="destination-label">Destination</label>
-                <LocationSearch
-                  geocoderContainerRef={geocoderContainerRef}
-                  id="destination-request"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="button-container">
-            <Button className="startTripButton" animated type="submit">
-              <Button.Content visible>Plan Trip</Button.Content>
-              <Button.Content hidden>
-                <Icon name="arrow circle right" />
-              </Button.Content>
-            </Button>
-          </div>
-        </form>
+    <>
+      {saveTrip ? (
+        <TripCreationForm locationList={locationList} />
       ) : (
-        <LocationList
-          origin={origin}
-          destination={destination}
-          locationList={locationList}
-          setLocationList={setLocationList}
-          geocoderContainerRef={geocoderContainerRef}
-          startTrip={startTrip}
-          geocoder3={geocoder3}
-          setDestination={setDestination}
-          map={map}
-        />
+        <div className="main">
+          {!(origin && destination && startTrip) ? (
+            <form
+              className="ui form origin-destination-inline-block"
+              onSubmit={handleStartTrip}
+            >
+              <div className="two-fields">
+                <div className="fields origin-destination-fields">
+                  <div className="field">
+                    <label id="starting-location-label">
+                      Starting Location
+                    </label>
+                    <LocationSearch
+                      geocoderContainerRef={geocoderContainerRef}
+                      id="origin-request"
+                    />
+                  </div>
+                  <div className="field">
+                    <label id="destination-label">Destination</label>
+                    <LocationSearch
+                      geocoderContainerRef={geocoderContainerRef}
+                      id="destination-request"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="button-container">
+                <Button className="startTripButton" animated type="submit">
+                  <Button.Content visible>Plan Trip</Button.Content>
+                  <Button.Content hidden>
+                    <Icon name="arrow circle right" />
+                  </Button.Content>
+                </Button>
+              </div>
+            </form>
+          ) : (
+            <LocationList
+              origin={origin}
+              destination={destination}
+              coordinateList={coordinateList}
+              locationList={locationList}
+              setLocationList={setLocationList}
+              setCoordinateList={setCoordinateList}
+              geocoderContainerRef={geocoderContainerRef}
+              fetchTripRoute={fetchTripRoute}
+              startTrip={startTrip}
+              geocoder3={geocoder3}
+              setDestination={setDestination}
+              map={map}
+              setSaveTrip={setSaveTrip}
+            />
+          )}
+          <div ref={mapContainer} className="mapContainer" id="map" />
+        </div>
       )}
-      <div ref={mapContainer} className="mapContainer" id="map" />
-    </div>
+    </>
   );
 }
 

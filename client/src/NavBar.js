@@ -6,11 +6,6 @@ import AuthContext from "./AuthContext"
 
 
 function NavBar() {
-  // const state = { activeItem: 'home' }
-
-  // const handleItemClick = (e, { name }) => this.setState({ activeItem: name })
-
-  //   const { activeItem } = this.state
 
   const auth = useContext(AuthContext);
   const history = useHistory();
@@ -30,22 +25,34 @@ function NavBar() {
         to="/"
         className='navbar-links'
       />
-      <Menu.Item
-        name='plan trip'
-        // active={activeItem === 'plan trip'}
-        // onClick={this.handleItemClick}
-        as={Link}
-        to="/adventure/planning"
-        className='navbar-links'
-      />
-      <Menu.Item
-        name='profile'
-        // active={activeItem === 'profile'}
-        // onClick={this.handleItemClick}
-        as={Link}
-        to="/profile/:id"
-        className='navbar-links'
-      />
+      {auth.user.username === "" ? (<></>) : (<>
+        <Menu.Item
+          name='plan trip'
+          // active={activeItem === 'plan trip'}
+          // onClick={this.handleItemClick}
+          as={Link}
+          to="/adventure/planning"
+          className='navbar-links'
+        />
+        <Menu.Item
+          name='profile'
+          // active={activeItem === 'profile'}
+          // onClick={this.handleItemClick}
+          as={Link}
+          to="/profile/:id"
+          className='navbar-links'
+        />
+        <Menu.Item
+          name='All Trips'
+          // active={activeItem === 'profile'}
+          // onClick={this.handleItemClick}
+          as={Link}
+          to="/alltrips"
+          className='navbar-links'
+        />
+      </>
+      )}
+
       <Menu.Menu position='right'>
         {auth.user.username !== "" ? (
           <>

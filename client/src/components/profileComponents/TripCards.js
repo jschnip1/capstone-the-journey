@@ -1,4 +1,4 @@
-import AuthContext from "../AuthContext";
+import AuthContext from "../../AuthContext";
 import { Image, Divider,Card, Icon } from 'semantic-ui-react';
 import { useHistory, Link } from "react-router-dom";
 import { useContext } from "react";
@@ -13,7 +13,7 @@ function TripCards() {
                 <Card.Content header={a.name} />
                 <Card.Content content={`Start Time: ${a.startTime}`} />
                 <Card.Content extra>
-                <Icon name='map' />{a.totalDistance}
+                <Icon name='map' />{a.totalDistance} miles
                 </Card.Content>
             </Card>)}
     </>
