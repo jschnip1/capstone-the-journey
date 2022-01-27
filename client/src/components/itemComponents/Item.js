@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, Icon, Tab, Table } from "semantic-ui-react";
 import { save } from "../../services/itemsApi";
 import ItemConfirmDelete from "./itemConfirmDelete";
+import { toast } from "react-toastify";
 
 function Item({ item, onDelete, owner }) {
 
@@ -11,7 +12,9 @@ function Item({ item, onDelete, owner }) {
         item.packed = !item.packed;
         setChecked(item.packed)
         save(item)
-            .catch(console.log)
+        .catch((error) => {
+            toast.error(`${error}`);
+          });
 
     }
 

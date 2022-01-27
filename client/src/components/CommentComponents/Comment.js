@@ -4,6 +4,7 @@ import { useState, useContext, useEffect } from "react";
 import AuthContext from '../../AuthContext';
 import CommentConfirmDelete from './CommentConfirmDelete';
 import { getProfilebyProfileId } from "../../services/profileApi";
+import { toast } from 'react-toastify';
 
 function Comments({comment, onDelete }) {
 
@@ -16,7 +17,9 @@ function Comments({comment, onDelete }) {
     useEffect(() => {
         getProfilebyProfileId(comment.profileId)
             .then(setProfile)
-            .catch(console.log)
+            .catch((error) => {
+                toast.error(`${error}`);
+              });
     }, [comment.profileId]);
 
     return <>
