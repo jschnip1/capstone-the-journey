@@ -8,6 +8,7 @@ import { Button, Icon, List, Form } from "semantic-ui-react";
 import LocationButton from "./LocationButton";
 import LocationSearch from "./LocationSearch";
 import mapboxgl from "mapbox-gl";
+import { Reorder } from "framer-motion";
 
 function LocationList({
   origin,
@@ -22,7 +23,7 @@ function LocationList({
   setDestination,
   fetchTripRoute,
   map,
-  setSaveTrip
+  setSaveTrip,
 }) {
   const [visiblity, setVisibility] = useState(true);
 
@@ -38,7 +39,7 @@ function LocationList({
     setVisibility(true);
     await fetchTripRoute(coordinateList);
     const marker = new mapboxgl.Marker()
-      .setLngLat(coordinateList.pop())
+      .setLngLat(coordinateList[coordinateList.length - 1])
       .addTo(map);
   };
 
@@ -57,15 +58,18 @@ function LocationList({
   }, [visiblity]);
 
   geocoder3.on("result", async (e) => {
-    const nextLocationList = [...locationList, e.result];
-    const nextCoordinateList = [
-      ...coordinateList,
-      e.result.geometry.coordinates,
-    ];
+    const nextLocationList = [...locationList];
+    nextLocationList.splice(locationList.length - 1, 0, e.result);
+    const nextCoordinateList = [...coordinateList];
+    nextCoordinateList.splice(
+      coordinateList.length - 1,
+      0,
+      e.result.geometry.coordinates
+    );
     setLocationList(nextLocationList);
     setCoordinateList(nextCoordinateList);
+    //addWaypoints(e);
     geocoder3.clear();
-    console.log(locationList);
   });
 
   return (
@@ -122,18 +126,22 @@ function LocationList({
         )}
       </div>
       <Divider />
-      <List animated verticalAlign="top" className="tripRoute">
+      <Reorder.Group as="div" values={locationList} onReorder={setLocationList}>
         {locationList.map((item, index) => (
-          <LocationItem
-            key={index}
-            location={item}
-            onAddLocation={handleAddLocation}
-            onDeleteLocation={handleDeleteLocation}
-          />
+          <Reorder.Item key={item.id} value={item.text}>
+            <LocationItem
+              key={item.id}
+              location={item}
+              onAddLocation={handleAddLocation}
+              onDeleteLocation={handleDeleteLocation}
+            />
+          </Reorder.Item>
         ))}
-      </List>
+      </Reorder.Group>
     </Container>
   );
 }
 
 export default LocationList;
+
+//<List animated verticalAlign="top" className="tripRoute">

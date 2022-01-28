@@ -29,11 +29,9 @@ function Login() {
   const history = useHistory();
 
   const handleChange = (evt) => {
-    console.log(evt);
     const nextCredentials = { ...credentials };
     nextCredentials[evt.target.name] = evt.target.value;
     setCredentials(nextCredentials);
-    console.log(credentials);
   };
 
   const handleSubmit = async (evt) => {

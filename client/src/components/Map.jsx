@@ -1,5 +1,7 @@
+/* eslint import/no-webpack-loader-syntax: off */
+
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import mapboxgl from "mapbox-gl";
+import mapboxgl from "!mapbox-gl";
 import * as turf from "@turf/turf";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "../styling/TripPlanner.css";
@@ -182,7 +184,6 @@ function Map() {
     ];
     setCoordinateList(nextCoordinateList);
     await fetchTripRoute(nextCoordinateList);
-    toast.info("Starting Trip!");
   };
 
   const fetchTripRoute = async (coordinateList) => {

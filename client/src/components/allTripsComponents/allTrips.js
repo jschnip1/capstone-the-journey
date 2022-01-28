@@ -10,7 +10,6 @@ function AllTrips() {
     const [allTrips, setAllTrips] = useState([]);
 
     useEffect(() => {
-        console.log(allTrips.length)
         if (allTrips.length === 0) {
             fetchAll()
                 .then(setAllTrips)

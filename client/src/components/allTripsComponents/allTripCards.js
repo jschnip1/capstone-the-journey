@@ -24,7 +24,6 @@ function AllTripCards({ tripInfo }) {
     }
   });
 
-  // console.log(tripInfo.tripReview)
   return (
     <Card
       key={tripInfo.tripId}
