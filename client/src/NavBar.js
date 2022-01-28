@@ -1,55 +1,89 @@
-import React, { Component } from 'react';
-import { Menu } from 'semantic-ui-react';
-import { Link } from "react-router-dom";
+import React, { useContext } from 'react';
+import { Menu, Button } from 'semantic-ui-react';
+import { Link, useHistory } from "react-router-dom";
 
-export default class MenuExampleSecondary extends Component {
-  state = { activeItem: 'home' }
+import AuthContext from "./AuthContext"
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
-  render() {
-    const { activeItem } = this.state
+function NavBar() {
 
-    return (
-      <Menu secondary>
+  const auth = useContext(AuthContext);
+  const history = useHistory();
+
+  function logoutAuth() {
+    auth.logout();
+    history.push("/")
+  }
+
+  return (
+    <Menu secondary>
+      <Menu.Item
+        name='home'
+        // active={activeItem === 'home'}
+        // onClick={this.handleItemClick}
+        as={Link}
+        to="/"
+        className='navbar-links'
+      />
+      {auth.user.username === "" ? (<></>) : (<>
         <Menu.Item
-            name='home'
-            active={activeItem === 'home'}
-            onClick={this.handleItemClick}
-            as={Link}
-            to="/"
-        />
-        <Menu.Item
-                name='plan trip'
-                active={activeItem === 'plan trip'}
-                onClick={this.handleItemClick}
-                as={Link}
-                to="/adventure/planning"
+          name='plan trip'
+          // active={activeItem === 'plan trip'}
+          // onClick={this.handleItemClick}
+          as={Link}
+          to="/adventure/planning"
+          className='navbar-links'
         />
         <Menu.Item
           name='profile'
-          active={activeItem === 'profile'}
-          onClick={this.handleItemClick}
+          // active={activeItem === 'profile'}
+          // onClick={this.handleItemClick}
           as={Link}
           to="/profile/:id"
+          className='navbar-links'
         />
-        <Menu.Menu position='right'>
+        <Menu.Item
+          name='All Trips'
+          // active={activeItem === 'profile'}
+          // onClick={this.handleItemClick}
+          as={Link}
+          to="/alltrips"
+          className='navbar-links'
+        />
+      </>
+      )}
+
+      <Menu.Menu position='right'>
+        {auth.user.username !== "" ? (
+          <>
             <Menu.Item
-                name='login'
-                active={activeItem === 'login'}
-                onClick={this.handleItemClick}
-                as={Link}
-                to="/login"
+              content={`Hello ${!auth.profile.name ? auth.user.username : auth.profile.name}!`}
             />
             <Menu.Item
-                name='register'
-                active={activeItem === 'register'}
-                onClick={this.handleItemClick}
-                as={Link}
-                to="/register"
+              name='Logout'
+              onClick={logoutAuth}
             />
-        </Menu.Menu>
-      </Menu>
-    )
-  }
+          </>
+        ) : (
+          <>
+            <Menu.Item
+              name='login'
+              // active={activeItem === 'login'}
+              // onClick={this.handleItemClick}
+              as={Link}
+              to="/login"
+            />
+            <Menu.Item
+              name='register'
+              // active={activeItem === 'register'}
+              // onClick={this.handleItemClick}
+              as={Link}
+              to="/register"
+            />
+          </>)}
+      </Menu.Menu>
+    </Menu>
+  )
 }
+
+export default NavBar;

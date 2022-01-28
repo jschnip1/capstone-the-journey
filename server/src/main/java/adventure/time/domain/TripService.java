@@ -6,13 +6,12 @@ import adventure.time.models.Trip;
 import adventure.time.models.TripLocation;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class TripService {
 
-    //TODO
-    // # of locations validation
 
     private final TripRepository tripRepository;
 
@@ -28,10 +27,10 @@ public class TripService {
     }
 
     public Trip findById(int tripId, boolean loadPhotos) {
-        return tripRepository.findById(tripId, loadPhotos);
+        return tripRepository.findById(tripId);
     }
 
-    public Result<Trip> add(Trip trip) {
+    public Result<Trip> add(Trip trip, int profileId) {
         Result<Trip> result = validate(trip);
         if(!result.isSuccess()) {
             return result;
@@ -42,7 +41,7 @@ public class TripService {
             return result;
         }
 
-        trip = tripRepository.add(trip);
+        trip = tripRepository.add(trip, profileId);
         result.setPayload(trip);
         return result;
     }
@@ -67,6 +66,14 @@ public class TripService {
     }
 
     public boolean deleteById(int tripId) {
+        Trip trip = findById(tripId, false);
+
+        if (trip != null) {
+            if (trip.getStartTime().isBefore(LocalDate.now())) {
+                return false;
+            }
+        }
+
         return tripRepository.deleteById(tripId);
     }
 
@@ -105,6 +112,16 @@ public class TripService {
         Result<Trip> result = new Result<>();
         if (trip == null) {
             result.addMessage("Trip cannot be null", ResultType.INVALID);
+            return result;
+        }
+
+        if (trip.getStartTime() == null) {
+            result.addMessage("Start time cannot be null", ResultType.INVALID);
+            return result;
+        }
+
+        if (trip.getEndTime() == null) {
+            result.addMessage("End time cannot be null", ResultType.INVALID);
             return result;
         }
 

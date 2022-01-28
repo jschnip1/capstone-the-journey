@@ -152,7 +152,7 @@ begin
     
     insert into location (latitude, longitude, `name`, `type`, photo_url, disabled) values
 		("41.081444","-81.519005", "Akron,OH","City","https://uploads-ssl.webflow.com/58e984c0a0e2f91e7c795e7a/60cb3c0ce6b1c3d8df753e9a_akron-oh-real-estate.jpg",0),
-        ("41.499321","-81.694359",null,null,null,0),
+        ("41.499321","-81.694359", "Cleveland,OH",null,null,0),
         ("39.961178","-82.998795","Columbus,OH","City",null,0),
         ("41.447019","-81.713324","Cleveland Metroparks Zoo","Zoo","https://www.clevelandmetroparks.com/getmedia/4755d368-c69b-436e-85a3-65fddb2e35c5/KCL_5322.jpg.ashx?width=1440&height=864&ext=.jpg&w=1440&h=863",0);
         
@@ -183,12 +183,12 @@ begin
 		(2, 1);
         
 	insert into photo (photo, trip_location_id, caption) values
-		("photo of cleveland",1, "This is a photo of cleveland"),
-        ("photo of elephant",5,"This is a photo of an elephant");
+		("https://img2.10bestmedia.com/Images/Photos/372221/Cleveland-Letters-at-Edgewater-Park-Normal-Edit-2_54_990x660.jpg",1, "This is a photo of cleveland"),
+        ("https://static.scientificamerican.com/sciam/cache/file/065ACE5F-1E4B-4D3E-8E1E7CE0397D7681_source.jpg?w=590&h=800&07BA3C6D-C2F7-4A0C-877A316951C83AC0",5,"This is a photo of an elephant");
         
 	insert into `profile` (profile_photo, about_me, app_user_id, `name`) values
-		("photo of John", "I have a generic name", 1, "John Smith"),
-        ("photo of Sally", "I like turtles", 2, "Sally Jones");
+		("https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/John_Cena_July_2018.jpg/1200px-John_Cena_July_2018.jpg", "I have a generic name", 1, "John Smith"),
+        ("https://live.staticflickr.com/4851/44958909525_e8ea7075c2_b.jpg", "I like turtles", 2, "Sally Jones");
         
 	insert into profile_trip (`profile_id`, `trip_id`) values
 		(1,1),

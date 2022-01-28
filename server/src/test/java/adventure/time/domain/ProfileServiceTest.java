@@ -21,12 +21,34 @@ class ProfileServiceTest {
     ProfileRepository repository;
 
     @Test
+    void shouldFindByProfileId() {
+        Profile mockOut = new Profile(2, null, "about me", "name", 1);
+
+        when(repository.findByProfileId(2)).thenReturn(mockOut);
+
+        Profile result = service.findByProfileId(2);
+
+        assertNotNull(result);
+    }
+
+    @Test
     void shouldFindByUserId() {
         Profile mockOut = new Profile(2, null, "about me", "name", 1);
 
         when(repository.findByUserId(1)).thenReturn(mockOut);
 
         Profile result = service.findByUserId(1);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void shouldFindByTripId() {
+        Profile mockOut = new Profile(2, null, "about me", "name", 1);
+
+        when(repository.findByTripId(1)).thenReturn(mockOut);
+
+        Profile result = service.findByTripId(1);
 
         assertNotNull(result);
     }

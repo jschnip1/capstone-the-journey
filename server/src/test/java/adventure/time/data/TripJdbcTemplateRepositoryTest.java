@@ -33,17 +33,18 @@ class TripJdbcTemplateRepositoryTest {
 
     @Test
     void shouldFindById() {
-        Trip trip = repository.findById(1, false);
+        Trip trip = repository.findById(1);
         assertEquals(1, trip.getTripId());
         assertEquals(3, trip.getTripReview());
         assertEquals(165, trip.getTotalDistance());
+        assertNotNull(trip.getLocations().get(1).getPhotoList());
         assertFalse(trip.isDisabled());
     }
 
     @Test
     void shouldAdd() {
         Trip trip = makeTrip();
-        Trip actual = repository.add(trip);
+        Trip actual = repository.add(trip, 1);
         assertNotNull(actual);
         assertEquals(5, actual.getTripReview());
     }

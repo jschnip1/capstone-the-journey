@@ -89,11 +89,11 @@ public class CommentJdbcTemplateRepository implements CommentRepository {
 
     @Override
     public boolean deleteById(int commentId) {
-        return jdbcTemplate.update("delete from comment where comment_id = ?", commentId) > 0;
+        return jdbcTemplate.update("delete from comment where comment_id = ?;", commentId) > 0;
     }
 
     @Override
     public boolean deleteByTripId(int tripId) {
-        return jdbcTemplate.update("delete from comment where trip_id = ?", tripId) > 0;
+        return jdbcTemplate.update("delete from comment where trip_id = ?;", tripId) > 0;
     }
 }

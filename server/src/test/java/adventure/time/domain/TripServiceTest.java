@@ -36,7 +36,7 @@ class TripServiceTest {
     @Test
     void shouldFindById() {
         Trip expected = makeTrip();
-        when(repository.findById(1, false)).thenReturn(expected);
+        when(repository.findById(1)).thenReturn(expected);
         Trip actual = service.findById(1, false);
         assertEquals(expected, actual);
     }
@@ -46,9 +46,9 @@ class TripServiceTest {
         Trip trip = makeTrip();
         Trip mockOut = makeTrip();
 
-        when(repository.add(trip)).thenReturn(mockOut);
+        when(repository.add(trip,1)).thenReturn(mockOut);
 
-        Result<Trip> actual = service.add(trip);
+        Result<Trip> actual = service.add(trip,1);
         assertEquals(ResultType.SUCCESS, actual.getType());
         assertEquals(mockOut, actual.getPayload());
     }
@@ -58,17 +58,17 @@ class TripServiceTest {
         Trip trip = makeTrip();
         // trip is null
         Trip nothing = null;
-        Result<Trip> actual = service.add(nothing);
+        Result<Trip> actual = service.add(nothing,1);
         assertEquals(ResultType.INVALID, actual.getType());
         assertEquals("Trip cannot be null", actual.getMessages().get(0));
         // trip name is null or blank
         trip.setName(null);
-        actual = service.add(trip);
+        actual = service.add(trip,1);
         assertEquals(ResultType.INVALID, actual.getType());
         assertEquals("Must name trip", actual.getMessages().get(0));
 
         trip.setName(" ");
-        actual = service.add(trip);
+        actual = service.add(trip,1);
         assertEquals(ResultType.INVALID, actual.getType());
         assertEquals("Must name trip", actual.getMessages().get(0));
     }
@@ -78,7 +78,7 @@ class TripServiceTest {
         Trip trip = makeTrip();
         trip.setStartTime(LocalDate.of(2022,2,1));
         trip.setEndTime(LocalDate.of(2021,2,2));
-        Result<Trip> actual = service.add(trip);
+        Result<Trip> actual = service.add(trip,1);
         assertEquals(ResultType.INVALID, actual.getType());
         assertEquals("End date cannot be before start date", actual.getMessages().get(0));
     }
@@ -148,10 +148,20 @@ class TripServiceTest {
         assertFalse(actual);
     }
 
+    @Test
+    void shouldNotDisableIfStartDateHasPassed() {
+        Trip trip = makeTrip();
+        trip.setTripId(3);
+        trip.setStartTime(LocalDate.of(2021,12,30));
+        when(repository.findById(3)).thenReturn(trip);
+        boolean actual = service.deleteById(3);
+        assertFalse(actual);
+    }
+
     private Trip makeTrip() {
         Trip trip = new Trip();
-        trip.setStartTime(LocalDate.of(2022, 2, 10));
-        trip.setEndTime(LocalDate.of(2022, 2, 12));
+        trip.setStartTime(LocalDate.of(2023, 2, 10));
+        trip.setEndTime(LocalDate.of(2023, 2, 12));
         trip.setTripReview(5);
         trip.setTotalDistance(200);
         trip.setName("Trip to Canada");

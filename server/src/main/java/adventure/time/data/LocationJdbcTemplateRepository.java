@@ -24,7 +24,7 @@ public class LocationJdbcTemplateRepository implements LocationRepository {
     @Override
     @Transactional
     public Location findById(int locationId) {
-        final String sql = "select location_id, latitude, longitude, name, type, photo" +
+        final String sql = "select location_id, latitude, longitude, name, type, photo_url" +
                 "from location" +
                 "where location_id = ?";
 
@@ -36,8 +36,8 @@ public class LocationJdbcTemplateRepository implements LocationRepository {
 
     @Override
     public Location add(Location location) {
-        final String sql = "insert into location (latitude, longitude, name, type, photo) " +
-                "values (?,?,?,?,?);";
+        final String sql = "insert into location (latitude, longitude, name, type, photo_url, disabled) " +
+                "values (?,?,?,?,?,?);";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int rowsAffected = jdbcTemplate.update(connection -> {
@@ -47,6 +47,7 @@ public class LocationJdbcTemplateRepository implements LocationRepository {
             ps.setString(3, location.getName());
             ps.setString(4, location.getType());
             ps.setString(5, location.getPhotoUrl());
+            ps.setBoolean(6, location.isDisabled());
             return ps;
         }, keyHolder);
 
@@ -65,7 +66,7 @@ public class LocationJdbcTemplateRepository implements LocationRepository {
                 + "longitude = ?, "
                 + "name = ?, "
                 + "type = ?, "
-                + "photo = ? "
+                + "photo_url = ? "
                 + "where agent_id = ?;";
 
         return jdbcTemplate.update(sql,

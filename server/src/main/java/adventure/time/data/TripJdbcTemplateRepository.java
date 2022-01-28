@@ -1,11 +1,11 @@
 package adventure.time.data;
 
 
-import adventure.time.data.mappers.CommentMapper;
-import adventure.time.data.mappers.ItemMapper;
-import adventure.time.data.mappers.TripLocationMapper;
-import adventure.time.data.mappers.TripMapper;
+import adventure.time.data.mappers.*;
+import adventure.time.models.Location;
+import adventure.time.models.Photo;
 import adventure.time.models.Trip;
+import adventure.time.models.TripLocation;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -26,9 +26,6 @@ public class TripJdbcTemplateRepository implements TripRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // TODO
-    // AddLocations method
-
 
     @Override
     public List<Trip> findAll() {
@@ -36,9 +33,11 @@ public class TripJdbcTemplateRepository implements TripRepository {
         return jdbcTemplate.query(sql, new TripMapper());
     }
 
+
+
     @Override
     @Transactional
-    public Trip findById(int tripId, boolean loadPhotos) {
+    public Trip findById(int tripId) {
 
         final String sql = "select trip_id, start_time, end_time, review, total_distance, name, disabled from trip where trip_id = ?;";
 
@@ -47,14 +46,33 @@ public class TripJdbcTemplateRepository implements TripRepository {
         if (trip != null) {
             addItems(trip);
             addComments(trip);
-            addLocations(trip, loadPhotos);
+            addLocations(trip);
         }
 
         return trip;
     }
 
+    private boolean addProfileTrip(int profileId, int tripId) {
+        final String sql = "insert into profile_trip (profile_id, trip_id) values (?,?);";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int rowsAffected = jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, profileId);
+            ps.setInt(2, tripId);
+            return ps;
+        }, keyHolder);
+
+        if (rowsAffected <= 0) {
+            return false;
+        }
+
+        return true;
+    }
+
     @Override
-    public Trip add(Trip trip) {
+    @Transactional
+    public Trip add(Trip trip, int profileId) {
 
         final String sql = "insert into trip (start_time, end_time, review, total_distance, name, disabled) values (?,?,?,?,?,?);";
 
@@ -75,6 +93,7 @@ public class TripJdbcTemplateRepository implements TripRepository {
         }
 
         trip.setTripId(keyHolder.getKey().intValue());
+        addProfileTrip(profileId, trip.getTripId());
         return trip;
     }
 
@@ -129,7 +148,7 @@ public class TripJdbcTemplateRepository implements TripRepository {
         trip.setCommentList(comments);
     }
 
-    private void addLocations(Trip trip, boolean loadPhotos) {
+    private void addLocations(Trip trip) {
 
         final String sql = "select tl.trip_location_id, tl.trip_id, tl.location_id, tl.sort_order, "
                 + "l.latitude, l.longitude, l.name, l.type, l.photo_url "
@@ -137,11 +156,20 @@ public class TripJdbcTemplateRepository implements TripRepository {
                 + "inner join location l on tl.location_id = l.location_id "
                 + "where tl.trip_id = ?";
 
-        // addPhotos sub of locations
-        final String otherSql = "";
+
 
         var tripLocations = jdbcTemplate.query(sql, new TripLocationMapper(), trip.getTripId());
+        for (int i = 0; i < tripLocations.size(); i++) {
+            tripLocations.get(i).setPhotoList(addPhotos(tripLocations.get(i)));
+        }
         trip.setLocations(tripLocations);
+    }
+
+    private List<Photo> addPhotos(TripLocation tripLocation) {
+        final String sql = "select photo_id, photo, trip_location_id, caption from photo where trip_location_id = ?;";
+
+        List<Photo> photos = jdbcTemplate.query(sql, new PhotoMapper(), tripLocation.getTripLocationId());
+        return photos;
     }
 
 

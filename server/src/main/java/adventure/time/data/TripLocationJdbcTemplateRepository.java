@@ -17,10 +17,9 @@ public class TripLocationJdbcTemplateRepository implements TripLocationRepositor
     @Override
     public boolean add(TripLocation tripLocation) {
 
-        final String sql = "insert into trip_location (trip_location_id, location_id, trip_id, sort_order) values (?,?,?,?);";
+        final String sql = "insert into trip_location (location_id, trip_id, sort_order) values (?,?,?);";
 
         return jdbcTemplate.update(sql,
-                tripLocation.getTripLocationId(),
                 tripLocation.getLocation().getLocationId(),
                 tripLocation.getTripId(),
                 tripLocation.getSortOrder()) > 0;

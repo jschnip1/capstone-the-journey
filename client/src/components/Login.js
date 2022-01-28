@@ -1,55 +1,121 @@
-import { useState, useContext} from "react";
+import { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import AuthContext from "../AuthContext";
 import { authenticate } from "../services/authApi";
-import { Button } from 'semantic-ui-react';
-
+import {
+  Button,
+  Form,
+  Grid,
+  Header,
+  Icon,
+  Input,
+  Message,
+  Segment,
+} from "semantic-ui-react";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Login() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [visibilityIcon, setVisibilityIcon] = useState("eye slash");
+  const [credentials, setCredentials] = useState({
+    username: "",
+    password: "",
+  });
 
-    const [credentials, setCredentials] = useState({ username: "", password: "" });
-    const [errors, setErrors] = useState([]);
+  const auth = useContext(AuthContext);
 
-    const auth = useContext(AuthContext);
+  const history = useHistory();
 
-    const history = useHistory();
+  const handleChange = (evt) => {
+    const nextCredentials = { ...credentials };
+    nextCredentials[evt.target.name] = evt.target.value;
+    setCredentials(nextCredentials);
+  };
 
-    const handleChange = (evt) => {
-        const nextCredentials = { ...credentials };
-        nextCredentials[evt.target.name] = evt.target.value;
-        setCredentials(nextCredentials);
-    };
+  const handleSubmit = async (evt) => {
+    evt.preventDefault();
 
-    const handleSubmit = async evt => {
-        evt.preventDefault();
+    authenticate(credentials)
+      .then((data) => {
+        auth.login(data.jwt_token);
+        history.push("/profile");
+      })
+      .catch((error) => {
+        toast.error(`${error}`);
+      });
+  };
 
-        authenticate(credentials)
-            .then((data) => {
+  return (
+    // <div>
+    //     <h2>Login</h2>
+    //     <form onSubmit={handleSubmit}>
+    //         <div>
+    //             <label className="form-label">Username</label>
+    //             <input className="form-control" type="text" value={credentials.username} name="username" onChange={handleChange} />
+    //         </div>
+    //         <div>
+    //             <label className="form-label">Password</label>
+    //             <input className="form-control" type="password" value={credentials.password} name="password" onChange={handleChange} />
+    //         </div>
+    //         <Button className="btn btn-primary" type="submit">Submit</Button>
+    //     </form>
 
-                auth.login(data.jwt_token);
-                history.push("/profile");
-            })
-            .catch(setErrors); 
-    }
+    // </div>
 
-    return (
-        <div>
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label className="form-label">Username</label>
-                    <input className="form-control" type="text" value={credentials.username} name="username" onChange={handleChange} />
-                </div>
-                <div>
-                    <label className="form-label">Password</label>
-                    <input className="form-control" type="password" value={credentials.password} name="password" onChange={handleChange} />
-                </div>
-                <Button className="btn btn-primary" type="submit">Submit</Button>
-            </form>
-    
-        </div>
+    <Grid textAlign="center" style={{ height: "100vh" }} verticalAlign="middle">
+      <Grid.Column style={{ maxWidth: 450 }}>
+        <Header as="h2" color="teal" textAlign="center">
+          <Icon name="map signs" /> Log-in to your account
+        </Header>
+        <Form size="large" onSubmit={handleSubmit}>
+          <Segment stacked>
+            <Form.Input
+              fluid
+              name="username"
+              icon="user"
+              iconPosition="left"
+              placeholder="E-mail address"
+              type="text"
+              value={credentials.username}
+              onChange={handleChange}
+            />
+            <div className="password-input-div">
+              <Form.Input
+                fluid
+                name="password"
+                icon={
+                  <Icon
+                    name={visibilityIcon}
+                    link
+                    onClick={() => {
+                      setShowPassword((prevState) => !prevState);
+                      visibilityIcon === "eye"
+                        ? setVisibilityIcon("eye slash")
+                        : setVisibilityIcon("eye");
+                    }}
+                  />
+                }
+                iconPosition="left"
+                placeholder="Password"
+                type={showPassword ? "text" : "password"}
+                value={credentials.password}
+                onChange={handleChange}
+              />
+            </div>
 
-    )
+            <Button color="teal" fluid size="large" type="submit">
+              Login
+            </Button>
+          </Segment>
+        </Form>
+        <Message>
+          New to us? <Link to="/register">Register</Link>
+        </Message>
+      </Grid.Column>
+    </Grid>
+  );
 }
 
 export default Login;
