@@ -39,7 +39,7 @@ function NavBar() {
           // active={activeItem === 'profile'}
           // onClick={this.handleItemClick}
           as={Link}
-          to="/profile/:id"
+          to="/profile"
           className='navbar-links'
         />
         <Menu.Item

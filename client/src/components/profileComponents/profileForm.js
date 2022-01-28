@@ -1,4 +1,4 @@
-import { Form, Button, FormField } from "semantic-ui-react";
+import { Form, Button, FormField, Grid, Header } from "semantic-ui-react";
 import { useState, useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import AuthContext from "../../AuthContext";
@@ -67,41 +67,40 @@ function ProfileForm() {
   };
 
   return (
-    <>
-      <div id="profile-form">
-        <Form onSubmit={handleSubmit}>
-          <FormField>
-            <label>Name</label>
-            <input
-              type="text"
-              placeholder="John Doe"
-              value={profile.name}
-              name="name"
-              onChange={handleChange}
-            />
-          </FormField>
-          {/* <FormField>
-                    <label>Last Name</label>
-                    <input type="text" placeholder='Doe' />
-                </FormField> */}
-          <Form.Field>
-            <label>About</label>
-            <textarea
-              placeholder="Tell us more about you..."
-              value={profile.profileDescription}
-              name="profileDescription"
-              onChange={handleChange}
-            />
-          </Form.Field>
-          <Form.Field>
-            <label>Profile Photo</label>
-            <input type="file" value={file} onChange={handleImageChange} />
-          </Form.Field>
-          <Button type="submit">Submit</Button>
-        </Form>
-        <ErrorSummary />
-      </div>
-    </>
+    <Grid textAlign="center" style={{ height: "65vh" }} verticalAlign="middle">
+      <Grid.Column style={{ maxWidth:"50%" }} verticalAlign="top">
+        <div id="profile-form">
+          <Header>Profile Information</Header>
+          <Form size="large" onSubmit={handleSubmit}>
+            <FormField>
+              <label>Name</label>
+              <input
+                type="text"
+                placeholder="John Doe"
+                value={profile.name}
+                name="name"
+                onChange={handleChange}
+              />
+            </FormField>
+            <Form.Field>
+              <label>About</label>
+              <textarea
+                placeholder="Tell us more about you..."
+                value={profile.profileDescription}
+                name="profileDescription"
+                onChange={handleChange}
+              />
+            </Form.Field>
+            <Form.Field>
+              <label>Profile Photo</label>
+              <input type="file" value={file} onChange={handleImageChange}  />
+            </Form.Field>
+            <Button type="submit">Submit</Button>
+          </Form>
+          <ErrorSummary />
+        </div>
+      </Grid.Column>
+    </Grid>
   );
 }
 

@@ -90,9 +90,9 @@ export default function MenuExampleTabularOnLeft() {
 
   return (
     <div id="trip-main">
-      <Grid>
+      <Grid  >
         <Grid.Column width={4}>
-          <Menu fluid vertical tabular>
+          <Menu fluid vertical tabular >
             <Menu.Item
               name="trip"
               active={activeItem === "trip"}
@@ -125,7 +125,7 @@ export default function MenuExampleTabularOnLeft() {
           </Menu>
         </Grid.Column>
 
-        <Grid.Column stretched width={12}>
+        <Grid.Column stretched width={10}>
           <Segment>{viewSegment(activeItem)}</Segment>
         </Grid.Column>
       </Grid>

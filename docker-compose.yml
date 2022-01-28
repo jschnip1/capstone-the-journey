@@ -12,7 +12,7 @@ services:
   adventure-time-api:
     image: 932204825147.dkr.ecr.us-east-2.amazonaws.com/adventure-time-api
     environment:
-      - DB_URL=jdbc:mysql://adventure-time-db.cdtqegjqlsvt.us-east-2.rds.amazonaws.com:3306/adventure_time_test
+      - DB_URL=jdbc:mysql://adventure-time-db.cdtqegjqlsvt.us-east-2.rds.amazonaws.com:3306/adventure_time
       - DB_USERNAME=admin
       - DB_PASSWORD=soccerBalls
       - AWS-ACCESS-KEY=AKIA5SC54ZI5XNC5JDV5
