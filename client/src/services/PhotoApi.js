@@ -1,4 +1,4 @@
-const url = "http://localhost:8080/photo";
+const url = "/photo";
 
 export async function fetchAll() {
     const response = await fetch(url);

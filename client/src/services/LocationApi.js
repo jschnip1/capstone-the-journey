@@ -1,4 +1,4 @@
-const url = "http://localhost:8080/location";
+const url = "/location";
 
 export async function fetchLocationById(locationId) {
     const response = await fetch(`${url}/${locationId}`);

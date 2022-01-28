@@ -1,4 +1,4 @@
-const url = "http://localhost:8080/comment";
+const url = "/comment";
 
 export async function fetchAll() {
     const response = await fetch(url);

@@ -7,7 +7,7 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - field-agent-api
+      - adventure-time-api
 
   adventure-time-api:
     image: 932204825147.dkr.ecr.us-east-2.amazonaws.com/adventure-time-api
@@ -17,7 +17,7 @@ services:
       - DB_PASSWORD=soccerBalls
       - AWS-ACCESS-KEY=AKIA5SC54ZI5XNC5JDV5
       - AWS-SECRET-KEY=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
-      - ALLOWED_ORIGINS=*
+      - ALLOWED_ORIGINS=http://adventure-time.us-east-2.elasticbeanstalk.com
     ports:
       - "8080:8080"
 

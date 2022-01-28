@@ -1,4 +1,4 @@
-const url = "http://localhost:8080/profile"
+const url = "/profile"
 
 
 export async function getProfilebyProfileId(profileId) {

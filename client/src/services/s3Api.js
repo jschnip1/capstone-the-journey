@@ -1,5 +1,5 @@
 export async function uploadFile (formData) {
-    const response = await fetch('http://localhost:8080/api/image/upload', {
+    const response = await fetch('/api/image/upload', {
       method: 'POST',
       headers: {
         Accept: 'application/json'

@@ -1,4 +1,4 @@
-const url = "http://localhost:8080/trip/location";
+const url = "/trip/location";
 
 export async function saveTripLocation(tripLocation, token) {
     const init = {

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState, useContext } from "react";
 import { Grid, Menu, Segment, Comment, Header } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import ViewComments from "../CommentComponents/ViewComments";
@@ -6,7 +6,6 @@ import ViewTrips from "../TripComponents/ViewTrips";
 import ViewPhoto from "../PhotoComponents/ViewPhoto";
 import ItemTable from "../itemComponents/ItemTable";
 import { useParams } from "react-router-dom";
-import { useEffect, useState, useContext } from "react/cjs/react.development";
 import { fetchById } from "../../services/TripApi";
 import AuthContext from "../../AuthContext";
 import PhotoForm from "../PhotoComponents/PhotoForm";

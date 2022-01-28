@@ -1,4 +1,4 @@
-const url = "http://localhost:8080/item"
+const url = "/item"
 
 export async function fetchByItemId(itemId){
     const response = await fetch(`${url}/${itemId}`)
