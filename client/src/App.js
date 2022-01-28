@@ -89,39 +89,15 @@ function App() {
             <Router>
               <NavBar />
               <Switch>
-                <Route path="/login">
-                  <Login>Login</Login>
-                </Route>
-                <Route path="/register">
-                  <Register />
-                </Route>
-                <Route path="/about/us">
-                  <h1>About Us</h1>
-                </Route>
-                <Route path="/profile">
-                  <ProfileView />
-                </Route>
-                <Route path="/create/profile">
-                  <ProfileForm />
-                </Route>
-                <Route path="/adventure/planning">
-                  <Map />
-                </Route>
-                <Route path="/travel/buddy/add">
-                  <h1>Add Travel Buddy</h1>
-                </Route>
-                <Route path="/allTrips">
-                  <AllTrips />
-                </Route>
-                <Route path="/trip/overview/:tripId">
-                  <TripOverview />
-                </Route>
-                <Route exact path="/">
-                  <ViewHome />
-                </Route>
-                <Route>
-                  <NotFound />
-                </Route>
+                <Route exact path="/login"><Login/></Route>
+                <Route exact path="/register"><Register /></Route>
+                <Route exact path="/profile"><ProfileView /></Route>
+                <Route exact path="/create/profile"><ProfileForm /></Route>
+                <Route exact path="/adventure/planning"><Map /></Route>
+                <Route exact path="/allTrips"><AllTrips /></Route>
+                <Route exact path="/trip/overview/:tripId"><TripOverview /></Route>
+                <Route exact path="/"><ViewHome /></Route>
+                <Route><NotFound /></Route>
               </Switch>
             </Router>
             <ToastContainer />

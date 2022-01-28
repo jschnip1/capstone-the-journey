@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form } from 'semantic-ui-react';
+import { Button, Checkbox, Form, Grid } from 'semantic-ui-react';
 import { useState, useEffect, useContext } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { saveTrip } from "../services/TripApi";
@@ -36,79 +36,83 @@ const EMPTY_LOCATION = {
 
 
 function TripCreationForm({ locationList }) {
-      // <div>
-    //   TripCreationForm
-    //   {locationList.map((e, index) => (
-    //     <>
-    //       <h1>Trip Locations</h1>
-    //       <div>
-    //         {index}: {e.text}
-    //       </div>
-    //     </>
-    //   ))}
-    // </div>
+  // <div>
+  //   TripCreationForm
+  //   {locationList.map((e, index) => (
+  //     <>
+  //       <h1>Trip Locations</h1>
+  //       <div>
+  //         {index}: {e.text}
+  //       </div>
+  //     </>
+  //   ))}
+  // </div>
 
 
 
-    // need to create trip on submit, then create the locations and with those create trip location.
+  // need to create trip on submit, then create the locations and with those create trip location.
 
-    // need to convert latitude and longitude into strings in order to add them.
-    // latitude: locationList[i].geometry.coordinates[1];
-    // longitude: locationList[i].geometry.coordinates[0];
-    // location name: locationList[i].place_name;
+  // need to convert latitude and longitude into strings in order to add them.
+  // latitude: locationList[i].geometry.coordinates[1];
+  // longitude: locationList[i].geometry.coordinates[0];
+  // location name: locationList[i].place_name;
 
-    // console.log(locationList);
+  // console.log(locationList);
 
-    const [theTrip, setTheTrip] = useState(EMPTY_TRIP);
-    const [theLocation, setTheLocation] = useState(EMPTY_LOCATION);
-    const [theTripLocation, setTheTripLocation] = useState(EMPTY_TRIP_LOCATION);
-    const [errors, setErrors] = useState([]);
+  const [theTrip, setTheTrip] = useState(EMPTY_TRIP);
+  const [theLocation, setTheLocation] = useState(EMPTY_LOCATION);
+  const [theTripLocation, setTheTripLocation] = useState(EMPTY_TRIP_LOCATION);
+  const [errors, setErrors] = useState([]);
 
-    const auth = useContext(AuthContext);
-    const history = useHistory();
+  const auth = useContext(AuthContext);
+  const history = useHistory();
 
-    const handleChange = (evt) => {
-      const nextTrip = {...theTrip};
-      nextTrip[evt.target.name] = evt.target.value;
-      setTheTrip(nextTrip);
-    }
+  const handleChange = (evt) => {
+    const nextTrip = { ...theTrip };
+    nextTrip[evt.target.name] = evt.target.value;
+    setTheTrip(nextTrip);
+  }
 
-    const handleSubmit = (evt) => {
-      evt.preventDefault();
-      saveTrip(theTrip, auth.user.token, auth.profile.profileId)
-        .then((tripData) => {
-          console.log(tripData);
-          for (let i = 0; i < locationList.length; i++) {
-            theLocation["longitude"] = locationList[i].geometry.coordinates[0];
-            theLocation["latitude"] = locationList[i].geometry.coordinates[1];
-            theLocation["name"] = locationList[i].place_name;
-            theLocation["disabled"] = false;
-            saveLocation(theLocation)
-              .then((locationData) => {
-                console.log(locationData);
-                theTripLocation["tripId"] = tripData.tripId;
-                theTripLocation["location"] = locationData;
-                theTripLocation["sortOrder"] = i+1;
-                saveTripLocation(theTripLocation, auth.user.token)
-                  .then((tripLocationData) => {
-                    console.log(tripLocationData);
-                  })
-                  .catch(console.log)
-              })
-              .catch(console.log)
-          }
-          auth.profile.tripList.push(tripData);
-          history.push("/profile");
-        })
-        .catch(console.log);
-    }
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    saveTrip(theTrip, auth.user.token, auth.profile.profileId)
+      .then((tripData) => {
+        console.log(tripData);
+        for (let i = 0; i < locationList.length; i++) {
+          theLocation["longitude"] = locationList[i].geometry.coordinates[0];
+          theLocation["latitude"] = locationList[i].geometry.coordinates[1];
+          theLocation["name"] = locationList[i].place_name;
+          theLocation["disabled"] = false;
+          saveLocation(theLocation)
+            .then((locationData) => {
+              console.log(locationData);
+              theTripLocation["tripId"] = tripData.tripId;
+              theTripLocation["location"] = locationData;
+              theTripLocation["sortOrder"] = i + 1;
+              saveTripLocation(theTripLocation, auth.user.token)
+                .then((tripLocationData) => {
+                  console.log(tripLocationData);
+                })
+                .catch(console.log)
+            })
+            .catch(console.log)
+        }
+        auth.profile.tripList.push(tripData);
+        history.push("/profile");
+      })
+      .catch(console.log);
+  }
 
 
   return <>
+    <Grid verticalAlign="middle" columns={3}>
+      <Grid.Column width={4} />
+      <Grid.Column width={8} verticalAlign="middle" id="trip-info-form">
+        <h1>Trip information</h1>
       <Form onSubmit={handleSubmit}>
         <Form.Field>
           <label>Trip Name</label>
-          <input placeholder='Trip Name' name="name" value={theTrip.name}type="text" onChange={handleChange} required />
+          <input placeholder='Trip Name' name="name" value={theTrip.name} type="text" onChange={handleChange} required />
         </Form.Field>
         <Form.Field>
           <label>Start Date</label>
@@ -119,9 +123,12 @@ function TripCreationForm({ locationList }) {
           <input type="date" name="endTime" value={theTrip.endTime} onChange={handleChange} required />
         </Form.Field>
         <Button type='submit'>Submit</Button>
-    </Form>
+      </Form>
+      </Grid.Column>
+      <Grid.Column  width={4}/>
+    </Grid>
 
-    </>
+  </>
 }
 
 export default TripCreationForm;
